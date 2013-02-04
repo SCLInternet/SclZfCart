@@ -1,0 +1,23 @@
+{
+    "name": "sclinternet/scl-zf-cart",
+    "description": "An extensible cart module for Zend Framework 2",
+    "type": "library",
+    "license": "MIT",
+    "homepage": "https://github.com/SCLInternet/SclZfCart",
+    "authors": [
+        {
+            "name": "Tom Oram",
+            "email": "tom@x2k.co.uk",
+            "homepage": "http://github.com/tomphp"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "SclZfCart\\": "src/"
+        }
+    },
+    "require-dev": {
+        "phpmd/phpmd" : "1.4.0",
+        "squizlabs/php_codesniffer": "1.*"
+    }
+}
