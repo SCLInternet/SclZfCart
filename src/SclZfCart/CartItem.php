@@ -1,6 +1,6 @@
 <?php
 
-namespace SclCms;
+namespace SclZfCart;
 
 /**
  * Class that represents an item in the cart.

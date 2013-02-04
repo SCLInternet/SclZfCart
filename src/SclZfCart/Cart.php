@@ -20,6 +20,13 @@ class Cart implements ServiceLocatorAwareInterface
     private $serviceLocator;
 
     /**
+     * The items in the cart
+     *
+     * @var CartItem[]
+     */
+    private $items = array();
+
+    /**
      * {@inheritDoc
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
@@ -34,16 +41,39 @@ class Cart implements ServiceLocatorAwareInterface
     {
         return $this->serviceLocator;
     }
-    
 
     /**
      * Adds an item to the cart.
      *
-     * @param ProductInterface $item
+     * @param ProductInterface $product
+     * @param int              $quantity
+     *
+     * @param boolean True if the item was added to the cart
      */
-    public function add(ProductInterface $item)
+    public function add(ProductInterface $product, $quantity = 1)
     {
-        
+        $uid = $product->getUid();
+
+        if (isset($this->items[$uid])) {
+            if (!$product->canAddMoreThanOne()) {
+                $this->items[$uid]->setQuantity(1);
+                return false;
+            }
+
+            $this->items[$uid]->add((int) $quantity);
+            return true;
+        }
+
+        $cartItem = $this->getServiceLocator()->get('SclZfCart\CartItem');
+        $cartItem->setProduct($product);
+
+        if ($product->canAddMoreThanOne()) {
+            $cartItem->setQuantity($quantity);
+        }
+
+        $this->items[$product->getUid()] = $cartItem;
+
+        return true;
     }
 
     /**
@@ -51,9 +81,9 @@ class Cart implements ServiceLocatorAwareInterface
      *
      * @param ProductInterface $item
      */
-    public function remove(ProductInterface $item)
+    public function remove(ProductInterface $product)
     {
-        
+        unset($this->items[$product->getUid()]);
     }
 
     /**
@@ -63,6 +93,6 @@ class Cart implements ServiceLocatorAwareInterface
      */
     public function getItems()
     {
-        
+        return $this->items;
     }
 }

@@ -22,4 +22,18 @@ interface ProductInterface
      * @return string
      */
     public function getDescription();
+
+    /**
+     * Returns a unique identifier for this product.
+     *
+     * @return string
+     */
+    public function getUid();
+
+    /**
+     * If a product can added to the cart more than once.
+     *
+     * @return boolean
+     */
+    public function canAddMoreThanOne();
 }
