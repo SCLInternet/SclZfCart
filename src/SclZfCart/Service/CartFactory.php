@@ -23,8 +23,11 @@ class CartFactory implements FactoryInterface
         /* @var $session \Zend\Session\Container */
         $session = $serviceLocator->get('SclZfCart\Session');
 
-        if (!isset($session->cart) || !$session->cart instanceof Cart) {
+        $cart = $session->cart;
+
+        if (!$cart instanceof Cart) {
             $session->cart = new Cart();
+            $cart = $session->cart;
         }
 
         return $session->cart;
