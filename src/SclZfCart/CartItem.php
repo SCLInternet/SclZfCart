@@ -46,13 +46,23 @@ class CartItem
     /**
      * Sets the quantity for this item.
      *
-     * @param unknown_type $quantity
+     * @param int $quantity
      */
     public function setQuantity($quantity)
     {
+        $quantity = (int) $quantity;
+
+        if ($quantity < 0) {
+            $quantity = 0;
+        }
+
+        if (!$this->product->canAddMoreThanOne()) {
+            $quantity = $quantity > 0 ? 1 : 0;
+        }
+
         $this->quantity = (int) $quantity;
     }
-    
+
     /**
      * Returns the quantity.
      *
@@ -67,10 +77,12 @@ class CartItem
      * Increase the quantity by the given amount.
      *
      * @param int $amount
+     *
+     * @return boolean False if the quantity was not updated.
      */
     public function add($amount = 1)
     {
-        $this->quantity += $amount;
+        $this->setQuantity($this->quantity + $amount);
     }
 
     /**
@@ -78,7 +90,7 @@ class CartItem
      *
      * @param int $amount
      *
-     * @return boolean True if an item was removed, false if there a no items left
+     * @return boolean True if there are items left, false if there a no items left
      */
     public function remove($amount = 1)
     {

@@ -27,7 +27,7 @@ class Cart implements ServiceLocatorAwareInterface
     private $items = array();
 
     /**
-     * {@inheritDoc
+     * {@inheritDoc}
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -55,21 +55,13 @@ class Cart implements ServiceLocatorAwareInterface
         $uid = $product->getUid();
 
         if (isset($this->items[$uid])) {
-            if (!$product->canAddMoreThanOne()) {
-                $this->items[$uid]->setQuantity(1);
-                return false;
-            }
-
-            $this->items[$uid]->add((int) $quantity);
-            return true;
+            return $this->items[$uid]->add((int) $quantity);
         }
 
         $cartItem = $this->getServiceLocator()->get('SclZfCart\CartItem');
         $cartItem->setProduct($product);
 
-        if ($product->canAddMoreThanOne()) {
-            $cartItem->setQuantity($quantity);
-        }
+        $cartItem->setQuantity($quantity);
 
         $this->items[$product->getUid()] = $cartItem;
 

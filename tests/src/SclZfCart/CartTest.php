@@ -19,6 +19,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     private $cart;
 
+    /**
+     * Prepare the object we'll be using
+     */
     protected function setUp()
     {
         $this->serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
@@ -88,10 +91,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $product->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
 
-        $product->expects($this->any())
-            ->method('canAddMoreThanOne')
-            ->will($this->returnValue(true));
-
         $cartItem = $this->getMock('SclZfCart\CartItem');
 
         $cartItem->expects($this->once())
@@ -100,7 +99,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($product));
 
         $cartItem->expects($this->once())->method('setQuantity')->with($this->equalTo(1));
-        $cartItem->expects($this->once())->method('add')->with($this->equalTo(2));
+        $cartItem->expects($this->once())->method('add')->with($this->equalTo(2))->will($this->returnValue(true));
 
         $this->serviceLocator->expects($this->once())
             ->method('get')
@@ -112,43 +111,5 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->cart->add($product, 2);
         $this->assertTrue($result, 'Second add');
-    }
-
-    /**
-     * @covers \SclZfCart\Cart::add
-     * @covers \SclZfCart\Cart::getItems
-     */
-    public function testSingleAddTypeAdd()
-    {
-        $uid = 'product123';
-
-        $product = $this->getMock('SclZfCart\ProductInterface');
-
-        $product->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
-
-        $product->expects($this->any())
-            ->method('canAddMoreThanOne')
-            ->will($this->returnValue(false));
-
-        $cartItem = $this->getMock('SclZfCart\CartItem');
-
-        $cartItem->expects($this->once())
-            ->method('setProduct')
-            ->with($this->equalTo($product))
-            ->will($this->returnValue($product));
-
-        $cartItem->expects($this->atLeastOnce())->method('setQuantity')->with($this->equalTo(1));
-        $cartItem->expects($this->never())->method('add');
-
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('SclZfCart\CartItem'))
-            ->will($this->returnValue($cartItem));
-
-        $result = $this->cart->add($product);
-        $this->assertTrue($result);
-
-        $result = $this->cart->add($product, 2);
-        $this->assertFalse($result);
     }
 }
