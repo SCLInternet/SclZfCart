@@ -4,9 +4,7 @@ php:
   - 5.3
   - 5.4
 
-before_script: bin/travis_build.sh
+before_script:
+  - composer install --dev
 
-script:
-  - phpunit
-  - vendor/bin/phpcs --standard=psr2 src
-  - vendor/bin/phpmd src text codesize
+script: bin/travis_build.sh

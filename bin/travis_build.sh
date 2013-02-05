@@ -32,6 +32,9 @@ License here
 ### Display results
 EXIT=0
 
+echo
+echo "#### RESULTS:"
+
 if [ "$PHPUNIT" -ne "0" ]; then
     echo "**** Unit tests failed"
     EXIT=1
