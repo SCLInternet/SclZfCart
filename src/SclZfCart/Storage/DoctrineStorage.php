@@ -12,6 +12,7 @@ use SclZfCart\Hydrator\CartHydrator;
  * Storage class for storing a cart using doctrine.
  *
  * @author Tom Oram <tom@scl.co.uk>
+ * @todo Redesign and refactor this class.
  */
 class DoctrineStorage implements StorageInterface
 {
@@ -75,22 +76,30 @@ class DoctrineStorage implements StorageInterface
 
         $items = $this->hydrator->extract($cart);
 
-        var_dump (array_keys($items));
-
         $entityItems = array();
-        foreach ($this->cartEntity->getItems() as $item) {
-            $entityItems[$item->getUid()] = $item;
-        }
 
-        var_dump (array_keys($entityItems));
-
-        foreach ($items as $key => &$item) {
-            if (isset($entityItems[$key])) {
-                $item->setId($entityItems[$key]->getId());
+        foreach ($this->cartEntity->getItems()->toArray() as $key => $entity) {
+            if (!isset($items[$entity->getUid()])) {
+                $this->entityManager->remove($entity);
             }
+
+            $entityItems[$entity->getUid()] = $entity;
         }
 
-        $this->cartEntity->setItems($items);
+        foreach ($items as $uid => $item) {
+            if (!isset($entityItems[$uid])) {
+                /* @var $entity \SclZfCart\Entity\CartItem */
+                //$entityItems[$uid] = $this->getServiceLocator()->get('SclZfCart\Entity\CartItem');
+                $entityItems[$uid] = new \SclZfCart\Entity\CartItem;
+            }
+
+            $entityItems[$uid]->setQuantity($item['quantity'])
+                ->setUid($item['uid'])
+                ->setProductType($item['productType'])
+                ->setProductData($item['productData']);
+        }
+
+        $this->cartEntity->setItems($entityItems);
 
         $this->entityManager->persist($this->cartEntity);
         $this->entityManager->flush();

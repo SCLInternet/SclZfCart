@@ -53,17 +53,14 @@ class CartHydrator implements ServiceLocatorAwareInterface
 
         /* @var $item \SclZfCart\CartItem */
         foreach ($cart->getItems() as $item) {
-            /* @var $entity \SclZfCart\Entity\CartItem */
-            $entity = $this->getServiceLocator()->get('SclZfCart\Entity\CartItem');
-
             $product = $item->getProduct();
 
-            $entity->setQuantity($item->getQuantity())
-                ->setUid($product->getUid())
-                ->setProductType(get_class($product))
-                ->setProductData(serialize($product));
-
-            $data[$product->getUid()] = $entity;
+            $data[$product->getUid()] = array(
+                'quantity'    => $item->getQuantity(),
+                'uid'         => $product->getUid(),
+                'productType' => get_class($product),
+                'productData' => serialize($product)
+            );
         }
 
         return $data;
