@@ -88,6 +88,10 @@ class Cart
      */
     public function setItems(array $items)
     {
+        foreach ($items as $item) {
+            $item->setCart($this);
+        }
+
         $this->items = new ArrayCollection($items);
     }
 
@@ -96,6 +100,7 @@ class Cart
      */
     public function addItem(CartItem $item)
     {
-        $this->items[$item->getUid] = $item;
+        $item->setCart($this);
+        $this->items[$item->getUid()] = $item;
     }
 }

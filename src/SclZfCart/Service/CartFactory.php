@@ -15,11 +15,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class CartFactory implements FactoryInterface
 {
     /**
-     * @var EventManagerInterface
-     */
-    private $eventManager;
-
-    /**
      * {@inheritDoc}
      *
      * @return Cart
@@ -27,6 +22,8 @@ class CartFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $cart = new Cart();
+
+        $cart->setServiceLocator($serviceLocator);
 
         /* @var $storage \SclZfCart\Storage\StorageInterface */
         $storage = $serviceLocator->get('SclZfCart\Storage');

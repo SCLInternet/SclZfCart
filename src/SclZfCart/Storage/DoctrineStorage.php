@@ -55,7 +55,7 @@ class DoctrineStorage implements StorageInterface
             throw new \Exception("Cart with \"%id\" not found.");
         }
 
-        $this->hydrator->hydrate($this->cartEntity->getItems(), $cart);
+        $this->hydrator->hydrate($this->cartEntity->getItems()->toArray(), $cart);
     }
 
     /**
@@ -78,14 +78,15 @@ class DoctrineStorage implements StorageInterface
         $entityItems = $this->cartEntity->getItems();
 
         foreach ($items as $key => &$item) {
-            if (!isset($entityItems[$key])) {
-                continue;
-            }
+            $this->cartEntity->addItem($item);
 
-            $item->setId($entityItems[$key]->getId());
+            if (isset($entityItems[$key])) {
+                $item->setId($entityItems[$key]->getId());
+            }
         }
 
         $this->cartEntity->setItems($items);
+        $entityItems = $this->cartEntity->getItems();
 
         $this->entityManager->persist($this->cartEntity);
         $this->entityManager->flush();

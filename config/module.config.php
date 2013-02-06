@@ -40,6 +40,22 @@ return array(
         'storage_class' => 'SclZfCart\Storage\DoctrineStorage',
     ),
 
+    // @todo Move to .dist config file
+    'doctrine' => array(
+        'driver' => array(
+            'sclzfcart_entity' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+                'paths' => __DIR__ . '/xml/doctrine-entities'
+            ),
+
+            'orm_default' => array(
+                'drivers' => array(
+                    'SclZfCart\Entity'  => 'sclzfcart_entity'
+                )
+            )
+        )
+    ),
+
     'view_manager' => array(
         'template_path_stack' => array(
             'SclZfCart\Controller' => __DIR__ . '/../view',

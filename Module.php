@@ -48,9 +48,11 @@ class Module implements
         return array(
             'shared' => array(
                 'SclZfCart\CartItem' => false,
+                'SclZfCart\Entity\CartItem' => false,
             ),
             'invokables' => array(
                 'SclZfCart\CartItem'              => 'SclZfCart\CartItem',
+                'SclZfCart\Entity\CartItem'       => 'SclZfCart\Entity\CartItem',
                 'SclZfCart\Hydrator\CartHydrator' => 'SclZfCart\Hydrator\CartHydrator',
             ),
             'factories' => array(

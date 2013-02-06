@@ -58,8 +58,7 @@ class CartHydrator implements ServiceLocatorAwareInterface
 
             $product = $item->getProduct();
 
-            $entity->setCart($cart)
-                ->setQuantity($item->getQuantity())
+            $entity->setQuantity($item->getQuantity())
                 ->setUid($product->getUid())
                 ->setProductType(get_class($product))
                 ->setProductData(serialize($product));
@@ -78,7 +77,7 @@ class CartHydrator implements ServiceLocatorAwareInterface
      */
     public function hydrate(array $data, Cart $cart)
     {
-        $cart->empty();
+        $cart->clear();
 
         foreach ($data as $itemEntity) {
             if (!$itemEntity instanceof CartItemEntity) {
