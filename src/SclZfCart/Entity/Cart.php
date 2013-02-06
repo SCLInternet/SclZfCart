@@ -5,7 +5,6 @@ namespace SclZfCart\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 
-
 /**
  * Entity class for storing a cart to the database
  *
