@@ -63,7 +63,7 @@ class CartHydrator implements ServiceLocatorAwareInterface
                 ->setProductType(get_class($product))
                 ->setProductData(serialize($product));
 
-            $data[] = $entity;
+            $data[$product->getUid()] = $entity;
         }
 
         return $data;

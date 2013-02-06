@@ -75,18 +75,22 @@ class DoctrineStorage implements StorageInterface
 
         $items = $this->hydrator->extract($cart);
 
-        $entityItems = $this->cartEntity->getItems();
+        var_dump (array_keys($items));
+
+        $entityItems = array();
+        foreach ($this->cartEntity->getItems() as $item) {
+            $entityItems[$item->getUid()] = $item;
+        }
+
+        var_dump (array_keys($entityItems));
 
         foreach ($items as $key => &$item) {
-            $this->cartEntity->addItem($item);
-
             if (isset($entityItems[$key])) {
                 $item->setId($entityItems[$key]->getId());
             }
         }
 
         $this->cartEntity->setItems($items);
-        $entityItems = $this->cartEntity->getItems();
 
         $this->entityManager->persist($this->cartEntity);
         $this->entityManager->flush();

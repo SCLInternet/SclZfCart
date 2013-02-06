@@ -16,6 +16,7 @@
             <cascade>
                 <cascade-all/>
             </cascade>
+            <orphan-removal>true</orphan-removal>
         </one-to-many>
 
     </entity>
