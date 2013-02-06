@@ -43,7 +43,7 @@ if [ "$PHPCS" -ne "0" ]; then
     echo "**** Coding standards failed"
     EXIT=1
 fi
-if [ "$PHPCS" -ne "0" ]; then
+if [ "$PHPMD" -ne "0" ]; then
     echo "**** Mess detection failed"
     EXIT=1
 fi
