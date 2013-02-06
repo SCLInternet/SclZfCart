@@ -3,6 +3,8 @@
 namespace SclZfCart\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+
 
 /**
  * Entity class for storing a cart to the database
@@ -21,11 +23,21 @@ class Cart
      */
     protected $lastUpdated;
 
+    /**
+     * @var ArrayCollection
+     * @ ORM\OneToMany(targetEntity="", mappedBy="customer", cascade={"remove"}, orphanRemoval=true)
+     */
+    protected $items;
+
+    /**
+     * Initialise internal objects
+     */
     public function __construct()
     {
         $this->timestamp = new DateTime();
+        $this->items = new ArrayCollection();
     }
-    
+
     /**
      * @return int
      */
@@ -45,11 +57,11 @@ class Cart
     }
 
     /**
-     * @return int
+     * @return DateTime
      */
-    public function getId()
+    public function getLastUpdated()
     {
-        return $this->id;
+        return $this->lastUpdated;
     }
 
     /**
@@ -58,15 +70,33 @@ class Cart
      */
     public function setLastUpdated(DateTime $lastUpdated)
     {
-        $this->lastUpdated = (int) $lastUpdated;
+        $this->lastUpdated = $lastUpdated;
         return $this;
     }
 
     /**
-     * @return DateTime
+     * @return ArrayCollection
      */
-    public function getLastUpdated()
+    public function getItems()
     {
-        return $this->lastUpdated;
+        return $this->items;
+    }
+
+    /**
+     * @param array $items
+     * 
+     * @return Cart
+     */
+    public function setItems(array $items)
+    {
+        $this->items = new ArrayCollection($items);
+    }
+
+    /**
+     * @param CartItem $item
+     */
+    public function addItem(CartItem $item)
+    {
+        $this->items[$item->getUid] = $item;
     }
 }

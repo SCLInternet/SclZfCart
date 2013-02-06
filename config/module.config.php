@@ -35,8 +35,9 @@ return array(
         ),
     ),
 
-    'scl_cart' => array(
-        'session_name' => 'SclZfCart',
+    'scl_zf_cart' => array(
+        'session_name'  => 'SclZfCart',
+        'storage_class' => 'SclZfCart\Storage\DoctrineStorage',
     ),
 
     'view_manager' => array(

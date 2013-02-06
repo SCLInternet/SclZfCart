@@ -1,9 +1,9 @@
 <?php
 
-namespace SclZfCart;
+namespace SclZfCart\Entity;
 
 /**
- * Entity class for storing a cart item to the database
+ * Entity class for storing a cart item to the database.
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
@@ -15,9 +15,9 @@ class CartItem
     protected $id;
 
     /**
-     * @var int
+     * @var Cart
      */
-    protected $cartId;
+    protected $cart;
 
     /**
      * @var string
@@ -58,20 +58,21 @@ class CartItem
     }
 
     /**
-     * @return int
+     * @return Cart
      */
-    public function getCartId()
+    public function getCart()
     {
-        return $this->cartId;
+        return $this->cart;
     }
 
     /**
-     * @param int $id
+     * @param Cart $cart
+     *
      * @return CartItem
      */
-    public function setCartId($id)
+    public function setCart(Cart $cart)
     {
-        $this->cartId = (int) $id;
+        $this->cart = $cart;
         return $this;
     }
 
@@ -85,6 +86,7 @@ class CartItem
 
     /**
      * @param string $uid
+     *
      * @return CartItem
      */
     public function setUid($uid)

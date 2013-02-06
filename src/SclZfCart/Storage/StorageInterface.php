@@ -14,18 +14,19 @@ interface StorageInterface
     /**
      * Loads a cart from the database.
      *
-     * @param int $id
+     * @param int  $id
+     * @param Cart $cart
      *
      * @return Cart
      */
-    public function load($id);
+    public function load($id, Cart $cart);
 
     /**
      * Stores a cart to the database
      *
      * @param Cart $cart
      *
-     * @return void
+     * @return int The cart identifier
      */
     public function store(Cart $cart);
 }

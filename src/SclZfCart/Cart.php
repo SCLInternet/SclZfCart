@@ -79,6 +79,16 @@ class Cart implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Empties the contents of the cart.
+     *
+     * @return void
+     */
+    public function clear()
+    {
+        $this->items = array();
+    }
+
+    /**
      * Fetches a list of all the items in the cart.
      *
      * @return CartItem[]

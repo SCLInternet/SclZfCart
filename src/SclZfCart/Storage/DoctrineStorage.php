@@ -6,7 +6,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use SclZfCart\Cart;
 use SclZfCart\CartItem;
 use SclZfCart\Entity\Cart as CartEntity;
-use SclZfCart\Entity\CartItem as CartItemEntity;
 use SclZfCart\Hydrator\CartHydrator;
 
 /**
@@ -19,12 +18,7 @@ class DoctrineStorage implements StorageInterface
     /**
      * @var CartEntity
      */
-    private $cart;
-
-    /**
-     * @var CartItemEntity[]
-     */
-    private $items = array();
+    private $cartEntity = null;
 
     /**
      * @var ObjectManager
@@ -48,35 +42,20 @@ class DoctrineStorage implements StorageInterface
     /**
      * {@inheritDoc}
      *
-     * @param int $id
+     * @param int  $id
+     * @param Cart $cart
      *
-     * @return Cart
+     * @return void
      */
-    public function load($id)
+    public function load($id, Cart $cart)
     {
-        $this->cart = $this->entityManager->find('SclZfCart\Entity\Cart', $id);
+        $this->cartEntity = $this->entityManager->find('SclZfCart\Entity\Cart', $id);
 
-        if (!$this->cart) {
+        if (!$this->cartEntity) {
             throw new \Exception("Cart with \"%id\" not found.");
         }
 
-        $items = $this->entityManager->getResource('SclZfCart\Entity\CartItem')
-            ->findBy(array('cartId' => $id));
-
-        foreach ($items as $item) {
-            $this->items[$item->getUid()] = $item;
-        }
-
-        $cart = new Cart;
-
-        $data = array(
-            'cart'     => $this->cart,
-            'items' => $this->cartItem
-        );
-
-        $this->hydrator->hydrate($data, $cart);
-
-        return $cart;
+        $this->hydrator->hydrate($this->cartEntity->getItems(), $cart);
     }
 
     /**
@@ -84,26 +63,34 @@ class DoctrineStorage implements StorageInterface
      *
      * @param Cart $cart
      *
-     * @return void
+     * @return int The cart identifier
      */
     public function store(Cart $cart)
     {
-        $data = $this->hydrator->extract($cart);
-
-        $this->cart = $data['cart'];
-
-        foreach ($data['items'] as $key => &$item) {
-            if (isset($this->items[$key])) {
-                $item->setId($this->items[$key]->getId());
-                $this->entityManager->persist($item);
-            } else {
-                $this->entityManager->remove($this->items[$key]);
-            }
+        if (null === $this->cartEntity) {
+            $this->cartEntity = new CartEntity();
         }
 
-        $this->items = $data['items'];
+        $this->cartEntity->setLastUpdated(new \DateTime());
 
+        $items = $this->hydrator->extract($cart);
+
+        $entityItems = $this->cartEntity->getItems();
+
+        foreach ($items as $key => &$item) {
+            if (!isset($entityItems[$key])) {
+                continue;
+            }
+
+            $item->setId($entityItems[$key]->getId());
+        }
+
+        $this->cartEntity->setItems($items);
+
+        $this->entityManager->persist($this->cartEntity);
         $this->entityManager->flush();
+
+        return $this->cartEntity->getId();
     }
 
     /**

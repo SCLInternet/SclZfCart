@@ -50,17 +50,23 @@ class Module implements
                 'SclZfCart\CartItem' => false,
             ),
             'invokables' => array(
-                'SclZfCart\CartItem' => 'SclZfCart\CartItem',
+                'SclZfCart\CartItem'              => 'SclZfCart\CartItem',
+                'SclZfCart\Hydrator\CartHydrator' => 'SclZfCart\Hydrator\CartHydrator',
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
                 'SclZfCart\Session' => function ($serviceLocator) {
                     $config = $serviceLocator->get('Config');
-                    return new Container($config['scl_cart']['session_name']);
+                    return new Container($config['scl_zf_cart']['session_name']);
+                },
+                'SclZfCart\Storage' => function ($serviceLocator) {
+                    $config = $serviceLocator->get('Config');
+                    return $serviceLocator->get($config['scl_zf_cart']['storage_class']);
                 },
                 'SclZfCart\Storage\DoctrineStorage' => function ($serviceLocator) {
                     $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
-                    return new DoctrineStorage($entityManager);
+                    $hydrator = $serviceLocator->get('SclZfCart\Hydrator\CartHydrator');
+                    return new DoctrineStorage($entityManager, $hydrator);
                 },
             ),
         );
