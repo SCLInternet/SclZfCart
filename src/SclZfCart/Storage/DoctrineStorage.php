@@ -5,6 +5,7 @@ namespace SclZfCart\Storage;
 use Doctrine\Common\Persistence\ObjectManager;
 use SclZfCart\Cart;
 use SclZfCart\Entity\Cart as CartEntity;
+use SclZfCart\Exception\CartNotFoundException;
 use SclZfCart\Hydrator\CartHydrator;
 
 /**
@@ -44,15 +45,15 @@ class DoctrineStorage implements StorageInterface
      *
      * @param int  $id
      * @param Cart $cart
-     *
      * @return void
+     * @throws CartNotFoundException
      */
     public function load($id, Cart $cart)
     {
         $this->cartEntity = $this->entityManager->find('SclZfCart\Entity\Cart', $id);
 
         if (!$this->cartEntity) {
-            throw new \Exception("Cart with \"%id\" not found.");
+            throw new CartNotFoundException("Cart with \"%id\" not found.");
         }
 
         $this->hydrator->hydrate($this->cartEntity->getItems()->toArray(), $cart);
@@ -62,7 +63,6 @@ class DoctrineStorage implements StorageInterface
      * {@inheritDoc}
      *
      * @param Cart $cart
-     *
      * @return int The cart identifier
      */
     public function store(Cart $cart)
@@ -92,10 +92,8 @@ class DoctrineStorage implements StorageInterface
                 $entityItems[$uid] = new \SclZfCart\Entity\CartItem;
             }
 
-            $entityItems[$uid]->setQuantity($item['quantity'])
-                ->setUid($item['uid'])
-                ->setProductType($item['productType'])
-                ->setProductData($item['productData']);
+            $entityItems[$uid]->setUid($item['uid'])
+                ->setData($item['data']);
         }
 
         $this->cartEntity->setItems($entityItems);

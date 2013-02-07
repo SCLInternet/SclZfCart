@@ -4,6 +4,7 @@ namespace SclZfCart\Hydrator;
 
 use SclZfCart\Cart;
 use SclZfCart\Entity\CartItem as CartItemEntity;
+use SclZfCart\Exception\InvalidArgumentException;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -20,6 +21,11 @@ class CartHydrator implements ServiceLocatorAwareInterface
      * @var ServiceLocatorInterface
      */
     private $serviceLocator;
+
+    /** 
+     * @var CartItemSerializerInterface
+     */
+    private $serializer;
 
     /**
      * {@inheritDoc}
@@ -42,8 +48,20 @@ class CartHydrator implements ServiceLocatorAwareInterface
     }
 
     /**
+     * @return CartItemInterface
+     */
+    protected function getItemSerializer()
+    {
+        if (null === $this->serializer) {
+            $this->serializer = $this->getServiceLocator()
+                ->get('SclZfCart\Storage\CartItemSerializer');
+        }
+
+        return $this->serializer;
+    }
+
+    /**
      * @param Cart $cart
-     *
      * @return CartItemEntity[]
      */
     public function extract(Cart $cart)
@@ -52,13 +70,10 @@ class CartHydrator implements ServiceLocatorAwareInterface
 
         /* @var $item \SclZfCart\CartItem */
         foreach ($cart->getItems() as $item) {
-            $product = $item->getProduct();
 
-            $data[$product->getUid()] = array(
-                'quantity'    => $item->getQuantity(),
-                'uid'         => $product->getUid(),
-                'productType' => get_class($product),
-                'productData' => serialize($product)
+            $data[$item->getUid()] = array(
+                'uid'  => $item->getUid(),
+                'data' => $this->getItemSerializer()->serialize($item)
             );
         }
 
@@ -68,8 +83,7 @@ class CartHydrator implements ServiceLocatorAwareInterface
     /**
      * @param CartItemEntity[] $data
      * @param Cart             $cart
-     *
-     * @throws \Exception
+     * @throws InvalidArguementException
      */
     public function hydrate(array $data, Cart $cart)
     {
@@ -77,17 +91,17 @@ class CartHydrator implements ServiceLocatorAwareInterface
 
         foreach ($data as $itemEntity) {
             if (!$itemEntity instanceof CartItemEntity) {
-                throw new \Exception(
-                    sprintf(
-                        'Expected instance of \SclZfCart\Entity\CartItem; got "%s"',
-                        is_object($itemEntity) ? get_class($itemEntity) : gettype($itemEntity)
-                    )
+                throw new InvalidArgumentException(
+                    '\SclZfCart\Entity\CartItem',
+                    $itemEntity,
+                    __CLASS__ . '::' . __METHOD__,
+                    __LINE__
                 );
             }
 
-            $product = unserialize($itemEntity->getProductData());
+            $item = $this->getItemSerializer()->unserialize($itemEntity->getData());
 
-            $cart->add($product, $itemEntity->getQuantity());
+            $cart->add($item);
         }
     }
 }

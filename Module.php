@@ -47,13 +47,14 @@ class Module implements
     {
         return array(
             'shared' => array(
-                'SclZfCart\CartItem' => false,
+                'SclZfCart\CartItem'        => false,
                 'SclZfCart\Entity\CartItem' => false,
             ),
             'invokables' => array(
-                'SclZfCart\CartItem'              => 'SclZfCart\CartItem',
-                'SclZfCart\Entity\CartItem'       => 'SclZfCart\Entity\CartItem',
-                'SclZfCart\Hydrator\CartHydrator' => 'SclZfCart\Hydrator\CartHydrator',
+                'SclZfCart\CartItem'                   => 'SclZfCart\CartItem',
+                'SclZfCart\Entity\CartItem'            => 'SclZfCart\Entity\CartItem',
+                'SclZfCart\Hydrator\CartHydrator'      => 'SclZfCart\Hydrator\CartHydrator',
+                'SclZfCart\Storage\CartItemSerializer' => 'SclZfCart\Storage\CartItemSerializer',
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',

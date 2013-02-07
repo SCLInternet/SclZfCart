@@ -25,19 +25,9 @@ class CartItem
     protected $uid;
 
     /**
-     * @var int
-     */
-    protected $quantity;
-
-    /**
      * @var string
      */
-    protected $productType;
-
-    /**
-     * @var string
-     */
-    protected $productData;
+    protected $data;
 
     /**
      * @return int
@@ -96,56 +86,20 @@ class CartItem
     }
 
     /**
-     * @return int
-     */
-    public function getQuantity()
-    {
-        return $this->quantity;
-    }
-
-    /**
-     * @param int $quantity
-     * @return CartItem
-     */
-    public function setQuantity($quantity)
-    {
-        $this->quantity = (int) $quantity;
-        return $this;
-    }
-
-    /**
      * @return string
      */
-    public function getProductType()
+    public function getData()
     {
-        return $this->productType;
-    }
-
-    /**
-     * @param string $productType
-     * @return CartItem
-     */
-    public function setProductType($productType)
-    {
-        $this->productType = (string) $productType;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getProductData()
-    {
-        return $this->productData;
+        return $this->data;
     }
 
     /**
      * @param string $productData
      * @return CartItem
      */
-    public function setProductData($productData)
+    public function setData($data)
     {
-        $this->productData = (string) $productData;
+        $this->data = (string) $data;
         return $this;
     }
 }

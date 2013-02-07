@@ -24,7 +24,6 @@ class Cart
 
     /**
      * @var ArrayCollection
-     * @ ORM\OneToMany(targetEntity="", mappedBy="customer", cascade={"remove"}, orphanRemoval=true)
      */
     protected $items;
 
