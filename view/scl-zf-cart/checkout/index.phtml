@@ -12,7 +12,7 @@
     <tbody>
         <?php foreach ($cart->getItems() as $item) : ?>
             <tr>
-                <td>X</td>
+                <td><a href="<?php echo $this->url('cart/remove', array('item' => $item->getUid())); ?>" rel="tooltip" title="Removed item from the cart">X</a></td>
                 <td>
                     <?php echo $this->escapeHtml($item->getTitle()); ?><br>
                     <small><?php echo $this->escapeHtml($item->getDescription()); ?></small>

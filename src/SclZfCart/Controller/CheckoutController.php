@@ -31,4 +31,20 @@ class CheckoutController extends AbstractActionController
     {
         return array('cart' => $this->getCart());
     }
+
+    /**
+     * Removes an item from the cart
+     *
+     * @return array
+     */
+    public function removeItemAction()
+    {
+        $uid = $this->params('item');
+
+        if ($uid) {
+            $this->getCart()->remove($uid);
+        }
+
+        return $this->redirect()->toRoute('cart');
+    }
 }

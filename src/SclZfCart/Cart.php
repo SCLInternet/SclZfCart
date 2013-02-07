@@ -48,7 +48,7 @@ class Cart implements ServiceLocatorAwareInterface
      * @param CartItemInterface $product
      * @param int               $quantity
      *
-     * @param boolean True if the item was added to the cart
+     * @param void
      */
     public function add(CartItemInterface $item)
     {
@@ -56,12 +56,11 @@ class Cart implements ServiceLocatorAwareInterface
 
         if (isset($this->items[$uid])) {
             $quantity = $this->items[$uid]->getQuantity() + $item->getQuantity();
-            return $this->items[$uid]->setQuantity($quantity);
+            $this->items[$uid]->setQuantity($quantity);
+            return;
         }
 
         $this->items[$uid] = $item;
-
-        return true;
     }
 
     /**

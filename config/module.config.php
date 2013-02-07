@@ -20,16 +20,16 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes'  => array(
-                    //'view' => array(
-                    //    'type'    => 'literal',
-                    //    'options' => array(
-                    //        'route'    => '/view',
-                    //        'defaults' => array(
-                    //            'controller' => 'SclZfCart\Controller\Checkout',
-                    //            'action'     => 'index',
-                    //        ),
-                    //    ),
-                    //),
+                    'remove' => array(
+                        'type'    => 'segment',
+                        'options' => array(
+                            'route'    => '/remove/:item',
+                            'defaults' => array(
+                                'controller' => 'SclZfCart\Controller\Checkout',
+                                'action'     => 'removeItem',
+                            ),
+                        ),
+                    ),
                 ), 
             ),
         ),

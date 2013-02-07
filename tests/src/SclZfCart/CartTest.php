@@ -34,82 +34,30 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers \SclZfCart\Cart::add
      * @covers \SclZfCart\Cart::getItems
-     * @covers \SclZfCart\Cart::remove
      */
-    public function testSingleProductAddAndRemove()
+    public function testSingleAdd()
     {
         $uid = 'product123';
 
-        $product = $this->getMock('SclZfCart\ProductInterface');
+        $item = $this->getMock('SclZfCart\CartItemInterface');
 
-        $product->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+        $item->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
 
-        $cartItem = $this->getMock('SclZfCart\CartItem');
-
-        $cartItem->expects($this->once())
-            ->method('setProduct')
-            ->with($this->equalTo($product))
-            ->will($this->returnValue($product));
-
-        $cartItem->expects($this->once())
-            ->method('getProduct')
-            ->will($this->returnValue($product));
-
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('SclZfCart\CartItem'))
-            ->will($this->returnValue($cartItem));
-
-        $result = $this->cart->add($product);
-
-        $this->assertTrue($result);
+        $result = $this->cart->add($item);
 
         $items = $this->cart->getItems();
 
         $this->assertArrayHasKey($uid, $items);
 
-        $this->assertEquals($cartItem, $items[$uid]);
-
-        $this->assertEquals($product, $items[$uid]->getProduct());
-
-        $this->cart->remove($product);
-
-        $items = $this->cart->getItems();
-
-        $this->assertEmpty($items);
+        $this->assertEquals($item, $items[$uid]);
     }
 
     /**
-     * @covers \SclZfCart\Cart::add
+     * @covers \SclZfCart\Cart::remove
      * @covers \SclZfCart\Cart::getItems
      */
-    public function testMultiQuatityAdd()
+    public function testRemove()
     {
-        $uid = 'product123';
-
-        $product = $this->getMock('SclZfCart\ProductInterface');
-
-        $product->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
-
-        $cartItem = $this->getMock('SclZfCart\CartItem');
-
-        $cartItem->expects($this->once())
-            ->method('setProduct')
-            ->with($this->equalTo($product))
-            ->will($this->returnValue($product));
-
-        $cartItem->expects($this->once())->method('setQuantity')->with($this->equalTo(1));
-        $cartItem->expects($this->once())->method('add')->with($this->equalTo(2))->will($this->returnValue(true));
-
-        $this->serviceLocator->expects($this->once())
-            ->method('get')
-            ->with($this->equalTo('SclZfCart\CartItem'))
-            ->will($this->returnValue($cartItem));
-
-        $result = $this->cart->add($product);
-        $this->assertTrue($result, 'First add');
-
-        $result = $this->cart->add($product, 2);
-        $this->assertTrue($result, 'Second add');
+        $this->markTestIncomplete('Not implmenented yet');
     }
 }
