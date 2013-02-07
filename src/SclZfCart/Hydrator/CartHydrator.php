@@ -3,7 +3,6 @@
 namespace SclZfCart\Hydrator;
 
 use SclZfCart\Cart;
-use SclZfCart\CartItem;
 use SclZfCart\Entity\CartItem as CartItemEntity;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
