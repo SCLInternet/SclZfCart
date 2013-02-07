@@ -78,6 +78,21 @@ class Cart implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Returns the item by uid.
+     *
+     * @param string $uid
+     * @return CartItemInterface
+     */
+    public function getItem($uid)
+    {
+        if (!isset($this->items[$uid])) {
+            return null;
+        }
+
+        return $this->items[$uid];
+    }
+
+    /**
      * Empties the contents of the cart.
      *
      * @return void

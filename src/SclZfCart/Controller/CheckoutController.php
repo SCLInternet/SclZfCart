@@ -41,9 +41,20 @@ class CheckoutController extends AbstractActionController
     {
         $uid = $this->params('item');
 
-        if ($uid) {
-            $this->getCart()->remove($uid);
+        if (!$uid) {
+            // @todo Generate error or write log
+            return $this->redirect()->toRoute('cart');
         }
+
+        $cart = $this->getCart();
+
+        $item = $cart->getItem($uid);
+
+        $this->flashMessenger()->addInfoMessage(
+            sprintf('%s has been removed from your cart.', $item->getTitle())
+        );
+
+        $this->getCart()->remove($item);
 
         return $this->redirect()->toRoute('cart');
     }

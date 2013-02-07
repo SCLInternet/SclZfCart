@@ -80,6 +80,7 @@ class DoctrineStorage implements StorageInterface
         foreach ($this->cartEntity->getItems()->toArray() as $key => $entity) {
             if (!isset($items[$entity->getUid()])) {
                 $this->entityManager->remove($entity);
+                continue;
             }
 
             $entityItems[$entity->getUid()] = $entity;
