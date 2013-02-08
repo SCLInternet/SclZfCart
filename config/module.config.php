@@ -3,6 +3,7 @@
 return array(
     'controllers' => array(
         'invokables' => array(
+            'SclZfCart\Controller\Cart'     => 'SclZfCart\Controller\CartController',
             'SclZfCart\Controller\Checkout' => 'SclZfCart\Controller\CheckoutController',
         ),
     ),
@@ -14,7 +15,7 @@ return array(
                 'options' => array(
                     'route'    => '/cart',
                     'defaults' => array(
-                        'controller' => 'SclZfCart\Controller\Checkout',
+                        'controller' => 'SclZfCart\Controller\Cart',
                         'action'     => 'index',
                     ),
                 ),
@@ -25,7 +26,7 @@ return array(
                         'options' => array(
                             'route'    => '/remove/:item',
                             'defaults' => array(
-                                'controller' => 'SclZfCart\Controller\Checkout',
+                                'controller' => 'SclZfCart\Controller\Cart',
                                 'action'     => 'removeItem',
                             ),
                         ),
@@ -54,6 +55,17 @@ return array(
                 )
             )
         )
+    ),
+
+    'controller_plugins' => array(
+        'invokables' => array(
+            'getCart' => 'SclZfCart\Controller\Plugin\Cart',
+        ),
+    ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'getCart' => 'SclZfCart\View\Helper\Cart',
+        ),
     ),
 
     'view_manager' => array(
