@@ -53,6 +53,7 @@ class Module implements
             'invokables' => array(
                 'SclZfCart\CartItem'                   => 'SclZfCart\CartItem',
                 'SclZfCart\Entity\CartItem'            => 'SclZfCart\Entity\CartItem',
+                'SclZfCart\Form\Cart'                  => 'SclZfCart\Form\Cart',
                 'SclZfCart\Hydrator\CartHydrator'      => 'SclZfCart\Hydrator\CartHydrator',
                 'SclZfCart\Storage\CartItemSerializer' => 'SclZfCart\Storage\CartItemSerializer',
             ),

@@ -1,25 +1,36 @@
-<?php echo $this->pageTitle('View Cart'); ?>
+<?php
+echo $this->pageTitle('View Cart');
 
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Description</th>
-            <th>Quantity</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($cart->getItems() as $item) : ?>
+$form->prepare();
+$form->setAttribute('action', $this->url('cart'));
+?>
+<?php echo $this->form()->openTag($form); ?>
+    <table class="table">
+        <thead>
             <tr>
-                <td><a href="<?php echo $this->url('cart/remove', array('item' => $item->getUid())); ?>" rel="tooltip" title="Removed item from the cart">X</a></td>
-                <td>
-                    <?php echo $this->escapeHtml($item->getTitle()); ?><br>
-                    <small><?php echo $this->escapeHtml($item->getDescription()); ?></small>
-                </td>
-                <td><?php echo $item->getQuantity(); ?></td>
-                <td></td>
+                <th></th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Price</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($cart->getItems() as $item) : ?>
+                <tr>
+                    <td><a href="<?php echo $this->url('cart/remove', array('item' => $item->getUid())); ?>" rel="tooltip" title="Removed item from the cart">X</a></td>
+                    <td>
+                        <?php echo $this->escapeHtml($item->getTitle()); ?><br>
+                        <small><?php echo $this->escapeHtml($item->getDescription()); ?></small>
+                    </td>
+                    <td><?php echo $this->forminput($form->getQuantityElement($item)); ?></td>
+                    <td></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php echo $this->formInput($form->get('checkout')); ?>
+    <?php echo $this->formInput($form->get('update')); ?>
+
+    <div class="clear"></div>
+<?php echo $this->form()->closeTag($form); ?>

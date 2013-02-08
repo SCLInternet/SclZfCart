@@ -2,60 +2,47 @@
 
 namespace SclZfCart\Controller;
 
-use SclZfCart\Cart;
+use SclZfCart\CartItem\CheckoutOptionsInterface;
+
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
- * The controller which takes the user through the checkout process.
+ * Takes the user through the checkout process.
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
 class CheckoutController extends AbstractActionController
 {
     /**
-     * Returns the shopping cart.
-     *
-     * @return Cart
-     */
-    private function getCart()
-    {
-        return $this->getServiceLocator()->get('SclZfCart\Cart');
-    }
-
-    /**
      * Displays the cart page.
      *
      * @return array
+     * @todo Consider the pros & cons of using the EventManager instead
      */
     public function indexAction()
     {
-        return array('cart' => $this->getCart());
-    }
-
-    /**
-     * Removes an item from the cart
-     *
-     * @return array
-     */
-    public function removeItemAction()
-    {
-        $uid = $this->params('item');
-
-        if (!$uid) {
-            // @todo Generate error or write log
-            return $this->redirect()->toRoute('cart');
-        }
+        //if (/* User not logged in */) {
+        //    // Redirect to user signup
+        //}
 
         $cart = $this->getCart();
 
-        $item = $cart->getItem($uid);
+        foreach ($cart->getItems() as $item) {
+            if (!$item instanceof CheckoutOptionsInterface) {
+                continue;
+            }
 
-        $this->flashMessenger()->addInfoMessage(
-            sprintf('%s has been removed from your cart.', $item->getTitle())
-        );
+            /* @var $item \SclZfCart\CartItem\CheckoutOptionsInterface */
 
-        $this->getCart()->remove($item);
+            // Redirect to product options page
+            if (!$item->checkoutOptionsCompleted()) {
+                $route = $item->checkoutOptionsRedirect();
+                return $this->redirect()->toRoute($route->route, $route->params);
+            }
+        }
 
-        return $this->redirect()->toRoute('cart');
+        // Shipping in the future.
+
+        // Take payment
     }
 }

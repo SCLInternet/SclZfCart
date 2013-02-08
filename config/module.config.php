@@ -31,6 +31,16 @@ return array(
                             ),
                         ),
                     ),
+                    'checkout' => array(
+                        'type'    => 'literal',
+                        'options' => array(
+                            'route'    => '/checkout',
+                            'defaults' => array(
+                                'controller' => 'SclZfCart\Controller\Checkout',
+                                'action'     => 'index',
+                            ),
+                        ),
+                    ),
                 ), 
             ),
         ),
