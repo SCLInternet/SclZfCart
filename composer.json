@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "2.*"
+        "zendframework/zendframework": "2.*",
+        "zf-commons/zfc-user-doctrine-orm": "dev-master"
     },
     "require-dev": {
         "phpmd/phpmd" : "1.4.0",
