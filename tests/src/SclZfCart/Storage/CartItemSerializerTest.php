@@ -9,46 +9,45 @@ class CartItemSerializerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var CartItemSerializer
      */
-    protected $object;
+    protected $serializer;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
      */
     protected function setUp()
     {
-        $this->object = new CartItemSerializer;
-    }
-
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
+        $this->serializer = new CartItemSerializer;
     }
 
     /**
      * @covers SclZfCart\Storage\CartItemSerializer::serialize
-     * @todo   Implement testSerialize().
+     * @covers SclZfCart\Storage\CartItemSerializer::unserialize
      */
     public function testSerialize()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $item = $this->getMock('SclZfCart\CartItemInterface');
+
+        $serialized = $this->serializer->serialize($item);
+
+        $this->assertInternalType('string', $serialized);
+        $this->assertGreaterThan(0, strlen($serialized));
+
+        $unserialized = $this->serializer->unserialize($serialized);
+
+        $this->assertEquals($item, $unserialized);
     }
 
     /**
      * @covers SclZfCart\Storage\CartItemSerializer::unserialize
-     * @todo   Implement testUnserialize().
+     * @expectedException SclZfCart\Exception\InvalidArgumentException
      */
-    public function testUnserialize()
+    public function testSerializedData()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $serialized = 'broken data';
+
+        $this->serializer->unserialize($serialized, 'Bad data test');
+
+        $serialized = serialize(new \stdClass());
+
+        $this->serializer->unserialize($serialized, 'Bad object test');
     }
 }

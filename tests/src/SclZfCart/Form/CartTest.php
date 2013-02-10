@@ -9,58 +9,46 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Cart
      */
-    protected $object;
+    protected $form;
 
     /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
      */
     protected function setUp()
     {
-        $this->object = new Cart;
+        $this->form = new Cart;
     }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
+    public function testSubmitButtons()
     {
+        $this->assertInstanceOf('Zend\Form\Element', $this->form->get('update'));
+        $this->assertInstanceOf('Zend\Form\Element', $this->form->get('checkout'));
+        $this->assertEquals('post', $this->form->getAttribute('method'));
     }
 
     /**
      * @covers SclZfCart\Form\Cart::addItem
-     * @todo   Implement testAddItem().
-     */
-    public function testAddItem()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers SclZfCart\Form\Cart::getQuantityElement
-     * @todo   Implement testGetQuantityElement().
-     */
-    public function testGetQuantityElement()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers SclZfCart\Form\Cart::getItemQuantity
-     * @todo   Implement testGetItemQuantity().
      */
-    public function testGetItemQuantity()
+    public function testItemMethods()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $uid = 'asdfg';
+        $quantity = 2;
+
+        $item = $this->getMock('SclZfCart\CartItemInterface');
+
+        $item->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+        $item->expects($this->atLeastOnce())->method('getQuantity')->will($this->returnValue($quantity));
+
+        $this->form->addItem($item);
+
+        $element = $this->form->get($uid);
+        $this->assertInstanceOf('Zend\Form\Element', $element, 'Direct fetch element test');
+
+        $this->assertEquals($quantity, $this->form->get($uid)->getValue(), 'Direct quantity test');
+
+        $this->assertEquals($element, $this->form->getQuantityElement($item), 'getQuantityElement() test');
+
+        $this->assertEquals($quantity, $this->form->getItemQuantity($item), 'getItemQuantity() test');
     }
 }
