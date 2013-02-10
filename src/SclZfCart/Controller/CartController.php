@@ -22,7 +22,7 @@ class CartController extends AbstractActionController
     {
         /* @var $item \SclZfCart\CartItemInterface */
         foreach ($this->getCart()->getItems() as $item) {
-            $quantity = $form->getQuantityElement($item);
+            $quantity = $form->getItemQuantity($item);
 
             if (null === $quantity) {
                 continue;
