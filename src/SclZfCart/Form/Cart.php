@@ -2,6 +2,8 @@
 
 namespace SclZfCart\Form;
 
+use SclZfCart\CartItem\QuantityElementProviderInterface;
+
 use SclZfCart\CartItemInterface;
 
 use Zend\Form\Form;
@@ -53,6 +55,13 @@ class Cart extends Form
      */
     public function addItem(CartItemInterface $item)
     {
+        if ($item instanceof QuantityElementProviderInterface) {
+            $element = $item->getQuantityElement();
+            $element->setName($item->getUid());
+            $this->add($element);
+            return;
+        }
+
         $this->add(
             array(
                 'name' => $item->getUid(),
