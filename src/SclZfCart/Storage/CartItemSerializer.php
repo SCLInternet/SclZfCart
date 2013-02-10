@@ -32,7 +32,7 @@ class CartItemSerializer implements CartItemSerializerInterface
      */
     public function unserialize($data)
     {
-        $item = unserialize($data);
+        $item = @unserialize($data);
 
         if (!$item instanceof CartItemInterface) {
             throw new InvalidArgumentException(

@@ -83,12 +83,12 @@ class Cart extends Form
      */
     public function getItemQuantity(CartItemInterface $item)
     {
-        $element = $this->getElement($item);
+        $element = $this->getQuantityElement($item);
 
         if (!$element) {
             return null;
         }
 
-        return (int) $this->getElement($item)->getValue();
+        return (int) $this->getQuantityElement($item)->getValue();
     }
 }
