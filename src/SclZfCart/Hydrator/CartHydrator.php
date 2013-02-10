@@ -5,6 +5,7 @@ namespace SclZfCart\Hydrator;
 use SclZfCart\Cart;
 use SclZfCart\Entity\CartItem as CartItemEntity;
 use SclZfCart\Exception\InvalidArgumentException;
+use SclZfCart\Storage\CartItemSerializerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -12,51 +13,29 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * Hydrator to extract and hydrator a cart's contents.
  *
  * @author Tom Oram <tom@scl.co.uk>
- *
- * @todo Consider using a product hydrator
  */
-class CartHydrator implements ServiceLocatorAwareInterface
+class CartHydrator
 {
-    /**
-     * @var ServiceLocatorInterface
-     */
-    private $serviceLocator;
-
     /**
      * @var CartItemSerializerInterface
      */
     private $serializer;
 
     /**
-     * {@inheritDoc}
+     * Set the item serializer class.
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param CartItemSerializerInterface $serializer
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function __construct(CartItemSerializerInterface $serializer)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->serializer = $serializer;
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
-     * @return CartItemInterface
+     * @return CartItemSerializerInterface
      */
     protected function getItemSerializer()
     {
-        if (null === $this->serializer) {
-            $this->serializer = $this->getServiceLocator()
-                ->get('SclZfCart\Storage\CartItemSerializer');
-        }
-
         return $this->serializer;
     }
 
