@@ -22,7 +22,7 @@ class CartHydrator implements ServiceLocatorAwareInterface
      */
     private $serviceLocator;
 
-    /** 
+    /**
      * @var CartItemSerializerInterface
      */
     private $serializer;

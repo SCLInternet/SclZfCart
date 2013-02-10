@@ -113,6 +113,6 @@ class DoctrineStorage implements StorageInterface
      */
     public function collectGarbage($probability, $lifetime)
     {
-        
+
     }
 }

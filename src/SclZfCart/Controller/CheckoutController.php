@@ -2,8 +2,9 @@
 
 namespace SclZfCart\Controller;
 
+use SclZfCart\CartEvent;
 use SclZfCart\CartItem\CheckoutOptionsInterface;
-
+use SclZfCart\Utility\Route;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
@@ -17,7 +18,6 @@ class CheckoutController extends AbstractActionController
      * Displays the cart page.
      *
      * @return array
-     * @todo Consider the pros & cons of using the EventManager instead
      */
     public function indexAction()
     {
@@ -25,24 +25,29 @@ class CheckoutController extends AbstractActionController
         //    // Redirect to user signup
         //}
 
+        /* @var $cart \SclZfCart\Cart */
         $cart = $this->getCart();
 
-        foreach ($cart->getItems() as $item) {
-            if (!$item instanceof CheckoutOptionsInterface) {
-                continue;
-            }
+        $eventManager = $cart->getEventManager();
 
-            /* @var $item \SclZfCart\CartItem\CheckoutOptionsInterface */
+        $results = $eventManager->trigger(CartEvent::EVENT_CHECKOUT, $cart);
 
-            // Redirect to product options page
-            if (!$item->checkoutOptionsCompleted()) {
-                $route = $item->checkoutOptionsRedirect();
-                return $this->redirect()->toRoute($route->route, $route->params);
+        foreach ($results as $result) {
+            if ($result instanceof Route) {
+                return $this->redirect()->toRoute($result->route, $result->params);
             }
         }
 
         // Shipping in the future.
 
-        // Take payment
+        // Display confirmation page
+    }
+
+    /**
+     * Displays the checkout completed page
+     */
+    public function completeAction()
+    {
+        
     }
 }

@@ -11,7 +11,7 @@ class InvalidArgumentException extends \InvalidArgumentException
 {
     /**
      * Formats the message.
-     * 
+     *
      * @param string $expected
      * @param mixed  $got
      * @param string $method

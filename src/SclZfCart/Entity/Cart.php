@@ -82,7 +82,7 @@ class Cart
 
     /**
      * @param array $items
-     * 
+     *
      * @return Cart
      */
     public function setItems(array $items)

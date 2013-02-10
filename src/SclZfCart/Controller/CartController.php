@@ -34,7 +34,7 @@ class CartController extends AbstractActionController
 
     /**
      * Updates the cart and checks if the checkout button was pressed
-     * 
+     *
      * @param CartForm $form
      * @return mixed
      */

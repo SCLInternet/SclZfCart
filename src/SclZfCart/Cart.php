@@ -2,6 +2,10 @@
 
 namespace SclZfCart;
 
+use Zend\Cache\Storage\Event;
+
+use Zend\EventManager\EventManagerAwareInterface;
+use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -10,7 +14,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-class Cart implements ServiceLocatorAwareInterface
+class Cart implements
+    EventManagerAwareInterface,
+    ServiceLocatorAwareInterface
 {
     /**
      * The service locator.
@@ -18,6 +24,13 @@ class Cart implements ServiceLocatorAwareInterface
      * @var ServiceLocatorInterface
      */
     private $serviceLocator;
+
+    /**
+     * The event manager.
+     *
+     * @var EventManagerInterface
+     */
+    private $eventManager;
 
     /**
      * The items in the cart
@@ -28,6 +41,8 @@ class Cart implements ServiceLocatorAwareInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @param ServiceLocatorInterface $serviceLocator
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
@@ -36,10 +51,33 @@ class Cart implements ServiceLocatorAwareInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
     {
         return $this->serviceLocator;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param EventManagerInterface $eventManager
+     */
+    public function setEventManager(EventManagerInterface $eventManager)
+    {
+        $eventManager->setEventClass('SclZfCart\CartEvent');
+        $this->eventManager = $eventManager;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return EventManagerInterface
+     */
+    public function getEventManager()
+    {
+        return $this->eventManager;
     }
 
     /**

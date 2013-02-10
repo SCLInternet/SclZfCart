@@ -14,7 +14,7 @@ use Zend\Form\Form;
 class Cart extends Form
 {
     /**
-     * Setup the submit buttons 
+     * Setup the submit buttons
      */
     public function __construct()
     {

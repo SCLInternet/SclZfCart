@@ -8,7 +8,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * Factory for creating the {@see Cart} object. 
+ * Factory for creating the {@see Cart} object.
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
