@@ -36,7 +36,9 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $this->hydrator = $this->getMock('SclZfCart\Hydrator\CartHydrator');
+        $this->hydrator = $this->getMockBuilder('SclZfCart\Hydrator\CartHydrator')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storage = new DoctrineStorage($this->entityManager, $this->hydrator);
     }

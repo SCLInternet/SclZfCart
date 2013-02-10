@@ -49,7 +49,6 @@ class CartHydrator
 
         /* @var $item \SclZfCart\CartItem */
         foreach ($cart->getItems() as $item) {
-
             $data[$item->getUid()] = array(
                 'uid'  => $item->getUid(),
                 'data' => $this->getItemSerializer()->serialize($item)
