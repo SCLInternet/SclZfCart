@@ -1,0 +1,10 @@
+<?php echo $this->pageTitle('Checkout Confirmation'); ?>
+
+<p>Please review you order details before completing payment.</p>
+<?php foreach ($this->getCart()->getItems() as $item) : ?>
+<pre>
+    <?php echo $this->escapeHtml($item->getTitle()); ?>
+    <?php echo $this->escapeHtml($item->getDescription()); ?>
+    <?php echo print_r($item); ?>
+</pre>
+<?php endforeach; ?>

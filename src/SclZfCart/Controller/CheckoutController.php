@@ -15,7 +15,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 class CheckoutController extends AbstractActionController
 {
     /**
-     * Displays the cart page.
+     * Displays the checkout confirmation page
      *
      * @return array
      */
@@ -38,9 +38,7 @@ class CheckoutController extends AbstractActionController
             }
         }
 
-        // Shipping in the future.
-
-        // Display confirmation page
+        return array();
     }
 
     /**
