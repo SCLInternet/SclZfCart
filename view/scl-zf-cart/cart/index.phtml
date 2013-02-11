@@ -22,7 +22,12 @@ $form->setAttribute('action', $this->url('cart'));
                         <?php echo $this->escapeHtml($item->getTitle()); ?><br>
                         <small><?php echo $this->escapeHtml($item->getDescription()); ?></small>
                     </td>
-                    <td><?php echo $this->formElement($form->getQuantityElement($item)); ?></td>
+                    <td><?php
+                        $quantity = $form->getQuantityElement($item);
+                        echo is_scalar($quantity)
+                            ? $this->escapeHtml($quantity)
+                            : $this->formElement($quantity);
+                    ?></td>
                     <td></td>
                 </tr>
             <?php endforeach; ?>

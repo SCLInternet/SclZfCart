@@ -2,8 +2,6 @@
 
 namespace SclZfCart;
 
-use Zend\Cache\Storage\Event;
-
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;

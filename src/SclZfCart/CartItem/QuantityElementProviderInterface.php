@@ -12,7 +12,7 @@ interface QuantityElementProviderInterface
     /**
      * Returns true if more options need to be entered.
      *
-     * @return \Zend\Form\ElementInterface
+     * @return \Zend\Form\ElementInterface|string
      */
     public function getQuantityElement();
 }
