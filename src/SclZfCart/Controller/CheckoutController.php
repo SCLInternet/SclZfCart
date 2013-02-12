@@ -30,11 +30,11 @@ class CheckoutController extends AbstractActionController
      */
     private function getCartEventManager()
     {
-        if (null === $this->eventManager) {
-            $this->eventManager = $this->getCart()->getEventManager();
+        if (null === $this->cartEventManager) {
+            $this->cartEventManager = $this->getCart()->getEventManager();
         }
 
-        return $this->eventManager;
+        return $this->cartEventManager;
     }
 
     /**
