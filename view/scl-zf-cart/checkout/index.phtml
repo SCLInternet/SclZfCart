@@ -22,3 +22,12 @@
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<?php
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formCollection($form);
+echo $this->form()->closeTag($form);
+?>
+
+<div class="clear"></div>

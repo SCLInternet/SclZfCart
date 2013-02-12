@@ -40,6 +40,19 @@ return array(
                                 'action'     => 'index',
                             ),
                         ),
+                        'may_terminate' => true,
+                        'child_routes'  => array(
+                            'complete' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/complete',
+                                    'defaults' => array(
+                                        'controller' => 'SclZfCart\Controller\Checkout',
+                                        'action'     => 'complete',
+                                    ),
+                                ),
+                            ),
+                        ),
                     ),
                 ),
             ),

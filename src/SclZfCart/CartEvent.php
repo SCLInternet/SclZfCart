@@ -12,7 +12,8 @@ use Zend\EventManager\Event;
  */
 class CartEvent extends Event
 {
-    const EVENT_CHECKOUT = 'checkout';
+    const EVENT_CHECKOUT      = 'checkout';
+    const EVENT_COMPLETE_FORM = 'complete_form';
 
     /**
      * @var Route

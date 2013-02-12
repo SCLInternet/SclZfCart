@@ -125,8 +125,7 @@ class Cart extends Form
             return $element;
         }
 
-        if (isset($this->quantityMessages[$uid]))
-        {
+        if (isset($this->quantityMessages[$uid])) {
             return (string) $this->quantityMessages[$uid];
         }
 
