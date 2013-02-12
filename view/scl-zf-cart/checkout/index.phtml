@@ -1,10 +1,24 @@
 <?php echo $this->pageTitle('Checkout Confirmation'); ?>
 
 <p>Please review you order details before completing payment.</p>
-<?php foreach ($this->getCart()->getItems() as $item) : ?>
-<pre>
-    <?php echo $this->escapeHtml($item->getTitle()); ?>
-    <?php echo $this->escapeHtml($item->getDescription()); ?>
-    <?php echo print_r($item); ?>
-</pre>
-<?php endforeach; ?>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->getCart()->getItems() as $item) : ?>
+            <tr>
+                <td>
+                    <?php echo $this->escapeHtml($item->getTitle()); ?><br>
+                    <em><?php echo $this->escapeHtml($item->getDescription()); ?></em>
+                </td>
+                <td><a href="<?php echo $this->url('cart'); ?>" rel="tooltip" title="Click to change quantity"><?php echo $item->getQuantity(); ?></a></td>
+                <td><?php echo $this->formatPrice(0); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
