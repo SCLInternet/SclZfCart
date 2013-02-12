@@ -6,7 +6,6 @@ use Zend\EventManager\EventManagerInterface;
 
 use SclZfCart\CartEvent;
 use SclZfCart\Utility\Route;
-use Zend\EventManager\EventInterface;
 use Zend\Form\Form;
 use Zend\Mvc\Controller\AbstractActionController;
 
@@ -48,7 +47,11 @@ class CheckoutController extends AbstractActionController
 
         $eventManager = $this->getCartEventManager();
 
-        $results = $eventManager->trigger(CartEvent::EVENT_CHECKOUT, $cart);
+        $results = $eventManager->trigger(
+            CartEvent::EVENT_CHECKOUT,
+            $cart,
+            array(CartEvent::PARAM_CART => $cart)
+        );
 
         foreach ($results as $result) {
             if ($result instanceof Route) {
@@ -81,7 +84,11 @@ class CheckoutController extends AbstractActionController
             )
         );
 
-        $this->getCartEventManager()->trigger(CartEvent::EVENT_COMPLETE_FORM, $form);
+        $this->getCartEventManager()->trigger(
+            CartEvent::EVENT_COMPLETE_FORM,
+            $form,
+            array(CartEvent::PARAM_CART => $this->getCart())
+        );
 
         return $form;
     }

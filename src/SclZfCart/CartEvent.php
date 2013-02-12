@@ -2,6 +2,7 @@
 
 namespace SclZfCart;
 
+use SclZfCart\Exception\InvalidArgumentException;
 use SclZfCart\Utility\Route;
 use Zend\EventManager\Event;
 
@@ -14,6 +15,8 @@ class CartEvent extends Event
 {
     const EVENT_CHECKOUT      = 'checkout';
     const EVENT_COMPLETE_FORM = 'complete_form';
+
+    const PARAM_CART = 'cart';
 
     /**
      * @var Route
@@ -39,5 +42,30 @@ class CartEvent extends Event
     public function getRoute()
     {
         return $this->route;
+    }
+
+    /**
+     * Returns the cart param.
+     *
+     * @return Cart|null
+     */
+    public function getCart()
+    {
+        $cart = $this->getParam(self::PARAM_CART);
+
+        if (null === $cart) {
+            return null;
+        }
+
+        if (!$cart instanceof Cart) {
+            throw new InvalidArgumentException(
+                '\SclZfCart\Cart',
+                $cart,
+                __METHOD__,
+                __LINE__
+            );
+        }
+
+        return $cart;
     }
 }
