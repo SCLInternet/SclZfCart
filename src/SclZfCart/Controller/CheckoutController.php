@@ -21,7 +21,7 @@ class CheckoutController extends AbstractActionController
      *
      * @var EventManagerInterface
      */
-    private $eventManager;
+    private $cartEventManager;
 
     /**
      * Return the cart event manager.
