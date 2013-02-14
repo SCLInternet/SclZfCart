@@ -15,6 +15,7 @@ class CartEvent extends Event
 {
     const EVENT_CHECKOUT      = 'checkout';
     const EVENT_COMPLETE_FORM = 'complete_form';
+    const EVENT_COMPLETE      = 'complete';
 
     const PARAM_CART = 'cart';
 

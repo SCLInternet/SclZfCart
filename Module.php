@@ -3,9 +3,10 @@
 namespace SclZfCart;
 
 use SclZfCart\Hydrator\CartHydrator;
-
 use SclZfCart\Storage\DoctrineStorage;
+use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Session\Container;
@@ -16,10 +17,29 @@ use Zend\Session\Container;
  * @author Tom Oram <tom@scl.co.uk>
  */
 class Module implements
+    BootstrapListenerInterface,
     AutoloaderProviderInterface,
     ConfigProviderInterface,
     ServiceProviderInterface
 {
+    /**
+     * {@inheritDoc}
+     *
+     * @param EventInterface $e
+     */
+    public function onBootstrap(EventInterface $e)
+    {
+        $serviceLocator = $e->getApplication()->getServiceManager();
+        /* @var $cart \SclZfCart\Cart */
+        $cart = $serviceLocator->get('SclZfCart\Cart');
+        $eventManager = $cart->getEventManager();
+
+        $eventManager->attach(
+            CartEvent::EVENT_COMPLETE,
+            array('SclZfCart\Listener\CartListener', 'completeOrder')
+        );
+    }
+
     /**
      * {@inheritDoc}
      */

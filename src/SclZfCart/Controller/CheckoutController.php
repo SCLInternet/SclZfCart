@@ -119,6 +119,14 @@ class CheckoutController extends AbstractActionController
      */
     public function completeAction()
     {
+        $cart = $this->getCart();
+
+        $this->getCartEventManager()->trigger(
+            CartEvent::EVENT_COMPLETE,
+            $cart,
+            array(CartEvent::PARAM_CART => $cart)
+        );
+
         return array();
     }
 }
