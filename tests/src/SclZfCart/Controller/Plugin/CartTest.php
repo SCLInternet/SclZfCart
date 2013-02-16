@@ -11,6 +11,10 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected $object;
 
+    protected $serviceLocator;
+
+    protected $controller;
+
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
@@ -18,14 +22,16 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->object = new Cart;
-    }
 
-    /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
+        $this->serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+
+        $this->controller = $this->getMock('Zend\Mvc\Controller\AbstractActionController');
+
+        $this->controller->expects($this->any())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->serviceLocator));
+
+        $this->object->setController($this->controller);
     }
 
     /**
@@ -34,9 +40,11 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function test__invoke()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->serviceLocator->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('SclZfCart\Cart'))
+            ->will($this->returnValue('CART_OBJECT'));
+
+        $this->assertEquals('CART_OBJECT', $this->object->__invoke());
     }
 }

@@ -53,11 +53,91 @@ class CartTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \SclZfCart\Cart::getItem
+     */
+    public function testGetItem()
+    {
+        $uid = 'product123';
+
+        $item = $this->getMock('SclZfCart\CartItemInterface');
+
+        $item->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+
+        $result = $this->cart->add($item);
+
+        $this->assertEquals($item, $this->cart->getItem($uid));
+    }
+
+    /**
+     * @covers \SclZfCart\Cart::getItem
+     */
+    public function testGetUnknownItem()
+    {
+        $this->assertNull($this->cart->getItem('stupid_uid'));
+    }
+
+    /**
      * @covers \SclZfCart\Cart::remove
      * @covers \SclZfCart\Cart::getItems
+     * @depends testGetItem
+     * @depends testGetUnknownItem
      */
-    public function testRemove()
+    public function testRemoveByUid()
     {
-        $this->markTestIncomplete('Not implmenented yet');
+        $uid = 'product123';
+
+        $item = $this->getMock('SclZfCart\CartItemInterface');
+
+        $item->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+
+        $result = $this->cart->add($item);
+
+        $this->cart->remove($uid);
+
+        $this->assertNull($this->cart->getItem($uid));
+    }
+
+    /**
+     * @covers \SclZfCart\Cart::remove
+     * @covers \SclZfCart\Cart::getItems
+     * @depends testGetItem
+     * @depends testGetUnknownItem
+     */
+    public function testRemoveByItem()
+    {
+        $uid = 'product123';
+
+        $item = $this->getMock('SclZfCart\CartItemInterface');
+
+        $item->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+
+        $result = $this->cart->add($item);
+
+        $this->cart->remove($item);
+
+        $this->assertNull($this->cart->getItem($uid));
+    }
+
+    /**
+     * @covers \SclZfCart\Cart::remove
+     * @covers \SclZfCart\Cart::getItems
+     * @depends testGetItem
+     * @depends testGetUnknownItem
+     */
+    public function testClear()
+    {
+        $uid = 'product123';
+        $item1 = $this->getMock('SclZfCart\CartItemInterface');
+        $item1->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+        $result = $this->cart->add($item1);
+
+        $uid = 'product456';
+        $item2 = $this->getMock('SclZfCart\CartItemInterface');
+        $item2->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
+        $result = $this->cart->add($item2);
+
+        $this->cart->clear();
+
+        $this->assertEquals(array(), $this->cart->getItems());
     }
 }
