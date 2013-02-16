@@ -119,8 +119,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \SclZfCart\Cart::remove
-     * @covers \SclZfCart\Cart::getItems
+     * @covers \SclZfCart\Cart::clear
      * @depends testGetItem
      * @depends testGetUnknownItem
      */

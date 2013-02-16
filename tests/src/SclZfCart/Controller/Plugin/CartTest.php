@@ -35,8 +35,8 @@ class CartTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers SclZfCart\Controller\Plugin\Cart::getServiceLocator
      * @covers SclZfCart\Controller\Plugin\Cart::__invoke
-     * @todo   Implement test__invoke().
      */
     public function test__invoke()
     {
