@@ -21,46 +21,44 @@ class CartEventTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
-
-    /**
      * @covers SclZfCart\CartEvent::setRoute
-     * @todo   Implement testSetRoute().
-     */
-    public function testSetRoute()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers SclZfCart\CartEvent::getRoute
-     * @todo   Implement testGetRoute().
      */
-    public function testGetRoute()
+    public function testGetSetRoute()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $route = new \SclZfCart\Utility\Route('test/route', array('a' => 'xyz'));
+
+        $this->object->setRoute($route);
+
+        $this->assertEquals($route, $this->object->getRoute());
     }
 
     /**
      * @covers SclZfCart\CartEvent::getCart
-     * @todo   Implement testGetCart().
      */
-    public function testGetCart()
+    public function testGetCartWithNoCartParam()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $this->assertNull($this->object->getCart());
+    }
+
+    /**
+     * @covers SclZfCart\CartEvent::getCart
+     * @expectedException \SclZfCart\Exception\InvalidArgumentException
+     */
+    public function testGetCartWithBadCartParam()
+    {
+        $this->object->setParam(CartEvent::PARAM_CART, 'xyz');
+        $this->assertNull($this->object->getCart());
+    }
+
+    /**
+     * @covers SclZfCart\CartEvent::getCart
+     */
+    public function testGetCartWithGoodCartParam()
+    {
+        $cart = $this->getMock('SclZfCart\Cart');
+        $this->object->setParam(CartEvent::PARAM_CART, $cart);
+        
+        $this->assertEquals($cart, $this->object->getCart());
     }
 }
