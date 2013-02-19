@@ -7,6 +7,8 @@ use SclZfCart\CartEvent;
  * Listener functions for the event manager
  *
  * @author Tom Oram <tom@scl.co.uk>
+ * @todo Consider implementing ListenerAggregateInterface, my concern is that it
+ *     will have to be instantiated on every call even when not needed.
  */
 class CartListener
 {
