@@ -6,8 +6,6 @@ use SclZfCart\Cart;
 use SclZfCart\Entity\CartItem as CartItemEntity;
 use SclZfCart\Exception\InvalidArgumentException;
 use SclZfCart\Storage\CartItemSerializerInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Hydrator to extract and hydrator a cart's contents.
