@@ -3,6 +3,8 @@ $form = $this->form;
 $cart = $this->cart;
 echo $this->pageTitle('View Cart');
 
+$this->headLink()->appendStylesheet($this->basePath() . '/css/scl-zf-cart/cart.css');
+
 $form->prepare();
 $form->setAttribute('action', $this->url('cart'));
 ?>

@@ -59,6 +59,21 @@ return array(
         ),
     ),
 
+    'asset_manager' => array(
+        'resolver_configs' => array(
+            'map' => array(
+                'css/scl-zf-cart/cart.css' => __DIR__ . '/../public/less/cart.less',
+            ),
+        ),
+        'filters' => array(
+            'css/scl-zf-cart/cart.css' => array(
+                array(
+                    'filter' => 'LessphpFilter',
+                ),
+            ),
+        ),
+    ),
+
     'scl_zf_cart' => array(
         'session_name'  => 'SclZfCart',
         'storage_class' => 'SclZfCart\Storage\DoctrineStorage',

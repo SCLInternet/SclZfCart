@@ -43,4 +43,11 @@ interface CartItemInterface
      * @return int
      */
     public function getQuantity();
+
+    /**
+     * Returns the price for this item
+     *
+     * @return float
+     */
+    public function getPrice();
 }
