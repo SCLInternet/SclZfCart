@@ -2,11 +2,16 @@
 
 namespace SclZfCart\Storage;
 
+use SclZfCart\Entity\CartItem;
+
+use Zend\ServiceManager\ServiceLocatorInterface;
+
 use Doctrine\Common\Persistence\ObjectManager;
 use SclZfCart\Cart;
+use SclZfCart\CartItemInterface;
 use SclZfCart\Entity\Cart as CartEntity;
-use SclZfCart\Exception\CartNotFoundException;
-use SclZfCart\Hydrator\CartHydrator;
+use SclZfCart\Entity\CartItem as CartItemEntity;
+use SclZfCart\Exception;
 
 /**
  * Storage class for storing a cart using doctrine.
@@ -19,65 +24,192 @@ class DoctrineStorage implements StorageInterface
     /**
      * @var CartEntity
      */
-    private $cartEntity = null;
+    protected $cartEntity = null;
 
     /**
      * @var ObjectManager
      */
-    private $entityManager;
+    protected $entityManager;
 
     /**
-     * @var CartHydrator
+     * @var ServiceLocatorInterface
      */
-    private $hydrator;
+    protected $serviceLocator;
+
 
     /**
      * @param ObjectManager $entityManager
      */
-    public function __construct(ObjectManager $entityManager, CartHydrator $hydrator)
-    {
+    public function __construct(
+        ObjectManager $entityManager,
+        ServiceLocatorInterface $serviceLocator
+    ) {
         $this->entityManager = $entityManager;
-        $this->hydrator = $hydrator;
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Converts the cart items to an array of useful information
+     * @param  Cart $cart
+     * @return array
+     * @todo type is a service name so is get_class the right way to acheive this? Maybe use a static member?
+     */
+    protected function cartItemsToArray(Cart $cart)
+    {
+        $data = array();
+
+        /* @var $item \SclZfCart\CartItemInterface */
+        foreach ($cart->getItems() as $item) {
+            $data[$item->getUid()] = $this->extractCartItem($item);
+        }
+
+        return $data;
+    }
+
+    /**
+     * Extract data from a CartItem object
+     *
+     * @param  CartItemInterface $item
+     * @return array
+     */
+    protected function extractCartItem(CartItemInterface $item)
+    {
+        return array(
+            'uid'      => $item->getUid(),
+            'type'     => get_class($item),
+            'quantity' => $item->getQuantity(),
+            'data'     => $item->serialize(),
+        );
+    }
+
+    /**
+     * Hydrates a cart item.
+     *
+     * @param  CartItemInterface $item
+     * @param  array             $data
+     * @throws InvalidArguementException
+     */
+    protected function hydrateCartItem(CartItemInterface $item, array $data)
+    {
+        if (!$item instanceof $data['type']) {
+            // @todo should be DomainException
+            throw new Exception\InvalidArgumentException(
+                $data['type'],
+                $item,
+                __METHOD__,
+                __LINE__
+            );
+        }
+
+        $item->setUid($data['uid'])
+            ->setQuantity($data['quantity']);
+
+        $item->unserialize($data['data']);
+    }
+
+    /**
+     * Load the cart from the database.
+     *
+     * @param  int $id
+     * @return CartEntity 
+     */
+    protected function loadCartById($id)
+    {
+        return $this->entityManager->find('SclZfCart\Entity\Cart', $id);
     }
 
     /**
      * {@inheritDoc}
      *
-     * @param int  $id
-     * @param Cart $cart
+     * @param  int  $id
+     * @param  Cart $cart
      * @return void
      * @throws CartNotFoundException
      */
     public function load($id, Cart $cart)
     {
-        $this->cartEntity = $this->entityManager->find('SclZfCart\Entity\Cart', $id);
+        $this->cartEntity = $this->loadCartById($id);
 
         if (!$this->cartEntity) {
-            throw new CartNotFoundException("Cart with \"%id\" not found.");
+            throw new Exception\CartNotFoundException("Cart with \"$id\" not found.");
         }
 
-        $this->hydrator->hydrate($this->cartEntity->getItems()->toArray(), $cart);
+        $cart->clear();
+
+        foreach ($this->cartEntity->getItems() as $entity) {
+            $item = $this->serviceLocator->get($entity->getType());
+
+            $data = $this->extractCartItemEntity($entity);
+
+            $this->hydrateCartItem($item, $data);
+
+            $cart->add($item);
+        }
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the cart entity or returns a new one if one previously had not been set.
      *
-     * @param Cart $cart
-     * @return int The cart identifier
+     * @return Cart
+     * @todo Maybe move this back into store()
      */
-    public function store(Cart $cart)
+    protected function getCartEntity()
     {
         if (null === $this->cartEntity) {
             $this->cartEntity = new CartEntity();
         }
 
+        return $this->cartEntity;
+    }
+
+    /**
+     * Extracts the data from CartItem entity
+     *
+     * @param  CartItemEntity $entity
+     * @return array
+     */
+    protected function extractCartItemEntity(CartItemEntity $entity)
+    {
+        return array(
+            'uid'      => $entity->getUid(),
+            'quantity' => $entity->getQuantity(),
+            'type'     => $entity->getType(),
+            'data'     => $entity->getData(),
+        );
+    }
+
+    /**
+     * Hydrates the CartItem entity
+     *
+     * @param  CartItemEntity $cartItemEntity
+     * @param  array          $data
+     * @return void
+     */
+    protected function hydrateCartItemEntity(CartItemEntity $entity, array $data)
+    {
+        $entity->setUid($data['uid'])
+            ->setQuantity($data['quantity'])
+            ->setType($data['type'])
+            ->setData($data['data']);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param  Cart $cart
+     * @return int The cart identifier
+     */
+    public function store(Cart $cart)
+    {
+        $this->getCartEntity();
+
         $this->cartEntity->setLastUpdated(new \DateTime());
 
-        $items = $this->hydrator->extract($cart);
+        $items = $this->cartItemsToArray($cart);
 
         $entityItems = array();
 
-        foreach ($this->cartEntity->getItems()->toArray() as $key => $entity) {
+        foreach ($this->cartEntity->getItems() as $key => $entity) {
             if (!isset($items[$entity->getUid()])) {
                 $this->entityManager->remove($entity);
                 continue;
@@ -86,15 +218,14 @@ class DoctrineStorage implements StorageInterface
             $entityItems[$entity->getUid()] = $entity;
         }
 
-        foreach ($items as $uid => $item) {
+        foreach ($items as $uid => $itemData) {
             if (!isset($entityItems[$uid])) {
-                /* @var $entity \SclZfCart\Entity\CartItem */
+                /* @var $entity CartItemEntity */
                 //$entityItems[$uid] = $this->getServiceLocator()->get('SclZfCart\Entity\CartItem');
-                $entityItems[$uid] = new \SclZfCart\Entity\CartItem;
+                $entityItems[$uid] = new CartItemEntity();
             }
 
-            $entityItems[$uid]->setUid($item['uid'])
-                ->setData($item['data']);
+            $this->hydrateCartItemEntity($entityItems[$uid], $itemData);
         }
 
         $this->cartEntity->setItems($entityItems);
