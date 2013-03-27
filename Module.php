@@ -76,6 +76,8 @@ class Module implements
                 'SclZfCart\CartItem'                   => 'SclZfCart\CartItem',
                 'SclZfCart\Entity\CartItem'            => 'SclZfCart\Entity\CartItem',
                 'SclZfCart\Form\Cart'                  => 'SclZfCart\Form\Cart',
+                'SclZfCart\Hydrator\CartItemHydrator'  => 'SclZfCart\Hydrator\CartItemHydrator',
+                'SclZfCart\Hydrator\CartItemEntityHydrator' => 'SclZfCart\Hydrator\CartItemEntityHydrator',
                 //'SclZfCart\Storage\CartItemSerializer' => 'SclZfCart\Storage\CartItemSerializer',
             ),
             'factories' => array(
@@ -89,10 +91,13 @@ class Module implements
                     return $serviceLocator->get($config['scl_zf_cart']['storage_class']);
                 },
                 'SclZfCart\Storage\DoctrineStorage' => function ($serviceLocator) {
-                    $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
-                    //$hydrator = $serviceLocator->get('SclZfCart\Hydrator\CartHydrator');
-                    //$serializer = $serviceLocator->get('SclZfCart\Storage\CartItemSerializer');
-                    return new DoctrineStorage($entityManager, $serviceLocator);
+
+                    return new DoctrineStorage(
+                        $serviceLocator->get('doctrine.entitymanager.orm_default'),
+                        $serviceLocator,
+                        $serviceLocator->get('SclZfCart\Hydrator\CartItemHydrator'),
+                        $serviceLocator->get('SclZfCart\Hydrator\CartItemEntityHydrator')
+                    );
                 },
                 /*
                 'SclZfCart\Hydrator\CartHydrator' => function ($serviceLocator) {
