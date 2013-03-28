@@ -21,22 +21,50 @@ class CartFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
-
-    /**
      * @covers SclZfCart\Service\CartFactory::createService
      * @todo   Implement testCreateService().
      */
     public function testCreateService()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $storage = $this->getMock('SclZfCart\Storage\StorageInterface');
+
+        $session = new \stdClass();
+        $session->cartId = 43;
+
+        $serviceLocator->expects($this->at(0))
+            ->method('get')
+            ->with($this->equalTo('SclZfCart\Storage'))
+            ->will($this->returnValue($storage));
+
+        $serviceLocator->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('SclZfCart\Session'))
+            ->will($this->returnValue($session));
+
+        $storage->expects($this->once())
+            ->method('load')
+            ->with($this->equalTo($session->cartId)/*,  $this->instanceOf('SclZfCart\Cart') */);
+
+        /*
+        $application = $serviceLocator->get('Application');
+
+        $eventManager = $application->getEventManager();
+
+        $eventManager->attach(
+            MvcEvent::EVENT_FINISH,
+            function (MvcEvent $event) use ($session, $storage, $cart) {
+                $session->cartId = $storage->store($cart);
+            }
         );
+        */
+
+//        $this->assertInstanceOf('SclZfCart\Cart', $this->object->createService($serviceLocator));
+        $this->markTestIncomplete("It's to late to finish this");
+    }
+
+    public function testCreateServiceWithoutLoad()
+    {
+        $this->markTestIncomplete('do me');
     }
 }

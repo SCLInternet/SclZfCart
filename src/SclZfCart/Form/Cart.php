@@ -101,7 +101,7 @@ class Cart extends Form
         $this->add(
             array(
                 'name' => $item->getUid(),
-                'type' => 'text',
+                'type' => 'Zend\Form\Element\Text',
                 'attributes' => array(
                     'value' => $item->getQuantity(),
                 )

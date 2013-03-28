@@ -12,50 +12,21 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-class Cart implements
-    EventManagerAwareInterface,
-    ServiceLocatorAwareInterface
+class Cart implements EventManagerAwareInterface
 {
-    /**
-     * The service locator.
-     *
-     * @var ServiceLocatorInterface
-     */
-    private $serviceLocator;
-
     /**
      * The event manager.
      *
      * @var EventManagerInterface
      */
-    private $eventManager;
+    protected $eventManager;
 
     /**
      * The items in the cart
      *
      * @var CartItem[]
      */
-    private $items = array();
-
-    /**
-     * {@inheritDoc}
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
+    protected $items = array();
 
     /**
      * {@inheritDoc}

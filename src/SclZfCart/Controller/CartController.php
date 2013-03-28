@@ -18,7 +18,7 @@ class CartController extends AbstractActionController
      * @param CartForm $form
      * @return void
      */
-    private function updateCartQuantities(CartForm $form)
+    protected function updateCartQuantities(CartForm $form)
     {
         /* @var $item \SclZfCart\CartItemInterface */
         foreach ($this->getCart()->getItems() as $item) {
@@ -38,7 +38,7 @@ class CartController extends AbstractActionController
      * @param CartForm $form
      * @return mixed
      */
-    private function updateAndCheckout(CartForm $form)
+    protected function updateAndCheckout(CartForm $form)
     {
         if (!$this->formSubmitted($form)) {
             return false;

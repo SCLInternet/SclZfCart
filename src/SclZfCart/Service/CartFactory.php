@@ -23,8 +23,6 @@ class CartFactory implements FactoryInterface
     {
         $cart = new Cart();
 
-        $cart->setServiceLocator($serviceLocator);
-
         /* @var $storage \SclZfCart\Storage\StorageInterface */
         $storage = $serviceLocator->get('SclZfCart\Storage');
 

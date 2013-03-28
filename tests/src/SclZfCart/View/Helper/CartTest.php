@@ -12,55 +12,50 @@ class CartTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
+    /**
+     * @var \Zend\View\HelperPluginManager
+     */
+    protected $helperPluginManager;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
     protected function setUp()
     {
+        $this->serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $this->helperPluginManager = $this->getMockBuilder('Zend\View\HelperPluginManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->object = new Cart;
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    protected function tearDown()
-    {
-    }
-
-    /**
      * @covers SclZfCart\View\Helper\Cart::setServiceLocator
-     * @todo   Implement testSetServiceLocator().
-     */
-    public function testSetServiceLocator()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers SclZfCart\View\Helper\Cart::getServiceLocator
-     * @todo   Implement testGetServiceLocator().
-     */
-    public function testGetServiceLocator()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
-    }
-
-    /**
      * @covers SclZfCart\View\Helper\Cart::__invoke
      * @todo   Implement test__invoke().
      */
     public function test__invoke()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        $cart = 'TestCartObject';
+
+        $this->helperPluginManager->expects($this->once())
+            ->method('getServiceLocator')
+            ->will($this->returnValue($this->serviceLocator));
+
+        $this->serviceLocator->expects($this->once())
+            ->method('get')
+            ->with($this->equalTo('SclZfCart\Cart'))
+            ->will($this->returnValue($cart));
+
+        $this->object->setServiceLocator($this->helperPluginManager);
+
+        $this->assertEquals($cart, $this->object->__invoke(), 'Expected cart value does not match returned value');
     }
 }

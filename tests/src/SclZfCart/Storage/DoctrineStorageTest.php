@@ -12,22 +12,27 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
-    private $serviceLocator;
+    protected $serviceLocator;
 
     /**
      * @var DoctrineStorage
      */
-    private $storage;
+    protected $storage;
 
     /**
      * @var \Doctrine\Common\Persistence\ObjectManager
      */
-    private $entityManager;
+    protected $entityManager;
 
     /**
-     * @var \SclZfCart\Hydrator\CartHydrator
+     * @var \SclZfCart\Hydrator\CartItemHydrator
      */
-    private $hydrator;
+    protected $itemHydrator;
+
+    /**
+     * @var \SclZfCart\Hydrator\CartItemEntityHydrator
+     */
+    protected $entityHydrator;
 
     /**
      * Prepare the object we'll be using
@@ -36,11 +41,18 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
 
-        $this->hydrator = $this->getMockBuilder('SclZfCart\Hydrator\CartHydrator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->itemHydrator = $this->getMock('SclZfCart\Hydrator\CartItemHydrator');
 
-        $this->storage = new DoctrineStorage($this->entityManager, $this->hydrator);
+        $this->entityHydrator = $this->getMock('SclZfCart\Hydrator\CartItemEntityHydrator');
+
+        $this->serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+
+        $this->storage = new DoctrineStorage(
+            $this->entityManager,
+            $this->serviceLocator,
+            $this->itemHydrator,
+            $this->entityHydrator
+        );
     }
 
     /**
@@ -69,24 +81,72 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $cartId = 27;
-        $itemsArray = array(1, 2, 3);
+        $itemsArray = array(
+            0 => array(
+                'uid' => 0,
+                'type' => 'ItemType1'
+            ),
+            1 => array(
+                'uid' => 1,
+                'type' => 'ItemType2'
+            ),
+            2 => array(
+                'uid' => 2,
+                'type' => 'ItemType3'
+            ),
+        );
 
-        $cart = $this->getMock('SclZfCart\Cart');
         $cartEntity = $this->getMock('SclZfCart\Entity\Cart');
-        $items = $this->getMock('Doctrine\Common\Collections\ArrayCollection');
+        $cart = $this->getMock('SclZfCart\Cart', array('clear', 'add'));
 
-        $items->expects($this->atLeastOnce())->method('toArray')->will($this->returnValue($itemsArray));
-
-        $cartEntity->expects($this->atLeastOnce())->method('getItems')->will($this->returnValue($items));
+        $cartItemEntities = array();
+        $cartItems = array();
+        for ($count = 0; $count < count($itemsArray); $count++) {
+            $cartItemEntities[$count] = $this->getMock('SclZfCart\Entity\CartItem');
+            $cartItems[$count] = $this->getMock('SclZfCart\CartItemInterface');
+        }
 
         $this->entityManager->expects($this->once())
             ->method('find')
             ->with($this->equalTo('SclZfCart\Entity\Cart'), $this->equalTo($cartId))
             ->will($this->returnValue($cartEntity));
-        
-        $this->hydrator->expects($this->once())
-            ->method('hydrate')
-            ->with($this->equalTo($itemsArray), $this->equalTo($cart));
+
+        $cart->expects($this->once())
+            ->method('clear');
+
+        $cartEntity->expects($this->once())
+            ->method('getItems')
+            ->will($this->returnValue($cartItemEntities));
+
+        $count = 0;
+        for ($count = 0; $count < count($itemsArray); $count++) {
+            $cartItemEntity = $cartItemEntities[$count];
+            $cartItem = $cartItems[$count];
+            $itemData = $itemsArray[$count];
+
+            $cartItemEntity->expects($this->once())
+                ->method('getType')
+                ->will($this->returnValue($itemData['type']));
+
+            $this->serviceLocator->expects($this->at($count))
+                ->method('get')
+                ->with($this->equalTo($itemData['type']))
+                ->will($this->returnValue($cartItem));
+
+            $this->entityHydrator->expects($this->at($count))
+                ->method('extract')
+                ->with($this->equalTo($cartItemEntity))
+                ->will($this->returnValue($itemData));
+
+            $this->itemHydrator->expects($this->at($count))
+                ->method('hydrate')
+                ->with($this->equalTo($itemData), $this->equalTo($cartItem));
+
+            // @todo find out why at is per object
+            $cart->expects($this->at($count + 1))
+                ->method('add')
+                ->with($this->equalTo($cartItem));
+        }
 
         $this->storage->load($cartId, $cart);
     }

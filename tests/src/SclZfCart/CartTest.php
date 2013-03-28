@@ -10,25 +10,16 @@ namespace SclZfCart;
 class CartTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    private $serviceLocator;
-
-    /**
      * @var Cart
      */
-    private $cart;
+    protected $cart;
 
     /**
      * Prepare the object we'll be using
      */
     protected function setUp()
     {
-        $this->serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
-
         $this->cart = new Cart;
-
-        $this->cart->setServiceLocator($this->serviceLocator);
     }
 
     /**
