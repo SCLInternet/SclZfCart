@@ -35,7 +35,15 @@ class Cart implements EventManagerAwareInterface
      */
     public function setEventManager(EventManagerInterface $eventManager)
     {
+        $eventManager->setIdentifiers(
+            array(
+                __CLASS__,
+                get_called_class(),
+            )
+        );
+
         $eventManager->setEventClass('SclZfCart\CartEvent');
+
         $this->eventManager = $eventManager;
     }
 
