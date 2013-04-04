@@ -16,6 +16,7 @@ class CartItem
 
     /**
      * @var Cart
+     * @todo Find out if this really needs to be reverse mapped.
      */
     protected $cart;
 
