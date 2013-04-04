@@ -21,14 +21,14 @@ class CheckoutController extends AbstractActionController
      *
      * @var EventManagerInterface
      */
-    private $cartEventManager;
+    protected $cartEventManager;
 
     /**
      * Return the cart event manager.
      *
      * @return EventManagerInterface
      */
-    private function getCartEventManager()
+    protected function getCartEventManager()
     {
         if (null === $this->cartEventManager) {
             $this->cartEventManager = $this->getCart()->getEventManager();
@@ -40,7 +40,7 @@ class CheckoutController extends AbstractActionController
     /**
      * @return \Zend\Http\Response|null
      */
-    private function triggerCheckoutEvent()
+    protected function triggerCheckoutEvent()
     {
         /* @var $cart \SclZfCart\Cart */
         $cart = $this->getCart();
@@ -67,7 +67,7 @@ class CheckoutController extends AbstractActionController
      *
      * @return Form
      */
-    private function createCompleteForm()
+    protected function createCompleteForm()
     {
         $form = new Form();
 

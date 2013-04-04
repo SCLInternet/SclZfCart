@@ -5,7 +5,7 @@ namespace SclZfCart\Utility;
  * Stores the details of a route.
  *
  * @author Tom Oram <tom@scl.co.uk>
- *
+ * @todo Move this to SclUtilities.
  */
 class Route
 {
