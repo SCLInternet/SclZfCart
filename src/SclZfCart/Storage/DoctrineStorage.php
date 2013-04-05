@@ -10,7 +10,7 @@ use SclZfCart\Entity\CartItem as CartItemEntity;
 use SclZfCart\Hydrator\CartItemEntityHydrator;
 use SclZfCart\Hydrator\CartItemHydrator;
 use SclZfCart\Exception;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use SclZfCart\Service\CartItemCreatorInterface;
 
 /**
  * Storage class for storing a cart using doctrine.
@@ -31,9 +31,9 @@ class DoctrineStorage implements StorageInterface
     protected $entityManager;
 
     /**
-     * @var ServiceLocatorInterface
+     * @var CartItemCreatorInterface
      */
-    protected $serviceLocator;
+    protected $itemCreator;
 
     /**
      * @var CartItemHydrator
@@ -50,13 +50,13 @@ class DoctrineStorage implements StorageInterface
      */
     public function __construct(
         ObjectManager $entityManager,
-        ServiceLocatorInterface $serviceLocator,
+        CartItemCreatorInterface $itemCreator,
         CartItemHydrator $cartItemHydrator,
         CartItemEntityHydrator $cartItemEntityHydrator
     ) {
-        $this->entityManager = $entityManager;
-        $this->serviceLocator = $serviceLocator;
-        $this->cartItemHydrator = $cartItemHydrator;
+        $this->entityManager          = $entityManager;
+        $this->itemCreator            = $itemCreator;
+        $this->cartItemHydrator       = $cartItemHydrator;
         $this->cartItemEntityHydrator = $cartItemEntityHydrator;
     }
 
@@ -90,7 +90,7 @@ class DoctrineStorage implements StorageInterface
         $cart->clear();
 
         foreach ($this->cartEntity->getItems() as $entity) {
-            $item = $this->serviceLocator->get($entity->getType());
+            $item = $this->itemCreator->create($entity->getType());
 
             $data = $this->cartItemEntityHydrator->extract($entity);
 

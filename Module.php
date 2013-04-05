@@ -78,7 +78,6 @@ class Module implements
                 'SclZfCart\Form\Cart'                  => 'SclZfCart\Form\Cart',
                 'SclZfCart\Hydrator\CartItemHydrator'  => 'SclZfCart\Hydrator\CartItemHydrator',
                 'SclZfCart\Hydrator\CartItemEntityHydrator' => 'SclZfCart\Hydrator\CartItemEntityHydrator',
-                //'SclZfCart\Storage\CartItemSerializer' => 'SclZfCart\Storage\CartItemSerializer',
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
@@ -94,17 +93,14 @@ class Module implements
 
                     return new DoctrineStorage(
                         $serviceLocator->get('doctrine.entitymanager.orm_default'),
-                        $serviceLocator,
+                        $serviceLocator->get('SclZfCart\Service\CartItemCreatorInterface'),
                         $serviceLocator->get('SclZfCart\Hydrator\CartItemHydrator'),
                         $serviceLocator->get('SclZfCart\Hydrator\CartItemEntityHydrator')
                     );
                 },
-                /*
-                'SclZfCart\Hydrator\CartHydrator' => function ($serviceLocator) {
-                    $serializer = $serviceLocator->get('SclZfCart\Storage\CartItemSerializer');
-                    return new CartHydrator($serializer);
+                'SclZfCart\Service\CartItemCreatorInterface' => function ($serviceLocator) {
+                    return new \SclZfCart\Service\ServiceLocatorItemCreator($serviceLocator);
                 },
-                */
             ),
         );
     }
