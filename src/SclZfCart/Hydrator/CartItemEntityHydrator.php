@@ -39,9 +39,9 @@ class CartItemEntityHydrator implements HydratorInterface
     public function hydrate(array $data, $entity)
     {
         $entity->setUid($data['uid'])
-            ->setQuantity($data['quantity'])
-            ->setType($data['type'])
-            ->setData($data['data']);
+               ->setQuantity($data['quantity'])
+               ->setType($data['type'])
+               ->setData($data['data']);
 
         return $entity;
     }

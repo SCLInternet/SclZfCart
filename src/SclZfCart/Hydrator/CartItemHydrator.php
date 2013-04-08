@@ -3,6 +3,7 @@
 namespace SclZfCart\Hydrator;
 
 use SclZfCart\CartItemInterface;
+use SclZfCart\Exception\InvalidArgumentException;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -41,7 +42,7 @@ class CartItemHydrator implements HydratorInterface
     {
         if (!$item instanceof $data['type']) {
             // @todo should be DomainException
-            throw new Exception\InvalidArgumentException(
+            throw new InvalidArgumentException(
                 $data['type'],
                 $item,
                 __METHOD__,
@@ -50,7 +51,7 @@ class CartItemHydrator implements HydratorInterface
         }
 
         $item->setUid($data['uid'])
-            ->setQuantity($data['quantity']);
+             ->setQuantity($data['quantity']);
 
         $item->unserialize($data['data']);
 

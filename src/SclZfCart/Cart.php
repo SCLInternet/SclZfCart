@@ -155,7 +155,7 @@ class Cart implements
     /**
      * Fetches a list of all the items in the cart.
      *
-     * @return CartItem[]
+     * @return CartItemInterface[]
      */
     public function getItems()
     {
