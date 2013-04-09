@@ -10,11 +10,6 @@ namespace SclZfCart\Storage;
 class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
-    /**
      * @var DoctrineStorage
      */
     protected $storage;
@@ -23,6 +18,11 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
      * @var \Doctrine\Common\Persistence\ObjectManager
      */
     protected $entityManager;
+
+    /**
+     * @var \SclZfCart\Service\CartItemCreatorInterface
+     */
+    protected $itemCreator;
 
     /**
      * @var \SclZfCart\Hydrator\CartItemHydrator
@@ -45,11 +45,11 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->entityHydrator = $this->getMock('SclZfCart\Hydrator\CartItemEntityHydrator');
 
-        $this->serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $this->itemCreator = $this->getMock('SclZfCart\Service\CartItemCreatorInterface');
 
         $this->storage = new DoctrineStorage(
             $this->entityManager,
-            $this->serviceLocator,
+            $this->itemCreator,
             $this->itemHydrator,
             $this->entityHydrator
         );
@@ -128,8 +128,8 @@ class DoctrineStorageTest extends \PHPUnit_Framework_TestCase
                 ->method('getType')
                 ->will($this->returnValue($itemData['type']));
 
-            $this->serviceLocator->expects($this->at($count))
-                ->method('get')
+            $this->itemCreator->expects($this->at($count))
+                ->method('create')
                 ->with($this->equalTo($itemData['type']))
                 ->will($this->returnValue($cartItem));
 
