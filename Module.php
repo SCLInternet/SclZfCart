@@ -9,6 +9,7 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Session\Container;
+use SclZfCart\Service\CartToOrderService;
 
 /**
  * This module contains an extensible shopping cart solution.
@@ -77,6 +78,10 @@ class Module implements
                 'SclZfCart\Form\Cart'                  => 'SclZfCart\Form\Cart',
                 'SclZfCart\Hydrator\CartItemHydrator'  => 'SclZfCart\Hydrator\CartItemHydrator',
                 'SclZfCart\Hydrator\CartItemEntityHydrator' => 'SclZfCart\Hydrator\CartItemEntityHydrator',
+
+                'SclZfCart\Hydrator\OrderItemHydrator' => 'SclZfCart\Hydrator\OrderItemHydrator',
+                'SclZfCart\Entity\DoctrineOrder'       => 'SclZfCart\Entity\DoctrineOrder',
+                'SclZfCart\Entity\DoctrineOrderItem'   => 'SclZfCart\Entity\DoctrineOrderItem',
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
@@ -84,6 +89,7 @@ class Module implements
                     $config = $serviceLocator->get('Config');
                     return new Container($config['scl_zf_cart']['session_name']);
                 },
+                // @todo user the interface name
                 'SclZfCart\Storage' => function ($serviceLocator) {
                     $config = $serviceLocator->get('Config');
                     return $serviceLocator->get($config['scl_zf_cart']['storage_class']);
@@ -99,6 +105,58 @@ class Module implements
                 },
                 'SclZfCart\Service\CartItemCreatorInterface' => function ($serviceLocator) {
                     return new \SclZfCart\Service\ServiceLocatorItemCreator($serviceLocator);
+                },
+
+                // Options
+                'SclZfCart\Options\CartOptions' => function ($sm) {
+                    $config = $sm->get('Config');
+                    return new \SclZfCart\Options\CartOptions(
+                        $config['scl_zf_cart']
+                    );
+                },
+
+                // Mapper & Entity interfaces
+                // @todo replace with aliase and avoid additional options layer.
+                'SclZfCart\Entity\OrderInterface' => function ($sm) {
+                    $options = $sm->get('SclZfCart\Options\CartOptions');
+                    return $sm->get($options->getOrderClass());
+                },
+                'SclZfCart\Entity\OrderItemInterface' => function ($sm) {
+                    $options = $sm->get('SclZfCart\Options\CartOptions');
+                    return $sm->get($options->getOrderItemClass());
+                },
+                'SclZfCart\Mapper\OrderMapperInterface' => function ($sm) {
+                    $options = $sm->get('SclZfCart\Options\CartOptions');
+                    return $sm->get($options->getOrderMapperClass());
+                },
+                'SclZfCart\Mapper\OrderItemMapperInterface' => function ($sm) {
+                    $options = $sm->get('SclZfCart\Options\CartOptions');
+                    return $sm->get($options->getItemMapperClass());
+                },
+
+                // Mapper implementations
+                // @todo append Doctrine rather than prepend
+                'SclZfCart\Mapper\DoctrineOrderMapper' => function ($sm) {
+                    return new \SclZfCart\Mapper\DoctrineOrderMapper(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                    );
+                },
+                'SclZfCart\Mapper\DoctrineOrderItemMapper' => function ($sm) {
+                    return new \SclZfCart\Mapper\DoctrineOrderItemMapper(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                    );
+                },
+
+                // Services
+                'SclZfCart\Service\CartToOrderServiceService' => function ($sm) {
+                    return new CartToOrderService(
+                        $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
+                        $sm->get('SclZfCart\Hydrator\CartItemHydrator'),
+                        $sm->get('SclZfCartOrder\Hydrator\OrderItemHydrator'),
+                        $sm->get('SclZfCartOrder\Mapper\OrderItemMapperInterface')
+                    );
                 },
             ),
         );

@@ -42,6 +42,16 @@ return array(
                         ),
                         'may_terminate' => true,
                         'child_routes'  => array(
+                            'process' => array(
+                                'type'    => 'literal',
+                                'options' => array(
+                                    'route'    => '/process',
+                                    'defaults' => array(
+                                        'controller' => 'SclZfCart\Controller\Checkout',
+                                        'action'     => 'process',
+                                    ),
+                                ),
+                            ),
                             'complete' => array(
                                 'type'    => 'literal',
                                 'options' => array(
@@ -75,8 +85,12 @@ return array(
     ),
 
     'scl_zf_cart' => array(
-        'session_name'  => 'SclZfCart',
-        'storage_class' => 'SclZfCart\Storage\DoctrineStorage',
+        'session_name'       => 'SclZfCart',
+        'storage_class'      => 'SclZfCart\Storage\DoctrineStorage',
+        'order_class'        => 'SclZfCart\Entity\DoctrineOrder',
+        'item_class'         => 'SclZfCart\Entity\DoctrineOrderItem',
+        'order_mapper_class' => 'SclZfCart\Mapper\DoctrineOrderMapper',
+        'item_mapper_class'  => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
     ),
 
     // @todo Move to .dist config file

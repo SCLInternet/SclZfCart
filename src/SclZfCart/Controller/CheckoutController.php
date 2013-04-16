@@ -94,7 +94,7 @@ class CheckoutController extends AbstractActionController
     }
 
     /**
-     * Displays the checkout confirmation page
+     * Starts the checkout processs and displays the checkout confirmation page.
      *
      * @return array
      */
@@ -109,15 +109,41 @@ class CheckoutController extends AbstractActionController
             return $redirect;
         }
 
+        // @todo Save the order here.
+
         return array(
             'form' => $this->createCompleteForm()
         );
     }
 
     /**
-     * Displays the checkout completed page
+     * Finalise the cart contents to and order and move on the the appropriate page.
+     *
+     * @return array
      */
-    public function completeAction()
+    public function processAction()
+    {
+        $cart     = $this->getCart();
+        $transfer = $this->getServiceLocator()->get('SclZfCart\Service\CartTransferService');
+        $mapper   = $this->getServiceLocator()->get('SclZfCart\Mapper\OrderMapperInterface');
+        $order = $mapper->create();
+
+        $transfer->cartToOrder($cart, $order);
+
+        $cart->clear();
+
+        $mapper->save($order);
+
+        // @todo Trigger the process event.
+
+        //return $this->redirect()->toRoute('order/redirect', array('id' => $order->getId()));
+        return array();
+    }
+
+    /**
+     * Displays the result of the checkout process
+     */
+    public function completedAction()
     {
         $cart = $this->getCart();
 
