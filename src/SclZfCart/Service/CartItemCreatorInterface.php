@@ -3,7 +3,6 @@
 namespace SclZfCart\Service;
 
 use SclZfCart\CartItemInterface;
-use SclZfCart\Service\Exception;
 
 /**
  * Creates cart items of given types.
@@ -17,7 +16,6 @@ interface CartItemCreatorInterface
      *
      * @param  string $type
      * @return CartItemInterface
-     * @throws Exception\DomainException
      */
     public function create($type);
 }

@@ -4,7 +4,6 @@ namespace SclZfCart\Storage;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use SclZfCart\Cart;
-use SclZfCart\CartItemInterface;
 use SclZfCart\Entity\Cart as CartEntity;
 use SclZfCart\Entity\CartItem as CartItemEntity;
 use SclZfCart\Hydrator\CartItemEntityHydrator;

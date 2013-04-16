@@ -2,7 +2,6 @@
 
 namespace SclZfCart;
 
-use SclZfCart\Hydrator\CartHydrator;
 use SclZfCart\Storage\DoctrineStorage;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
