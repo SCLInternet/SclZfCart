@@ -7,7 +7,7 @@ namespace SclZfCart\Entity;
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-class CartItem
+class DoctrineCartItem implements CartItemInterface
 {
     /**
      * @var int

@@ -2,12 +2,12 @@
 
 namespace SclZfCart\Storage;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use SclZfCart\Cart;
 use SclZfCart\Entity\Cart as CartEntity;
-use SclZfCart\Entity\CartItem as CartItemEntity;
 use SclZfCart\Hydrator\CartItemEntityHydrator;
 use SclZfCart\Hydrator\CartItemHydrator;
+use SclZfCart\Mapper\CartMapperInterface;
+use SclZfCart\Mapper\CartItemMapperInterface;
 use SclZfCart\Exception;
 use SclZfCart\Service\CartItemCreatorInterface;
 
@@ -17,7 +17,7 @@ use SclZfCart\Service\CartItemCreatorInterface;
  * @author Tom Oram <tom@scl.co.uk>
  * @todo Redesign and refactor this class.
  */
-class DoctrineStorage implements StorageInterface
+class CartStorage implements StorageInterface
 {
     /**
      * @var CartEntity
@@ -25,9 +25,14 @@ class DoctrineStorage implements StorageInterface
     protected $cartEntity = null;
 
     /**
-     * @var ObjectManager
+     * @var CartMapperInterface
      */
-    protected $entityManager;
+    protected $cartMapper;
+
+    /**
+     * @var CartItemMapperInterface
+     */
+    protected $cartItemMapper;
 
     /**
      * @var CartItemCreatorInterface
@@ -45,29 +50,25 @@ class DoctrineStorage implements StorageInterface
     protected $cartItemEntityHydrator;
 
     /**
-     * @param ObjectManager $entityManager
+     * 
+     * @param  CartMapperInterface      $cartMapper
+     * @param  CartItemMapperInterface  $cartItemMapper
+     * @param  CartItemCreatorInterface $itemCreator
+     * @param  CartItemHydrator         $cartItemHydrator
+     * @param  CartItemEntityHydrator   $cartItemEntityHydrator
      */
     public function __construct(
-        ObjectManager $entityManager,
+        CartMapperInterface $cartMapper,
+        CartItemMapperInterface $cartItemMapper,
         CartItemCreatorInterface $itemCreator,
         CartItemHydrator $cartItemHydrator,
         CartItemEntityHydrator $cartItemEntityHydrator
     ) {
-        $this->entityManager          = $entityManager;
+        $this->cartMapper             = $cartMapper;
+        $this->cartItemMapper         = $cartItemMapper;
         $this->itemCreator            = $itemCreator;
         $this->cartItemHydrator       = $cartItemHydrator;
         $this->cartItemEntityHydrator = $cartItemEntityHydrator;
-    }
-
-    /**
-     * Load the cart from the database.
-     *
-     * @param  int $id
-     * @return CartEntity 
-     */
-    protected function loadCartById($id)
-    {
-        return $this->entityManager->find('SclZfCart\Entity\Cart', $id);
     }
 
     /**
@@ -80,7 +81,7 @@ class DoctrineStorage implements StorageInterface
      */
     public function load($id, Cart $cart)
     {
-        $this->cartEntity = $this->loadCartById($id);
+        $this->cartEntity = $this->cartMapper->findById($id);
 
         if (!$this->cartEntity) {
             throw new Exception\CartNotFoundException("Cart with \"$id\" not found.");
@@ -108,7 +109,7 @@ class DoctrineStorage implements StorageInterface
     protected function getCartEntity()
     {
         if (null === $this->cartEntity) {
-            $this->cartEntity = new CartEntity();
+            $this->cartEntity = $this->cartMapper->create();
         }
 
         return $this->cartEntity;
@@ -150,7 +151,7 @@ class DoctrineStorage implements StorageInterface
 
         foreach ($this->cartEntity->getItems() as $key => $entity) {
             if (!isset($items[$entity->getUid()])) {
-                $this->entityManager->remove($entity);
+                $this->cartItemMapper->delete($entity);
                 continue;
             }
 
@@ -159,9 +160,7 @@ class DoctrineStorage implements StorageInterface
 
         foreach ($items as $uid => $itemData) {
             if (!isset($entityItems[$uid])) {
-                /* @var $entity CartItemEntity */
-                //$entityItems[$uid] = $this->getServiceLocator()->get('SclZfCart\Entity\CartItem');
-                $entityItems[$uid] = new CartItemEntity();
+                $entityItems[$uid] = $this->cartItemMapper->create();
             }
 
             $this->cartItemEntityHydrator->hydrate($itemData, $entityItems[$uid]);
@@ -169,8 +168,7 @@ class DoctrineStorage implements StorageInterface
 
         $this->cartEntity->setItems($entityItems);
 
-        $this->entityManager->persist($this->cartEntity);
-        $this->entityManager->flush();
+        $this->cartMapper->save($this->cartEntity);
 
         return $this->cartEntity->getId();
     }

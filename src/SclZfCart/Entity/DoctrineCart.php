@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-class Cart
+class DoctrineCart implements CartInterface
 {
     /**
      * @var int
@@ -97,7 +97,7 @@ class Cart
     /**
      * @param CartItem $item
      */
-    public function addItem(CartItem $item)
+    public function addItem(CartItemInterface $item)
     {
         $item->setCart($this);
         $this->items[$item->getUid()] = $item;

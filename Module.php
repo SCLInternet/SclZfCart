@@ -69,19 +69,34 @@ class Module implements
     {
         return array(
             'shared' => array(
-                'SclZfCart\CartItem'        => false,
-                'SclZfCart\Entity\CartItem' => false,
+                'SclZfCart\CartItem'                => false,
+                'SclZfCart\Entity\DoctrineCartItem' => false,
+            ),
+            'aliases' => array(
+                // Entities
+                'SclZfCart\Entity\CartInterface'            => 'SclZfCart\Entity\DoctrineCart',
+                'SclZfCart\Entity\CartItemInterface'        => 'SclZfCart\Entity\DoctrineCartItem',
+                'SclZfCart\Entity\OrderInterface'           => 'SclZfCart\Entity\DoctrineOrder',
+                'SclZfCart\Entity\OrderItemInterface'       => 'SclZfCart\Entity\DoctrineOrderItem',
+                // Mappers
+                'SclZfCart\Mapper\CartMapperInterface'      => 'SclZfCart\Mapper\DoctrineCartMapper',
+                'SclZfCart\Mapper\CartMapperItemInterface'  => 'SclZfCart\Mapper\DoctrineCartItemMapper',
+                'SclZfCart\Mapper\OrderMapperInterface'     => 'SclZfCart\Mapper\DoctrineOrderMapper',
+                'SclZfCart\Mapper\OrderItemMapperInterface' => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
             ),
             'invokables' => array(
-                'SclZfCart\CartItem'                   => 'SclZfCart\CartItem',
-                'SclZfCart\Entity\CartItem'            => 'SclZfCart\Entity\CartItem',
-                'SclZfCart\Form\Cart'                  => 'SclZfCart\Form\Cart',
-                'SclZfCart\Hydrator\CartItemHydrator'  => 'SclZfCart\Hydrator\CartItemHydrator',
+                'SclZfCart\CartItem'                        => 'SclZfCart\CartItem',
+                'SclZfCart\Entity\CartItem'                 => 'SclZfCart\Entity\CartItem',
+                'SclZfCart\Form\Cart'                       => 'SclZfCart\Form\Cart',
+                // Hydrators
+                'SclZfCart\Hydrator\CartItemHydrator'       => 'SclZfCart\Hydrator\CartItemHydrator',
                 'SclZfCart\Hydrator\CartItemEntityHydrator' => 'SclZfCart\Hydrator\CartItemEntityHydrator',
-
-                'SclZfCart\Hydrator\OrderItemHydrator' => 'SclZfCart\Hydrator\OrderItemHydrator',
-                'SclZfCart\Entity\DoctrineOrder'       => 'SclZfCart\Entity\DoctrineOrder',
-                'SclZfCart\Entity\DoctrineOrderItem'   => 'SclZfCart\Entity\DoctrineOrderItem',
+                'SclZfCart\Hydrator\OrderItemHydrator'      => 'SclZfCart\Hydrator\OrderItemHydrator',
+                // Entities
+                'SclZfCart\Entity\DoctrineCart'             => 'SclZfCart\Entity\DoctrineCart',
+                'SclZfCart\Entity\DoctrineCartItem'         => 'SclZfCart\Entity\DoctrineCartItem',
+                'SclZfCart\Entity\DoctrineOrder'            => 'SclZfCart\Entity\DoctrineOrder',
+                'SclZfCart\Entity\DoctrineOrderItem'        => 'SclZfCart\Entity\DoctrineOrderItem',
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
@@ -89,15 +104,10 @@ class Module implements
                     $config = $serviceLocator->get('Config');
                     return new Container($config['scl_zf_cart']['session_name']);
                 },
-                // @todo user the interface name
-                'SclZfCart\Storage' => function ($serviceLocator) {
-                    $config = $serviceLocator->get('Config');
-                    return $serviceLocator->get($config['scl_zf_cart']['storage_class']);
-                },
-                'SclZfCart\Storage\DoctrineStorage' => function ($serviceLocator) {
-
-                    return new DoctrineStorage(
-                        $serviceLocator->get('doctrine.entitymanager.orm_default'),
+                'SclZfCart\Storage\CartStorage' => function ($serviceLocator) {
+                    return new \SclZfCart\Storage\CartStorage(
+                        $serviceLocator->get('SclZfCart\Mapper\CartMapperInterface'),
+                        $serviceLocator->get('SclZfCart\Mapper\CartItemMapperInterface'),
                         $serviceLocator->get('SclZfCart\Service\CartItemCreatorInterface'),
                         $serviceLocator->get('SclZfCart\Hydrator\CartItemHydrator'),
                         $serviceLocator->get('SclZfCart\Hydrator\CartItemEntityHydrator')
@@ -108,34 +118,29 @@ class Module implements
                 },
 
                 // Options
+                /*
                 'SclZfCart\Options\CartOptions' => function ($sm) {
                     $config = $sm->get('Config');
                     return new \SclZfCart\Options\CartOptions(
                         $config['scl_zf_cart']
                     );
                 },
-
-                // Mapper & Entity interfaces
-                // @todo replace with aliase and avoid additional options layer.
-                'SclZfCart\Entity\OrderInterface' => function ($sm) {
-                    $options = $sm->get('SclZfCart\Options\CartOptions');
-                    return $sm->get($options->getOrderClass());
-                },
-                'SclZfCart\Entity\OrderItemInterface' => function ($sm) {
-                    $options = $sm->get('SclZfCart\Options\CartOptions');
-                    return $sm->get($options->getOrderItemClass());
-                },
-                'SclZfCart\Mapper\OrderMapperInterface' => function ($sm) {
-                    $options = $sm->get('SclZfCart\Options\CartOptions');
-                    return $sm->get($options->getOrderMapperClass());
-                },
-                'SclZfCart\Mapper\OrderItemMapperInterface' => function ($sm) {
-                    $options = $sm->get('SclZfCart\Options\CartOptions');
-                    return $sm->get($options->getItemMapperClass());
-                },
+                */
 
                 // Mapper implementations
                 // @todo append Doctrine rather than prepend
+                'SclZfCart\Mapper\DoctrineCartMapper' => function ($sm) {
+                    return new \SclZfCart\Mapper\DoctrineCartMapper(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                    );
+                },
+                'SclZfCart\Mapper\DoctrineCartItemMapper' => function ($sm) {
+                    return new \SclZfCart\Mapper\DoctrineCartItemMapper(
+                        $sm->get('doctrine.entitymanager.orm_default'),
+                        $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                    );
+                },
                 'SclZfCart\Mapper\DoctrineOrderMapper' => function ($sm) {
                     return new \SclZfCart\Mapper\DoctrineOrderMapper(
                         $sm->get('doctrine.entitymanager.orm_default'),
@@ -154,8 +159,8 @@ class Module implements
                     return new CartToOrderService(
                         $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
                         $sm->get('SclZfCart\Hydrator\CartItemHydrator'),
-                        $sm->get('SclZfCartOrder\Hydrator\OrderItemHydrator'),
-                        $sm->get('SclZfCartOrder\Mapper\OrderItemMapperInterface')
+                        $sm->get('SclZfCart\Hydrator\OrderItemHydrator'),
+                        $sm->get('SclZfCart\Mapper\OrderItemMapperInterface')
                     );
                 },
             ),
