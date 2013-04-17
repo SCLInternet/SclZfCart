@@ -3,7 +3,7 @@
 namespace SclZfCart;
 
 use SclZfCart\Exception\InvalidArgumentException;
-use SclZfCart\Utility\Route;
+use SclZfUtilities\Model\Route;
 use Zend\EventManager\Event;
 
 /**

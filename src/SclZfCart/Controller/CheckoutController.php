@@ -2,11 +2,10 @@
 
 namespace SclZfCart\Controller;
 
-use Zend\EventManager\EventManagerInterface;
-
 use SclZfCart\CartEvent;
-use SclZfCart\Utility\Route;
+use SclZfUtilities\Model\Route;
 use Zend\Form\Form;
+use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 
 /**
