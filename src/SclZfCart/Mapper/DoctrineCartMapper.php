@@ -2,7 +2,7 @@
 
 namespace SclZfCart\Mapper;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Persistence\ObjectManager;
 use SclZfUtilities\Doctrine\FlushLock;
 use SclZfUtilities\Mapper\GenericDoctrineMapper;
 
@@ -15,11 +15,11 @@ class DoctrineCartMapper extends GenericDoctrineMapper implements
     CartMapperInterface
 {
     /**
-     * @param EntityManager $entityManager
+     * @param ObjectManager $entityManager
      * @param FlushLock     $flushLock
      */
     public function __construct(
-        EntityManager $entityManager,
+        ObjectManager $entityManager,
         FlushLock $flushLock
     ) {
         parent::__construct(
