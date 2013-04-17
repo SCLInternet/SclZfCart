@@ -7,6 +7,7 @@ use SclZfUtilities\Model\Route;
 use Zend\Form\Form;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\Controller\AbstractActionController;
+use SclZfCart\Entity\OrderInterface;
 
 /**
  * Takes the user through the checkout process.
@@ -36,6 +37,10 @@ class CheckoutController extends AbstractActionController
         return $this->cartEventManager;
     }
 
+    //
+    // indexAction
+    //
+
     /**
      * @return \Zend\Http\Response|null
      */
@@ -62,10 +67,123 @@ class CheckoutController extends AbstractActionController
     }
 
     /**
+     * Creates a form which provides the button to take customer to the confirm page.
+     *
+     * @return Form
+     * @todo Include a hash of the cart.
+     */
+    public function createConfirmForm()
+    {
+        $form = new Form('cart-confirm-form');
+
+        $form->setAttribute('action', $this->url()->fromRoute('cart/checkout/process'));
+
+        $form->add(
+            array(
+                'name' => 'complete',
+                'type' => 'Zend\Form\Element\Submit',
+                'attributes' => array(
+                    'value' => 'Confirm',
+                    'id'    => 'complete-order',
+                    'class' => 'btn',
+                ),
+            )
+        );
+
+        return $form;
+    }
+
+    /**
+     * Starts the checkout processs and displays the checkout confirmation page.
+     *
+     * Starts the checkout process and displays an pages required before the confirmation page.
+     * This action triggers the CartEvent::EVENT_CHECKOUT event.
+     *
+     * @return array
+     */
+    public function indexAction()
+    {
+        //if (/* User not logged in */) {
+        //    // Redirect to user signup
+        //}
+
+        $redirect = $this->triggerCheckoutEvent();
+        if (null !== $redirect) {
+            return $redirect;
+        }
+
+        return array(
+            'form' => $this->createConfirmForm(),
+        );
+    }
+
+    //
+    // processAction
+    //
+
+    /**
+     * @param  OrderInterface $order
+     * @return \Zend\Http\Response|null
+     */
+    protected function triggerProcessEvent(OrderInterface $order)
+    {
+        $eventManager = $this->getCartEventManager();
+
+        $results = $eventManager->trigger(CartEvent::EVENT_PROCESS, $order);
+
+        foreach ($results as $result) {
+            if ($result instanceof Route) {
+                return $this->redirect()->toRoute($result->route, $result->params);
+            }
+
+            if ($result instanceof Form) {
+                return $result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Finalise the cart contents to and order and move on the the appropriate page.
+     *
+     * @return array|Response
+     */
+    public function processAction()
+    {
+        $cart     = $this->getCart();
+        $transfer = $this->getServiceLocator()->get('SclZfCart\Service\CartToOrderService');
+        $mapper   = $this->getServiceLocator()->get('SclZfCart\Mapper\OrderMapperInterface');
+        $order = $mapper->create();
+
+        $transfer->cartToOrder($cart, $order);
+
+        $cart->clear();
+
+        $mapper->save($order);
+
+        $result = $this->triggerProcessEvent($order);
+
+        if ($result instanceof \Zend\Http\Response) {
+            return $result;
+        }
+
+        if ($result instanceof Form) {
+            return array(
+                'form' => $result,
+            );
+        }
+
+        // @todo Throw an exception here
+        return array();
+    }
+
+    /**
      * Builds the form object which shows the complete button.
      *
      * @return Form
      */
+    /*
     protected function createCompleteForm()
     {
         $form = new Form();
@@ -91,66 +209,20 @@ class CheckoutController extends AbstractActionController
 
         return $form;
     }
+    */
 
-    /**
-     * Starts the checkout processs and displays the checkout confirmation page.
-     *
-     * @return array
-     */
-    public function indexAction()
-    {
-        //if (/* User not logged in */) {
-        //    // Redirect to user signup
-        //}
-
-        $redirect = $this->triggerCheckoutEvent();
-        if (null !== $redirect) {
-            return $redirect;
-        }
-
-        // @todo Save the order here.
-
-        return array(
-            'form' => $this->createCompleteForm()
-        );
-    }
-
-    /**
-     * Finalise the cart contents to and order and move on the the appropriate page.
-     *
-     * @return array
-     */
-    public function processAction()
-    {
-        $cart     = $this->getCart();
-        $transfer = $this->getServiceLocator()->get('SclZfCart\Service\CartTransferService');
-        $mapper   = $this->getServiceLocator()->get('SclZfCart\Mapper\OrderMapperInterface');
-        $order = $mapper->create();
-
-        $transfer->cartToOrder($cart, $order);
-
-        $cart->clear();
-
-        $mapper->save($order);
-
-        // @todo Trigger the process event.
-
-        //return $this->redirect()->toRoute('order/redirect', array('id' => $order->getId()));
-        return array();
-    }
+    //
+    // completedAction
+    //
 
     /**
      * Displays the result of the checkout process
      */
     public function completedAction()
     {
-        $cart = $this->getCart();
+        // @todo Check the user is allowed to see this order progress.
 
-        $this->getCartEventManager()->trigger(
-            CartEvent::EVENT_COMPLETE,
-            $cart,
-            array(CartEvent::PARAM_CART => $cart)
-        );
+        // @todo Load the order
 
         return array();
     }

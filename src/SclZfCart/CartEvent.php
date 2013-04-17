@@ -14,10 +14,10 @@ use Zend\EventManager\Event;
 class CartEvent extends Event
 {
     const EVENT_CHECKOUT      = 'checkout';
-    const EVENT_COMPLETE_FORM = 'complete_form';
+    const EVENT_PROCESS       = 'process-order';
     const EVENT_COMPLETE      = 'complete';
 
-    const PARAM_CART = 'cart';
+    const PARAM_CART  = 'cart';
 
     /**
      * @var Route

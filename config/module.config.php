@@ -60,7 +60,7 @@ return array(
                                     'route'    => '/complete',
                                     'defaults' => array(
                                         'controller' => 'SclZfCart\Controller\Checkout',
-                                        'action'     => 'complete',
+                                        'action'     => 'completed',
                                     ),
                                 ),
                             ),

@@ -20,6 +20,9 @@ class Module implements
     ConfigProviderInterface,
     ServiceProviderInterface
 {
+    const DEFAULT_PROCESS_PREFERENCE = 0;
+    const DEFAULT_COMPLETE_PREFERENCE = 0;
+
     /**
      * {@inheritDoc}
      *
@@ -33,8 +36,27 @@ class Module implements
         $eventManager = $cart->getEventManager();
 
         $eventManager->attach(
+            CartEvent::EVENT_PROCESS,
+            function (CartEvent $event) use ($eventManager) {
+                $order = $event->getTarget();
+
+                $eventManager->trigger(CartEvent::EVENT_COMPLETE, $order);
+
+                return new \SclZfUtilities\Model\Route(
+                    'cart/checkout/complete',
+                    array('id' => $order->getId())
+                );
+            },
+            self::DEFAULT_PROCESS_PREFERENCE
+        );
+
+        $eventManager->attach(
             CartEvent::EVENT_COMPLETE,
-            array('SclZfCart\Listener\CartListener', 'completeOrder')
+            function (CartEvent $event) use ($serviceLocator) {
+                $order->setStatus($order::STATUS_COMPLETED);
+                $mapper = $serviceLocator->get('SclZfCart\Mapper\OrderMapperInterface');
+                $mapper->save($order);
+            }
         );
     }
 
@@ -153,7 +175,7 @@ class Module implements
                 },
 
                 // Services
-                'SclZfCart\Service\CartToOrderServiceService' => function ($sm) {
+                'SclZfCart\Service\CartToOrderService' => function ($sm) {
                     return new \SclZfCart\Service\CartToOrderService(
                         $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
                         $sm->get('SclZfCart\Hydrator\CartItemHydrator'),
