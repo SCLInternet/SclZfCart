@@ -24,7 +24,7 @@ class CartFactory implements FactoryInterface
         $cart = new Cart();
 
         /* @var $storage \SclZfCart\Storage\StorageInterface */
-        $storage = $serviceLocator->get('SclZfCart\Storage');
+        $storage = $serviceLocator->get('SclZfCart\Storage\CartStorage');
 
         /* @var $session \Zend\Session\Container */
         $session = $serviceLocator->get('SclZfCart\Session');

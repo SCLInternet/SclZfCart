@@ -12,7 +12,7 @@ use SclZfUtilities\Mapper\GenericDoctrineMapper;
  * @author Tom Oram <tom@scl.co.uk>
  */
 class DoctrineCartItemMapper extends GenericDoctrineMapper implements
-    CartMapperInterface
+    CartItemMapperInterface
 {
     /**
      * @param EntityManager $entityManager

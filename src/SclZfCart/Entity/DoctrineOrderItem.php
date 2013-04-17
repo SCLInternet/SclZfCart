@@ -22,7 +22,6 @@ class DoctrineOrderItem implements OrderItemInterface
 
     /**
      * @var DoctrineOrder
-     *
      * @ORM\ManyToOne(targetEntity="SclZfCart\Entity\DoctrineOrder", inversedBy="items")
      */
     protected $order;

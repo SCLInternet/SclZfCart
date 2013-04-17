@@ -17,7 +17,7 @@ use SclZfCart\Service\CartItemCreatorInterface;
  * @author Tom Oram <tom@scl.co.uk>
  * @todo Redesign and refactor this class.
  */
-class CartStorage implements StorageInterface
+class CartStorage
 {
     /**
      * @var CartEntity

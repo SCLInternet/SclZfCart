@@ -4,26 +4,34 @@ namespace SclZfCart\Entity;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Entity class for storing a cart to the database
  *
+ * @ORM\Entity
+ * @ORM\Table(name="cart")
  * @author Tom Oram <tom@scl.co.uk>
  */
 class DoctrineCart implements CartInterface
 {
     /**
      * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
      * @var DateTime
+     * @ORM\Column(type="datetime")
      */
     protected $lastUpdated;
 
     /**
      * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="SclZfCart\Entity\DoctrineCartItem", cascade={"all"}, mappedBy="cart")
      */
     protected $items;
 

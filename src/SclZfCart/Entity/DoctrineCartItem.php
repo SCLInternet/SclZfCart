@@ -2,41 +2,53 @@
 
 namespace SclZfCart\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Entity class for storing a cart item to the database.
  *
+ * @ORM\Entity
+ * @ORM\Table(name="cart_item")
  * @author Tom Oram <tom@scl.co.uk>
  */
 class DoctrineCartItem implements CartItemInterface
 {
     /**
      * @var int
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
     /**
-     * @var Cart
+     * @var DoctrineCart
+     * @ORM\ManyToOne(targetEntity="SclZfCart\Entity\DoctrineCart", inversedBy="items")
      * @todo Find out if this really needs to be reverse mapped.
      */
     protected $cart;
 
     /**
      * @var string
+     * @ORM\Column(type="string")
      */
     protected $uid;
 
     /**
      * @var int
+     * @ORM\Column(type="integer")
      */
     protected $quantity;
 
     /**
      * @var string
+     * @ORM\Column(type="string")
      */
     protected $type;
 
     /**
      * @var string
+     * @ORM\Column(type="text")
      */
     protected $data;
 
@@ -71,7 +83,7 @@ class DoctrineCartItem implements CartItemInterface
      *
      * @return CartItem
      */
-    public function setCart(Cart $cart)
+    public function setCart(CartInterface $cart)
     {
         $this->cart = $cart;
         return $this;

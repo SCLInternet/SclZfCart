@@ -2,14 +2,12 @@
 
 namespace SclZfCart;
 
-use SclZfCart\Storage\DoctrineStorage;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Session\Container;
-use SclZfCart\Service\CartToOrderService;
 
 /**
  * This module contains an extensible shopping cart solution.
@@ -80,7 +78,7 @@ class Module implements
                 'SclZfCart\Entity\OrderItemInterface'       => 'SclZfCart\Entity\DoctrineOrderItem',
                 // Mappers
                 'SclZfCart\Mapper\CartMapperInterface'      => 'SclZfCart\Mapper\DoctrineCartMapper',
-                'SclZfCart\Mapper\CartMapperItemInterface'  => 'SclZfCart\Mapper\DoctrineCartItemMapper',
+                'SclZfCart\Mapper\CartItemMapperInterface'  => 'SclZfCart\Mapper\DoctrineCartItemMapper',
                 'SclZfCart\Mapper\OrderMapperInterface'     => 'SclZfCart\Mapper\DoctrineOrderMapper',
                 'SclZfCart\Mapper\OrderItemMapperInterface' => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
             ),
@@ -156,7 +154,7 @@ class Module implements
 
                 // Services
                 'SclZfCart\Service\CartToOrderServiceService' => function ($sm) {
-                    return new CartToOrderService(
+                    return new \SclZfCart\Service\CartToOrderService(
                         $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
                         $sm->get('SclZfCart\Hydrator\CartItemHydrator'),
                         $sm->get('SclZfCart\Hydrator\OrderItemHydrator'),

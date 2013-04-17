@@ -4,13 +4,13 @@ namespace SclZfCart\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Zend\XmlRpc\Value\String;
 
 /**
  * Doctrine implementation of the the OrderInterface
  *
  * @ORM\Entity
  * @ORM\Table(name="cart_order")
+ * @author Tom Oram <tom@scl.co.uk>
  */
 class DoctrineOrder implements OrderInterface
 {
@@ -23,7 +23,7 @@ class DoctrineOrder implements OrderInterface
     protected $id;
 
     /**
-     * @var String
+     * @var string
      * @ORM\Column(type="string")
      */
     protected $status;
