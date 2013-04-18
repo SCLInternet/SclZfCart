@@ -20,7 +20,7 @@ class Module implements
     ConfigProviderInterface,
     ServiceProviderInterface
 {
-    const DEFAULT_PROCESS_PREFERENCE = 0;
+    const DEFAULT_PROCESS_PREFERENCE  = 0;
     const DEFAULT_COMPLETE_PREFERENCE = 0;
 
     /**
@@ -35,6 +35,10 @@ class Module implements
         $cart = $serviceLocator->get('SclZfCart\Cart');
         $eventManager = $cart->getEventManager();
 
+        // @todo Use shared event manager and switch to fetching the event manager & ServiceLocator from the event.
+        // @todo Move the events out of this class
+
+        // Default process order event
         $eventManager->attach(
             CartEvent::EVENT_PROCESS,
             function (CartEvent $event) use ($eventManager) {
@@ -50,10 +54,14 @@ class Module implements
             self::DEFAULT_PROCESS_PREFERENCE
         );
 
+        // Default complete order event
         $eventManager->attach(
             CartEvent::EVENT_COMPLETE,
             function (CartEvent $event) use ($serviceLocator) {
+                $order = $event->getTarget();
+
                 $order->setStatus($order::STATUS_COMPLETED);
+
                 $mapper = $serviceLocator->get('SclZfCart\Mapper\OrderMapperInterface');
                 $mapper->save($order);
             }

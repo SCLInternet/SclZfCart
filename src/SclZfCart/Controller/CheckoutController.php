@@ -3,11 +3,11 @@
 namespace SclZfCart\Controller;
 
 use SclZfCart\CartEvent;
-use SclZfUtilities\Model\Route;
-use Zend\Form\Form;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Mvc\Controller\AbstractActionController;
 use SclZfCart\Entity\OrderInterface;
+use SclZfUtilities\Model\Route;
+use Zend\EventManager\EventManagerInterface;
+use Zend\Form\Form;
+use Zend\Mvc\Controller\AbstractActionController;
 
 /**
  * Takes the user through the checkout process.
@@ -145,6 +145,39 @@ class CheckoutController extends AbstractActionController
     }
 
     /**
+     * Builds the form object which shows the complete button.
+     *
+     * @return Form
+     */
+    /*
+     protected function createCompleteForm()
+     {
+        $form = new Form();
+
+        $form->setAttribute('action', $this->url()->fromRoute('cart/checkout/complete'));
+
+        $form->add(
+            array(
+                'name' => 'complete',
+                'type' => 'Zend\Form\Element\Submit',
+                'attributes' => array(
+                    'value' => 'Confirm',
+                    'id'    => 'complete-order',
+                ),
+            )
+        );
+
+        $this->getCartEventManager()->trigger(
+            CartEvent::EVENT_COMPLETE_FORM,
+            $form,
+            array(CartEvent::PARAM_CART => $this->getCart())
+        );
+
+        return $form;
+    }
+    */
+
+    /**
      * Finalise the cart contents to and order and move on the the appropriate page.
      *
      * @return array|Response
@@ -177,39 +210,6 @@ class CheckoutController extends AbstractActionController
         // @todo Throw an exception here
         return array();
     }
-
-    /**
-     * Builds the form object which shows the complete button.
-     *
-     * @return Form
-     */
-    /*
-    protected function createCompleteForm()
-    {
-        $form = new Form();
-
-        $form->setAttribute('action', $this->url()->fromRoute('cart/checkout/complete'));
-
-        $form->add(
-            array(
-                'name' => 'complete',
-                'type' => 'Zend\Form\Element\Submit',
-                'attributes' => array(
-                    'value' => 'Confirm',
-                    'id'    => 'complete-order',
-                ),
-            )
-        );
-
-        $this->getCartEventManager()->trigger(
-            CartEvent::EVENT_COMPLETE_FORM,
-            $form,
-            array(CartEvent::PARAM_CART => $this->getCart())
-        );
-
-        return $form;
-    }
-    */
 
     //
     // completedAction

@@ -1,0 +1,23 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+
+    <body>
+        If you browser doesn't refresh in a few seconds click the Continue button.
+        <?php
+            $form = $this->form;
+            $form->prepare();
+            echo $this->form()->openTag($form);
+            echo $this->formCollection($form);
+            echo $this->form()->closeTag($form);
+        ?>
+
+        <script type="text/javascript">
+            <!--
+            document.getElementById('continue-button').click();
+            // -->
+        </script>
+    </body>
+</html>
