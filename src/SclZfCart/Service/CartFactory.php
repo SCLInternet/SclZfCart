@@ -21,7 +21,7 @@ class CartFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $cart = new Cart();
+        $cart = $serviceLocator->get('SclZfCart\CartObject');
 
         /* @var $storage \SclZfCart\Storage\StorageInterface */
         $storage = $serviceLocator->get('SclZfCart\Storage\CartStorage');

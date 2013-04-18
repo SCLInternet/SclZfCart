@@ -113,6 +113,7 @@ class Module implements
                 'SclZfCart\Mapper\OrderItemMapperInterface' => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
             ),
             'invokables' => array(
+                'SclZfCart\CartObject'                      => 'SclZfCart\Cart',
                 'SclZfCart\CartItem'                        => 'SclZfCart\CartItem',
                 'SclZfCart\Entity\CartItem'                 => 'SclZfCart\Entity\CartItem',
                 'SclZfCart\Form\Cart'                       => 'SclZfCart\Form\Cart',
