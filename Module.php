@@ -59,11 +59,8 @@ class Module implements
             CartEvent::EVENT_COMPLETE,
             function (CartEvent $event) use ($serviceLocator) {
                 $order = $event->getTarget();
-
-                $order->setStatus($order::STATUS_COMPLETED);
-
-                $mapper = $serviceLocator->get('SclZfCart\Mapper\OrderMapperInterface');
-                $mapper->save($order);
+                $orderService = $serviceLocator->get('SclZfCart\Service\OrderCompletionService');
+                $orderService->complete($order);
             }
         );
     }

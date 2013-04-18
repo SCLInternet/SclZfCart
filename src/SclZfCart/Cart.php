@@ -33,7 +33,7 @@ class Cart implements
     /**
      * The items in the cart
      *
-     * @var CartItem[]
+     * @var CartItemInterface[]
      */
     protected $items = array();
 
