@@ -73,6 +73,7 @@ class Cart implements
      *
      * @param  ServiceLocatorInterface $serviceLocator
      * @return self
+     * @todo Maybe not needed now
      */
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {

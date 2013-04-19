@@ -13,10 +13,16 @@ use Zend\EventManager\Event;
  */
 class CartEvent extends Event
 {
-    const EVENT_CHECKOUT      = 'checkout';
-    const EVENT_PROCESS       = 'process-order';
-    const EVENT_COMPLETE      = 'complete';
+    // Checkout events
+    const EVENT_CHECKOUT       = 'checkout';
+    const EVENT_PROCESS        = 'process-order';
+    const EVENT_COMPLETE       = 'complete';
 
+    // Order events
+    const EVENT_ORDER_COMPLETE = 'order-complete';
+    const EVENT_ORDER_FAIL     = 'order-failed';
+
+    // Parameter names
     const PARAM_CART  = 'cart';
 
     /**
