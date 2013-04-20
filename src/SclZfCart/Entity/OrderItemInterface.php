@@ -2,12 +2,14 @@
 
 namespace SclZfCart\Entity;
 
+use SclZfCart\ProvidesUidInterface;
+
 /**
  * Defines the interface of an order item object.
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-interface OrderItemInterface
+interface OrderItemInterface extends ProvidesUidInterface
 {
     /**
      * Gets the value for quantity.
@@ -23,13 +25,6 @@ interface OrderItemInterface
      * @return self
      */
     public function setQuantity($quantity);
-
-    /**
-     * Gets the value for uid.
-     *
-     * @return string
-     */
-    public function getUid();
 
     /**
      * Sets the value for uid.

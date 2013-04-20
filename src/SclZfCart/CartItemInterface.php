@@ -7,7 +7,7 @@ namespace SclZfCart;
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-interface CartItemInterface extends \Serializable
+interface CartItemInterface extends ProvidesUidInterface, \Serializable
 {
     /**
      * Return the main title of the product to be displayed it the cart.
@@ -22,13 +22,6 @@ interface CartItemInterface extends \Serializable
      * @return string
      */
     public function getDescription();
-
-    /**
-     * Returns a unique identifier for this product.
-     *
-     * @return string
-     */
-    public function getUid();
 
     /**
      * Sets the uid.

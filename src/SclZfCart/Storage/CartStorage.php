@@ -4,11 +4,12 @@ namespace SclZfCart\Storage;
 
 use SclZfCart\Cart;
 use SclZfCart\Entity\Cart as CartEntity;
+use SclZfCart\Exception;
 use SclZfCart\Hydrator\CartItemEntityHydrator;
 use SclZfCart\Hydrator\CartItemHydrator;
-use SclZfCart\Mapper\CartMapperInterface;
 use SclZfCart\Mapper\CartItemMapperInterface;
-use SclZfCart\Exception;
+use SclZfCart\Mapper\CartMapperInterface;
+use SclZfCart\ProvidesUidInterface;
 use SclZfCart\Service\CartItemCreatorInterface;
 
 /**
@@ -132,6 +133,18 @@ class CartStorage
 
         return $data;
     }
+    
+    /**
+     * Compares the UIDs of 2 objects which provide UIDs.
+     * 
+     * @param  ProvidesUidInterface $a
+     * @param  ProvidesUidInterface $b
+     * @return boolean
+     */
+    public static function uidCompare(ProvidesUidInterface $a, ProvidesUidInterface $b)
+    {
+        return $a->getUid() === $b->getUid();
+    }
 
     /**
      * {@inheritDoc}
@@ -141,15 +154,24 @@ class CartStorage
      */
     public function store(Cart $cart)
     {
-        $this->getCartEntity();
+        $cartEntity = $this->getCartEntity();
 
-        $this->cartEntity->setLastUpdated(new \DateTime());
+        /*
+        $items       = new UidItemCollection($cart->getItems());
+        $entityItems = new UidItemCollection($cartEntity->getItems());
 
+        $deadEntities = array_udiff($entityItems, $items, 'SclZfCart\Storage\CartStorage::uidCompare');
+        $newEntities = array_udiff($items, $entityItems, 'SclZfCart\Storage\CartStorage::uidCompare');
+
+        //*/
+        // Get extracted data from the cart keyed by UID
         $items = $this->cartItemsToArray($cart);
 
         $entityItems = array();
 
-        foreach ($this->cartEntity->getItems() as $key => $entity) {
+        // Run through entities removing items which are not in the cart and
+        // adding all others to an array of new items
+        foreach ($cartEntity->getItems() as $key => $entity) {
             if (!isset($items[$entity->getUid()])) {
                 $this->cartItemMapper->delete($entity);
                 continue;
@@ -158,6 +180,8 @@ class CartStorage
             $entityItems[$entity->getUid()] = $entity;
         }
 
+        // Run through the items in the cart and either update or create entity
+        // items or use existing ones and hydrate them
         foreach ($items as $uid => $itemData) {
             if (!isset($entityItems[$uid])) {
                 $entityItems[$uid] = $this->cartItemMapper->create();
@@ -165,12 +189,14 @@ class CartStorage
 
             $this->cartItemEntityHydrator->hydrate($itemData, $entityItems[$uid]);
         }
+        //*/
 
-        $this->cartEntity->setItems($entityItems);
+        $cartEntity->setItems($entityItems);
+        $cartEntity->setLastUpdated(new \DateTime());
 
-        $this->cartMapper->save($this->cartEntity);
+        $this->cartMapper->save($cartEntity);
 
-        return $this->cartEntity->getId();
+        return $cartEntity->getId();
     }
 
     /**

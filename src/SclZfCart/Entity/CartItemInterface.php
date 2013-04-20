@@ -2,12 +2,14 @@
 
 namespace SclZfCart\Entity;
 
+use SclZfCart\ProvidesUidInterface;
+
 /**
  * Entity class interface for storing a cart item to the database.
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-interface CartItemInterface
+interface CartItemInterface extends ProvidesUidInterface
 {
     /**
      * @return int
@@ -30,11 +32,6 @@ interface CartItemInterface
      * @return CartItem
      */
     public function setCart(CartInterface $cart);
-
-    /**
-     * @return string
-     */
-    public function getUid();
 
     /**
      * @param  string $uid
