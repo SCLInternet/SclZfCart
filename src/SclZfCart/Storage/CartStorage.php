@@ -156,14 +156,34 @@ class CartStorage
     {
         $cartEntity = $this->getCartEntity();
 
-        /*
+        //*
         $items       = new UidItemCollection($cart->getItems());
         $entityItems = new UidItemCollection($cartEntity->getItems());
 
-        $deadEntities = array_udiff($entityItems, $items, 'SclZfCart\Storage\CartStorage::uidCompare');
-        $newEntities = array_udiff($items, $entityItems, 'SclZfCart\Storage\CartStorage::uidCompare');
+        // Remove old entities
+        foreach ($entityItems->diffItems($items) as $entity) {
+            $this->cartItemMapper->delete($entity);
+            $entityItems->remove($entity);
+        }
 
-        //*/
+        // Create new entities
+        foreach ($items->diffUids($entityItems) as $uid) {
+            $entity = $this->cartItemMapper->create();
+            $entity->setUid();
+            $entityItems->add($entity);
+        }
+
+        // Copy the data across
+        foreach ($items->getItems() as $uid => $item) {
+            $entity = $entityItems->get($uid);
+            $data = $this->cartItemHydrator->extract($item);
+
+            $this->cartItemEntityHydrator->hydrate($data, $item);
+        }
+
+        $cartEntity->setItems($entityItems->getItems());
+
+        /*/
         // Get extracted data from the cart keyed by UID
         $items = $this->cartItemsToArray($cart);
 
@@ -189,9 +209,10 @@ class CartStorage
 
             $this->cartItemEntityHydrator->hydrate($itemData, $entityItems[$uid]);
         }
-        //*/
 
         $cartEntity->setItems($entityItems);
+        //*/
+
         $cartEntity->setLastUpdated(new \DateTime());
 
         $this->cartMapper->save($cartEntity);
