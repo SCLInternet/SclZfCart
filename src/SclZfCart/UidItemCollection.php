@@ -132,7 +132,7 @@ class UidItemCollection
 
         foreach ($uids as $uid) {
             if (!isset($this->items[$uid])) {
-                throw new \DomainException('Item with '$uid' is not is the collection');
+                throw new \DomainException("Item with '$uid' is not is the collection");
             }
 
             $items[$uid] = $this->items[$uid];
@@ -160,7 +160,7 @@ class UidItemCollection
      */
     public function intersectItems(UidItemCollection $collection)
     {
-        return $this->uidsToItems($this->intersectUids($collection->getUids());
+        return $this->uidsToItems($this->intersectUids($collection));
     }
 
     /**
@@ -183,6 +183,6 @@ class UidItemCollection
      */
     public function diffItems(UidItemCollection $collection)
     {
-        return $this->uidsToItems($this->diffUids($collection->getUids());
+        return $this->uidsToItems($this->diffUids($collection));
     }
 }
