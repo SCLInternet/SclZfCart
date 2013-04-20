@@ -74,6 +74,21 @@ class CartStorage
     }
 
     /**
+     * Returns the cart entity or returns a new one if one previously had not been set.
+     *
+     * @return Cart
+     * @todo Maybe move this back into store()
+     */
+    protected function getCartEntity()
+    {
+        if (null === $this->cartEntity) {
+            $this->cartEntity = $this->cartMapper->create();
+        }
+
+        return $this->cartEntity;
+    }
+
+    /**
      * {@inheritDoc}
      *
      * @param  int  $id
@@ -100,21 +115,6 @@ class CartStorage
 
             $cart->add($item);
         }
-    }
-
-    /**
-     * Returns the cart entity or returns a new one if one previously had not been set.
-     *
-     * @return Cart
-     * @todo Maybe move this back into store()
-     */
-    protected function getCartEntity()
-    {
-        if (null === $this->cartEntity) {
-            $this->cartEntity = $this->cartMapper->create();
-        }
-
-        return $this->cartEntity;
     }
 
     /**
