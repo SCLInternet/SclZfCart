@@ -1,6 +1,8 @@
 <?php
 
-namespace SclZfCart\Storage;
+namespace SclZfCartTests\Storage;
+
+use SclZfCart\Storage\CartStorage;
 
 /**
  * Unit test for {@see \SclZfCart\Storage\DoctrineStorage}

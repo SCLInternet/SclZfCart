@@ -1,6 +1,8 @@
 <?php
 
-namespace SclZfCart;
+namespace SclZfCartTests;
+
+use SclZfCart\Cart;
 
 /**
  * Unit test for {@see \SclZfCart\Cart}

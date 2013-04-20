@@ -1,6 +1,8 @@
 <?php
 
-namespace SclZfCart\Hydrator;
+namespace SclZfCartTests\Hydrator;
+
+use SclZfCart\Hydrator\CartItemHydrator;
 
 class CartItemHydratorTest extends \PHPUnit_Framework_TestCase
 {

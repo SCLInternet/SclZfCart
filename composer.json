@@ -28,7 +28,10 @@
 	},
 	"autoload" : {
 		"psr-0" : {
-			"SclZfCart\\" : "src/"
-		}
+			"SclZfCart" : "src/"
+		},
+        "classmap" : [
+            "./Module.php"
+        ]
 	}
 }
