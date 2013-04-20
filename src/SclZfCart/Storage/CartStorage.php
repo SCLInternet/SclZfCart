@@ -3,7 +3,7 @@
 namespace SclZfCart\Storage;
 
 use SclZfCart\Cart;
-use SclZfCart\Entity\Cart as CartEntity;
+use SclZfCart\Entity\CartInterface as CartEntity;
 use SclZfCart\Exception;
 use SclZfCart\Hydrator\CartItemEntityHydrator;
 use SclZfCart\Hydrator\CartItemHydrator;
@@ -17,7 +17,6 @@ use SclZfCart\UidItemCollection;
  * Storage class for storing a cart using doctrine.
  *
  * @author Tom Oram <tom@scl.co.uk>
- * @todo Redesign and refactor this class.
  */
 class CartStorage
 {
@@ -77,36 +76,63 @@ class CartStorage
      * Returns the cart entity or returns a new one if one previously had not been set.
      *
      * @return Cart
-     * @todo Maybe move this back into store()
      */
     protected function getCartEntity()
     {
         if (null === $this->cartEntity) {
-            $this->cartEntity = $this->cartMapper->create();
+            $this->setCartEntity($this->cartMapper->create());
         }
 
         return $this->cartEntity;
     }
 
     /**
-     * {@inheritDoc}
+     * Sets the cart entity
+     * 
+     * @param CartEntity $entity
+     * @return self
+     */
+    protected function setCartEntity(CartEntity $entity)
+    {
+        $this->cartEntity = $entity;
+
+        return $this;
+    }
+
+    /**
+     * Populates a Cart object from the entities in storage.
      *
      * @param  int  $id
      * @param  Cart $cart
-     * @return void
+     * @return Cart
      * @throws CartNotFoundException
      */
     public function load($id, Cart $cart)
     {
-        $this->cartEntity = $this->cartMapper->findById($id);
+        $cartEntity = $this->cartMapper->findById($id);
 
-        if (!$this->cartEntity) {
+        if (!$cartEntity) {
             throw new Exception\CartNotFoundException("Cart with \"$id\" not found.");
         }
 
+        $this->setCartEntity($cartEntity);
+
         $cart->clear();
 
-        foreach ($this->cartEntity->getItems() as $entity) {
+        $this->loadItems($cart, $cartEntity);
+
+        return $cart;
+    }
+
+    /**
+     * Loads items from the storage into the cart
+     * 
+     * @param  Cart $cart
+     * @return Cart
+     */
+    protected function loadItems(Cart $cart, CartEntity $cartEntity)
+    {
+        foreach ($cartEntity->getItems() as $entity) {
             $item = $this->itemCreator->create($entity->getType());
 
             $data = $this->cartItemEntityHydrator->extract($entity);
@@ -115,10 +141,12 @@ class CartStorage
 
             $cart->add($item);
         }
+
+        return $cart;
     }
 
     /**
-     * {@inheritDoc}
+     * Converts a Cart object into entities persists them. 
      *
      * @param  Cart $cart
      * @return int The cart identifier
@@ -127,6 +155,17 @@ class CartStorage
     {
         $cartEntity = $this->getCartEntity();
 
+        $cartEntity->setLastUpdated(new \DateTime());
+
+        $this->storeItems($cart, $cartEntity);
+
+        $this->cartMapper->save($cartEntity);
+
+        return $cartEntity->getId();
+    }
+
+    public function storeItems(Cart $cart, CartEntity $cartEntity)
+    {
         $items       = new UidItemCollection($cart->getItems());
         $entityItems = new UidItemCollection($cartEntity->getItems());
 
@@ -153,11 +192,6 @@ class CartStorage
         }
 
         $cartEntity->setItems($entityItems->getItems());
-        $cartEntity->setLastUpdated(new \DateTime());
-
-        $this->cartMapper->save($cartEntity);
-
-        return $cartEntity->getId();
     }
 
     /**

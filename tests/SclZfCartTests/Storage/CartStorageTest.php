@@ -5,14 +5,14 @@ namespace SclZfCartTests\Storage;
 use SclZfCart\Storage\CartStorage;
 
 /**
- * Unit test for {@see \SclZfCart\Storage\DoctrineStorage}
+ * Unit test for {@see \SclZfCart\Storage\CartStorage}
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
 class CartStorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DoctrineStorage
+     * @var CartStorage
      */
     protected $storage;
 
@@ -66,92 +66,97 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \SclZfCart\Storage\DoctrineStorage::load
-     * @expectedException \SclZfCart\CartNotFoundException
+     * @covers \SclZfCart\Storage\CartStorage::load
+     * @expectedException \SclZfCart\Exception\CartNotFoundException
      */
-    /*
     public function testLoadFails()
     {
         $cartId = 27;
         $cart = $this->getMock('SclZfCart\Cart');
-        $cartEntity = $this->getMock('SclZfCart\Entity\Cart');
 
-        $this->entityManager->expects($this->once())
-            ->method('find')
-            ->with($this->equalTo('SclZfCart\Entity\Cart'), $this->equalTo($cartId))
-            ->will($this->returnValue(false));
+        $this->cartMapper->expects($this->once())
+            ->method('findById')
+            ->with($this->equalTo($cartId))
+            ->will($this->returnValue(null));
+
 
         $this->storage->load($cartId, $cart);
     }
-    */
 
     /**
-     * @covers \SclZfCart\Storage\DoctrineStorage::load
+     * @covers \SclZfCart\Storage\CartStorage::load
      */
-    public function testLoad()
+    public function testLoadWithNoItems()
     {
         $cartId = 27;
 
         $cart = $this->getMock('SclZfCart\Cart', array('clear', 'add'));
 
-        // $this->cartEntity = $this->cartMapper->findById($id);
+        $cartEntity = $this->getMock('SclZfCart\Entity\CartInterface');
+
         $this->cartMapper->expects($this->once())
             ->method('findById')
             ->with($this->equalTo($cartId))
-            ->will($this->returnValue($cart));
+            ->will($this->returnValue($cartEntity));
 
-        // $cart->clear();
         $cart->expects($this->once())
             ->method('clear');
 
-        // foreach ($this->cartEntity->getItems() as $entity) { .. }
-        $cartItemEntity = $this->getMock('SclZfCart\Entity\CartItemEntityInterface');
-        $cartItemEntities = array($cartItemEntity);
-
-        $cartEntity = $this->getMock('SclZfCart\Entity\CartInterface');
         $cartEntity->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue($cartItemEntities));
+            ->will($this->returnValue(array()));
 
-        // $item = $this->itemCreator->create($entity->getType());
-        $cartItemEntityType = 'random_type';
-        $cartItemEntity->expects($this->once())
-            ->method('getType')
-            ->will($this->returnValue($cartItemEntityType));
+        $result = $this->storage->load($cartId, $cart);
 
-        $cartItem = $this->getMock('SclZfCart\CartItemInterface');
-
-        $this->itemCreator->expects($this->once())
-            ->method('create')
-            ->with($this->equalTo($cartItemEntityType))
-            ->will($this->returnValue($cartItem));
-
-        // $data = $this->cartItemEntityHydrator->extract($entity);
-        $data = 'abc';
-        $this->entityHydrator->expects($this->once())
-            ->method('extract')
-            ->with($this->equalTo($cartItemEntity))
-            ->will($this->returnValue($data));
-
-        $this->itemHydrator->expects($this->once())
-            ->method('hydrate')
-            ->with($this->equalTo($data), $this->equalTo($cartItem));
-
-        $this->storage->load($cartId, $cart);
+        $this->assertEquals($cart, $result, 'The load method should return the Cart object');
     }
 
     /**
-     * @covers \SclZfCart\Storage\DoctrineStorage::store
+     * @covers \SclZfCart\Storage\CartStorage::loadItems
+     */
+    public function testLoadItems()
+    {
+        $this->markTestIncomplete('Implement me');
+    }
+
+    /**
+     * @covers \SclZfCart\Storage\CartStorage::store
      */
     public function testStore()
     {
-        $this->markTestIncomplete(
-            'Class implementation needs to be fixed first.'
-        );
+        $cartId = '43';
+
+        $cart = $this->getMock('SclZfCart\Cart');
+        
+        $cartEntity = $this->getMock('SclZfCart\Entity\CartInterface');
+
+        $this->cartMapper->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($cartEntity));
+
+        $this->cartMapper->expects($this->once())
+            ->method('save')
+            ->with($this->equalTo($cartEntity));
+
+        $cartEntity->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($cartId));
+
+        $result = $this->storage->store($cart);
+
+        $this->assertEquals($cartId, $result, 'Store should return the ID from the entity');
     }
 
     /**
-     * @covers \SclZfCart\Storage\DoctrineStorage::collectGarbage
+     * @covers \SclZfCart\Storage\CartStorage::storeItems
+     */
+    public function testStoreItems()
+    {
+        $this->markTestIncomplete('Implement me');
+    }
+
+    /**
+     * @covers \SclZfCart\Storage\CartStorage::collectGarbage
      */
     public function testCollectGarbage()
     {
