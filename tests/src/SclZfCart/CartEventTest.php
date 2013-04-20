@@ -26,7 +26,7 @@ class CartEventTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSetRoute()
     {
-        $route = new \SclZfCart\Utility\Route('test/route', array('a' => 'xyz'));
+        $route = new \SclZfUtilities\Model\Route('test/route', array('a' => 'xyz'));
 
         $this->object->setRoute($route);
 

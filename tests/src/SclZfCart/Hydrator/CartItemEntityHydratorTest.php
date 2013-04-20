@@ -22,7 +22,7 @@ class CartItemEntityHydratorTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtract()
     {
-        $item = $this->getMock('SclZfCart\Entity\CartItem');
+        $item = $this->getMock('SclZfCart\Entity\CartItemInterface');
 
         $item->expects($this->once())->method('getUid')->will($this->returnValue('uid'));
         $item->expects($this->once())->method('getQuantity')->will($this->returnValue(4));
