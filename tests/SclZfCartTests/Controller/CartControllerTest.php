@@ -20,7 +20,10 @@ class CartControllerTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $pluginManager = new \Zend\Mvc\Controller\PluginManager();
+
         $this->object = new CartController;
+        $this->object->setPluginManager($pluginManager);
     }
 
     /**
@@ -37,10 +40,8 @@ class CartControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIndexAction()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
-        );
+        //$this->object->indexAction();
+        $this->markTestIncomplete('Need to work out how to mock controller plugins');
     }
 
     /**

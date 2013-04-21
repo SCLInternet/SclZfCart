@@ -23,13 +23,38 @@ class DoctrineCartTest extends \PHPUnit_Framework_TestCase
         $this->object = new DoctrineCart;
     }
 
+    protected function fluentGetSetTest($name, $value)
+    {
+        $setter = 'set' . $name;
+        $getter = 'get' . $name;
+
+        $result = $this->object->$setter($value);
+
+        $this->assertEquals($this->object, $result, "set$name doesn't return itself.");
+
+        $result = $this->object->$getter();
+
+        $this->assertEquals($value, $result, "get$name didn't return the value set.");
+
+        return $this;
+    }
+
     /**
      */
     public function testEntity()
     {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+        $this->assertInstanceOf(
+            'SclZfCart\Entity\CartInterface',
+            $this->object,
+            'DoctrineCartItem is not an instance of SclZfCartEntity\CartInterface'
         );
+
+        $this->fluentGetSetTest('id', 34)
+             ->fluentGetSetTest('lastUpdated', new \DateTime());
+    }
+
+    public function testItems()
+    {
+        $this->markTestIncomplete('write this test');
     }
 }

@@ -29,45 +29,55 @@ class CartFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateService()
     {
+        $cart = $this->getMock('SclZfCart\Cart');
+
         $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
-        $storage = $this->getMock('SclZfCart\Storage\StorageInterface');
+
+        $storage = $this->getMockBuilder('SclZfCart\Storage\CartStorage')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $session = new \stdClass();
         $session->cartId = 43;
 
+        $application = $this->getMockBuilder('Zend\Mvc\Application')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $eventManager = $this->getMock('Zend\EventManager\EventManagerInterface');
+
         $serviceLocator->expects($this->at(0))
             ->method('get')
-            ->with($this->equalTo('SclZfCart\Storage'))
-            ->will($this->returnValue($storage));
+            ->with($this->equalTo('SclZfCart\CartObject'))
+            ->will($this->returnValue($cart));
 
         $serviceLocator->expects($this->at(1))
+            ->method('get')
+            ->with($this->equalTo('SclZfCart\Storage\CartStorage'))
+            ->will($this->returnValue($storage));
+
+        $serviceLocator->expects($this->at(2))
             ->method('get')
             ->with($this->equalTo('SclZfCart\Session'))
             ->will($this->returnValue($session));
 
         $storage->expects($this->once())
             ->method('load')
-            ->with($this->equalTo($session->cartId)/*,  $this->instanceOf('SclZfCart\Cart') */);
+            ->with($this->equalTo($session->cartId), $this->equalTo($cart));
 
-        /*
-        $application = $serviceLocator->get('Application');
+        $serviceLocator->expects($this->at(3))
+            ->method('get')
+            ->with($this->equalTo('Application'))
+            ->will($this->returnValue($application));
 
-        $eventManager = $application->getEventManager();
+        $application->expects($this->once())
+            ->method('getEventManager')
+            ->will($this->returnValue($eventManager));
 
-        $eventManager->attach(
-            MvcEvent::EVENT_FINISH,
-            function (MvcEvent $event) use ($session, $storage, $cart) {
-                $session->cartId = $storage->store($cart);
-            }
-        );
-        */
+        $eventManager->expects($this->once())
+            ->method('attach')
+            ->with($this->equalTo(\Zend\Mvc\MvcEvent::EVENT_FINISH));
 
-//        $this->assertInstanceOf('SclZfCart\Cart', $this->object->createService($serviceLocator));
-        $this->markTestIncomplete("It's to late to finish this");
-    }
-
-    public function testCreateServiceWithoutLoad()
-    {
-        $this->markTestIncomplete('do me');
+        $this->assertEquals($cart, $this->object->createService($serviceLocator));
     }
 }
