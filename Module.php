@@ -189,6 +189,11 @@ class Module implements
                         $sm->get('SclZfCart\Mapper\OrderItemMapperInterface')
                     );
                 },
+                'SclZfCart\Service\OrderCompletionService' => function ($sm) {
+                    return new \SclZfCart\Service\OrderCompletionService(
+                        $sm->get('SclZfCart\Mapper\OrderMapperInterface')
+                    );
+                }
             ),
         );
     }
