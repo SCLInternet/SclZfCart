@@ -3,11 +3,13 @@
 namespace SclZfCart\Service;
 
 use SclZfCart\Cart;
-use SclZfCart\Hydrator\CartItemHydrator;
-use SclZfCart\Service\CartItemCreatorInterface;
+use SclZfCart\CartItemInterface;
 use SclZfCart\Entity\OrderInterface;
+use SclZfCart\Entity\OrderItemInterface;
+use SclZfCart\Hydrator\CartItemHydrator;
 use SclZfCart\Hydrator\OrderItemEntityHydrator;
 use SclZfCart\Mapper\OrderItemMapperInterface;
+use SclZfCart\Service\CartItemCreatorInterface;
 
 /**
  * Provides methods to fill an Order entity from a Cart, or fill a Cart from an Order entity.
@@ -95,14 +97,22 @@ class CartToOrderService
         }
 
         foreach ($order->getItems() as $orderItem) {
-            $cartItem = $this->getCartItemCreator()
-                             ->create($orderItem->getType());
-
-            $data = $this->orderItemHydrator->extract($orderItem);
-
-            $this->cartItemHydrator->hydrate($data, $cartItem);
-
-            $cart->add($cartItem);
+            $cart->add($this->convertToCartItem($orderItem));
         }
+    }
+
+    /**
+     * Convert a order item entity into a cart item.
+     *
+     * @param  OrderItemInterface $orderItem
+     * @return CartItemInterface
+     */
+    public function convertToCartItem(OrderItemInterface $orderItem)
+    {
+        $cartItem = $this->cartItemCreator->create($orderItem->getType());
+
+        $data = $this->orderItemHydrator->extract($orderItem);
+
+        return $this->cartItemHydrator->hydrate($data, $cartItem);
     }
 }
