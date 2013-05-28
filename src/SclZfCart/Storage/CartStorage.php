@@ -9,7 +9,6 @@ use SclZfCart\Hydrator\CartItemEntityHydrator;
 use SclZfCart\Hydrator\CartItemHydrator;
 use SclZfCart\Mapper\CartItemMapperInterface;
 use SclZfCart\Mapper\CartMapperInterface;
-use SclZfCart\ProvidesUidInterface;
 use SclZfCart\Service\CartItemCreatorInterface;
 use SclZfCart\UidItemCollection;
 
@@ -51,7 +50,7 @@ class CartStorage
     protected $cartItemEntityHydrator;
 
     /**
-     * 
+     *
      * @param  CartMapperInterface      $cartMapper
      * @param  CartItemMapperInterface  $cartItemMapper
      * @param  CartItemCreatorInterface $itemCreator
@@ -88,7 +87,7 @@ class CartStorage
 
     /**
      * Sets the cart entity
-     * 
+     *
      * @param CartEntity $entity
      * @return self
      */
@@ -126,7 +125,7 @@ class CartStorage
 
     /**
      * Loads items from the storage into the cart
-     * 
+     *
      * @param  Cart $cart
      * @return Cart
      */
@@ -146,7 +145,7 @@ class CartStorage
     }
 
     /**
-     * Converts a Cart object into entities persists them. 
+     * Converts a Cart object into entities persists them.
      *
      * @param  Cart $cart
      * @return int The cart identifier

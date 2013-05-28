@@ -118,11 +118,10 @@ class UidItemCollection
 
         return $this;
     }
-    
 
     /**
      * Returns a list of items from the specified uids
-     * 
+     *
      * @param  array $uids
      * @return ProvidesUidInterface[]
      */
@@ -143,7 +142,7 @@ class UidItemCollection
 
     /**
      * Returns the intersecting set of UIDs with the given collection.
-     * 
+     *
      * @param  UidItemCollection $collection
      * @return array
      */
@@ -154,7 +153,7 @@ class UidItemCollection
 
     /**
      * Returns the intersecting set of items with the given collection
-     * 
+     *
      * @param  UidItemCollection $collection
      * @return array
      */
@@ -165,8 +164,8 @@ class UidItemCollection
 
     /**
      * Returns the UIDs of the items which are in this collection but not the given one.
-     * 
-     * @param  UidItemCollection $collection 
+     *
+     * @param  UidItemCollection $collection
      * @return self
      */
     public function diffUids(UidItemCollection $collection)
@@ -176,9 +175,9 @@ class UidItemCollection
 
     /**
      * Returns the items which are in this collection but not the given one.
-     * 
-     * @param UidItemCollection $collection collection 
-     * 
+     *
+     * @param UidItemCollection $collection collection
+     *
      * @return void
      */
     public function diffItems(UidItemCollection $collection)
