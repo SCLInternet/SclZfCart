@@ -61,7 +61,7 @@ class CartEventTest extends \PHPUnit_Framework_TestCase
     {
         $cart = $this->getMock('SclZfCart\Cart');
         $this->object->setParam(CartEvent::PARAM_CART, $cart);
-        
+
         $this->assertEquals($cart, $this->object->getCart());
     }
 }
