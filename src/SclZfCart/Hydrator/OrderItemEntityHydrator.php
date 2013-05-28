@@ -11,17 +11,8 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  * @author Tom Oram <tom@scl.co.uk>
  * @todo Add object type checking
  */
-class OrderItemHydrator implements HydratorInterface
+class OrderItemEntityHydrator implements HydratorInterface
 {
-    /**
-     * Check that 
-     * @param  OrderItemInterface $item
-     */
-    protected function checkType(OrderItemInterface $item)
-    {
-        // Type checking is done via typehinting
-    }
-
     /**
      * Extract data from a OrderItem object
      *
@@ -30,13 +21,15 @@ class OrderItemHydrator implements HydratorInterface
      */
     public function extract($item)
     {
-        $this->checkType($item);
+        if (!$item instanceof OrderItemInterface) {
+            return array();
+        }
 
         return array(
             'uid'      => $item->getUid(),
             'type'     => $item->getType(),
             'quantity' => $item->getQuantity(),
-            'data'     => $item->serialize(),
+            'data'     => $item->getData(),
             'price'    => $item->getPrice(),
         );
     }
@@ -44,13 +37,15 @@ class OrderItemHydrator implements HydratorInterface
     /**
      * Hydrates a cart item.
      *
-     * @param  array     $data
+     * @param  array              $data
      * @param  OrderItemInterface $item
      * @return OrderItemInterface
      */
     public function hydrate(array $data, $item)
     {
-        $this->checkType($item);
+        if (!$item instanceof OrderItemInterface) {
+            return $item;
+        }
 
         $item->setUid($data['uid'])
              ->setType($data['type'])
