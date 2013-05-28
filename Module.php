@@ -99,30 +99,30 @@ class Module implements
             ),
             'aliases' => array(
                 // Entities
-                'SclZfCart\Entity\CartInterface'            => 'SclZfCart\Entity\DoctrineCart',
-                'SclZfCart\Entity\CartItemInterface'        => 'SclZfCart\Entity\DoctrineCartItem',
-                'SclZfCart\Entity\OrderInterface'           => 'SclZfCart\Entity\DoctrineOrder',
-                'SclZfCart\Entity\OrderItemInterface'       => 'SclZfCart\Entity\DoctrineOrderItem',
+                'SclZfCart\Entity\CartInterface'             => 'SclZfCart\Entity\DoctrineCart',
+                'SclZfCart\Entity\CartItemInterface'         => 'SclZfCart\Entity\DoctrineCartItem',
+                'SclZfCart\Entity\OrderInterface'            => 'SclZfCart\Entity\DoctrineOrder',
+                'SclZfCart\Entity\OrderItemInterface'        => 'SclZfCart\Entity\DoctrineOrderItem',
                 // Mappers
-                'SclZfCart\Mapper\CartMapperInterface'      => 'SclZfCart\Mapper\DoctrineCartMapper',
-                'SclZfCart\Mapper\CartItemMapperInterface'  => 'SclZfCart\Mapper\DoctrineCartItemMapper',
-                'SclZfCart\Mapper\OrderMapperInterface'     => 'SclZfCart\Mapper\DoctrineOrderMapper',
-                'SclZfCart\Mapper\OrderItemMapperInterface' => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
+                'SclZfCart\Mapper\CartMapperInterface'       => 'SclZfCart\Mapper\DoctrineCartMapper',
+                'SclZfCart\Mapper\CartItemMapperInterface'   => 'SclZfCart\Mapper\DoctrineCartItemMapper',
+                'SclZfCart\Mapper\OrderMapperInterface'      => 'SclZfCart\Mapper\DoctrineOrderMapper',
+                'SclZfCart\Mapper\OrderItemMapperInterface'  => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
             ),
-            'invokables' => array(
-                'SclZfCart\CartObject'                      => 'SclZfCart\Cart',
-                'SclZfCart\CartItem'                        => 'SclZfCart\CartItem',
-                'SclZfCart\Entity\CartItem'                 => 'SclZfCart\Entity\CartItem',
-                'SclZfCart\Form\Cart'                       => 'SclZfCart\Form\Cart',
+            'invokables'                                     => array(
+                'SclZfCart\CartObject'                       => 'SclZfCart\Cart',
+                'SclZfCart\CartItem'                         => 'SclZfCart\CartItem',
+                'SclZfCart\Entity\CartItem'                  => 'SclZfCart\Entity\CartItem',
+                'SclZfCart\Form\Cart'                        => 'SclZfCart\Form\Cart',
                 // Hydrators
-                'SclZfCart\Hydrator\CartItemHydrator'       => 'SclZfCart\Hydrator\CartItemHydrator',
-                'SclZfCart\Hydrator\CartItemEntityHydrator' => 'SclZfCart\Hydrator\CartItemEntityHydrator',
-                'SclZfCart\Hydrator\OrderItemHydrator'      => 'SclZfCart\Hydrator\OrderItemHydrator',
+                'SclZfCart\Hydrator\CartItemHydrator'        => 'SclZfCart\Hydrator\CartItemHydrator',
+                'SclZfCart\Hydrator\CartItemEntityHydrator'  => 'SclZfCart\Hydrator\CartItemEntityHydrator',
+                'SclZfCart\Hydrator\OrderItemEntityHydrator' => 'SclZfCart\Hydrator\OrderItemEntityHydrator',
                 // Entities
-                'SclZfCart\Entity\DoctrineCart'             => 'SclZfCart\Entity\DoctrineCart',
-                'SclZfCart\Entity\DoctrineCartItem'         => 'SclZfCart\Entity\DoctrineCartItem',
-                'SclZfCart\Entity\DoctrineOrder'            => 'SclZfCart\Entity\DoctrineOrder',
-                'SclZfCart\Entity\DoctrineOrderItem'        => 'SclZfCart\Entity\DoctrineOrderItem',
+                'SclZfCart\Entity\DoctrineCart'              => 'SclZfCart\Entity\DoctrineCart',
+                'SclZfCart\Entity\DoctrineCartItem'          => 'SclZfCart\Entity\DoctrineCartItem',
+                'SclZfCart\Entity\DoctrineOrder'             => 'SclZfCart\Entity\DoctrineOrder',
+                'SclZfCart\Entity\DoctrineOrderItem'         => 'SclZfCart\Entity\DoctrineOrderItem',
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
@@ -185,7 +185,7 @@ class Module implements
                     return new \SclZfCart\Service\CartToOrderService(
                         $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
                         $sm->get('SclZfCart\Hydrator\CartItemHydrator'),
-                        $sm->get('SclZfCart\Hydrator\OrderItemHydrator'),
+                        $sm->get('SclZfCart\Hydrator\OrderItemEntityHydrator'),
                         $sm->get('SclZfCart\Mapper\OrderItemMapperInterface')
                     );
                 },

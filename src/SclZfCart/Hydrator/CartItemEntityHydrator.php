@@ -2,7 +2,7 @@
 
 namespace SclZfCart\Hydrator;
 
-use SclZfCart\Entity\CartItem as CartItemEntity;
+use SclZfCart\Entity\CartItemInterface as CartItemEntity;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 /**
@@ -21,6 +21,10 @@ class CartItemEntityHydrator implements HydratorInterface
      */
     public function extract($entity)
     {
+        if (!$entity instanceof CartItemEntity) {
+            return array();
+        }
+
         return array(
             'uid'      => $entity->getUid(),
             'quantity' => $entity->getQuantity(),
@@ -38,6 +42,10 @@ class CartItemEntityHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $entity)
     {
+        if (!$entity instanceof CartItemEntity) {
+            return $entity;
+        }
+
         $entity->setUid($data['uid'])
                ->setQuantity($data['quantity'])
                ->setType($data['type'])

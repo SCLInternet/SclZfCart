@@ -6,7 +6,7 @@ use SclZfCart\Cart;
 use SclZfCart\Hydrator\CartItemHydrator;
 use SclZfCart\Service\CartItemCreatorInterface;
 use SclZfCart\Entity\OrderInterface;
-use SclZfCart\Hydrator\OrderItemHydrator;
+use SclZfCart\Hydrator\OrderItemEntityHydrator;
 use SclZfCart\Mapper\OrderItemMapperInterface;
 
 /**
@@ -27,28 +27,28 @@ class CartToOrderService
     protected $cartItemHydrator;
 
     /**
-     * @var OrderItemHydrator
+     * @var OrderItemEntityHydrator
      */
     protected $orderItemHydrator;
 
     /**
      * Persistence for OrderItem objects.
-     * 
+     *
      * @var OrderItemMapperInterface
      */
     protected $orderItemMapper;
 
     /**
-     * 
+     *
      * @param  CartItemCreatorInterface $cartItemCreator
      * @param  CartItemHydrator         $cartItemHydrator
-     * @param  OrderItemHydrator        $orderItemHydrator
+     * @param  OrderItemEntityHydrator  $orderItemHydrator
      * @param  OrderItemMapper          $orderItemMapper
      */
     public function __construct(
         CartItemCreatorInterface $cartItemCreator,
         CartItemHydrator $cartItemHydrator,
-        OrderItemHydrator $orderItemHydrator,
+        OrderItemEntityHydrator $orderItemHydrator,
         OrderItemMapperInterface $orderItemMapper
     ) {
         $this->cartItemCreator   = $cartItemCreator;

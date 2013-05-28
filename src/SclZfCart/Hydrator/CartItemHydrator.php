@@ -22,6 +22,10 @@ class CartItemHydrator implements HydratorInterface
      */
     public function extract($item)
     {
+        if (!$item instanceof CartItemInterface) {
+            return array();
+        }
+
         return array(
             'uid'      => $item->getUid(),
             'type'     => get_class($item),
