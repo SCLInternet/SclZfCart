@@ -14,7 +14,7 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
 class OrderItemHydrator implements HydratorInterface
 {
     /**
-     * Check that 
+     * Check that
      * @param  OrderItemInterface $item
      */
     protected function checkType(OrderItemInterface $item)

@@ -33,13 +33,13 @@ class CartToOrderService
 
     /**
      * Persistence for OrderItem objects.
-     * 
+     *
      * @var OrderItemMapperInterface
      */
     protected $orderItemMapper;
 
     /**
-     * 
+     *
      * @param  CartItemCreatorInterface $cartItemCreator
      * @param  CartItemHydrator         $cartItemHydrator
      * @param  OrderItemHydrator        $orderItemHydrator
