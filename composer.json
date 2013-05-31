@@ -1,37 +1,38 @@
 {
-	"name" : "sclinternet/scl-zf-cart",
-	"description" : "An extensible cart module for Zend Framework 2",
-	"type" : "library",
-	"authors" : [{
-			"name" : "Tom Oram",
-			"email" : "tom@x2k.co.uk",
-			"homepage" : "http://github.com/tomphp"
-		}
-	],
-	"keywords" : [],
-	"homepage" : "https://github.com/SCLInternet/SclZfCart",
-	"license" : [
-		"MIT"
-	],
-	"require" : {
-		"php" : ">=5.3.3",
-		"zf-commons/zfc-user-doctrine-orm" : "dev-master",
-		"rwoverdijk/assetmanager" : "1.*",
+    "name" : "sclinternet/scl-zf-cart",
+    "description" : "An extensible cart module for Zend Framework 2",
+    "type" : "library",
+    "authors" : [{
+            "name" : "Tom Oram",
+            "email" : "tom@x2k.co.uk",
+            "homepage" : "http://github.com/tomphp"
+        }
+    ],
+    "keywords" : [],
+    "homepage" : "https://github.com/SCLInternet/SclZfCart",
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+        "php" : ">=5.3.3",
+        "zf-commons/zfc-user-doctrine-orm" : "dev-master",
+        "rwoverdijk/assetmanager" : "1.*",
         "sclinternet/scl-zf-utilities": "dev-master",
         "sclinternet/scl-contact": "dev-master",
-		"zendframework/zendframework" : "2.*"
-	},
-	"require-dev" : {
-		"phpunit/phpunit" : "3.7.*",
-		"squizlabs/php_codesniffer" : "1.*",
-		"phpmd/phpmd" : "1.4.0"
-	},
-	"autoload" : {
-		"psr-0" : {
-			"SclZfCart" : "src/"
-		},
+        "zendframework/zendframework" : "2.*"
+    },
+    "require-dev" : {
+        "phpunit/phpunit" : "3.7.*",
+        "squizlabs/php_codesniffer" : "1.*",
+        "phpmd/phpmd" : "1.4.0",
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "autoload" : {
+        "psr-0" : {
+            "SclZfCart" : "src/"
+        },
         "classmap" : [
             "./Module.php"
         ]
-	}
+    }
 }
