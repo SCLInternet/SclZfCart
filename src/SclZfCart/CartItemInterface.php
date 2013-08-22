@@ -46,7 +46,28 @@ interface CartItemInterface extends ProvidesUidInterface, \Serializable
     public function getQuantity();
 
     /**
-     * Returns the price for this item
+     * Returns the tax amount for a single item.
+     *
+     * @return float|null NULL can be returned to stop this from being displayed in the cart
+     */
+    public function getUnitTax();
+
+    /**
+     * Get the total tax amount for the set quantity.
+     *
+     * @return float
+     */
+    public function getTax();
+
+    /**
+     * Returns the price for a single item.
+     *
+     * @return float|null NULL can be returned to stop this from being displayed in the cart
+     */
+    public function getUnitPrice();
+
+    /**
+     * Returns the price the set quantity.
      *
      * @return float
      */
