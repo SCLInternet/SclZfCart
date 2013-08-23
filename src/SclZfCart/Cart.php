@@ -143,6 +143,39 @@ class Cart implements
         return $this->items[$uid];
     }
 
+    public function getTotalExTax()
+    {
+        return array_reduce(
+            $this->items,
+            function ($total, $item) {
+                return $total + $item->getPrice();
+            },
+            0
+        );
+    }
+
+    public function getTotalIncTax()
+    {
+        return array_reduce(
+            $this->items,
+            function ($total, $item) {
+                return $total + $item->getPrice() + $item->getTax();
+            },
+            0
+        );
+    }
+
+    public function getTotalTax()
+    {
+        return array_reduce(
+            $this->items,
+            function ($total, $item) {
+                return $total + $item->getTax();
+            },
+            0
+        );
+    }
+
     /**
      * Empties the contents of the cart.
      *
