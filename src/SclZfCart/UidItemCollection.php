@@ -77,10 +77,10 @@ class UidItemCollection
     /**
      * Adds an item to the collection
      *
-     * @param  ProvidesUidInterface $item
+     * @param  UidProviderInterface $item
      * @return self
      */
-    public function add(ProvidesUidInterface $item)
+    public function add(UidProviderInterface $item)
     {
         $this->items[$item->getUid()] = $item;
 
@@ -91,7 +91,7 @@ class UidItemCollection
      * Returns a requested item from the collection
      *
      * @param  string $uid
-     * @return ProvidesUidInterface|null
+     * @return UidProviderInterface|null
      */
     public function get($uid)
     {
@@ -105,12 +105,12 @@ class UidItemCollection
     /**
      * Removes a item from the collection.
      *
-     * @param  ProvidesUidInterface|string $uidOrItem
+     * @param  UidProviderInterface|string $uidOrItem
      * @return self
      */
     public function remove($uidOrItem)
     {
-        if ($uidOrItem instanceof ProvidesUidInterface) {
+        if ($uidOrItem instanceof UidProviderInterface) {
             $uidOrItem = $uidOrItem->getUid();
         }
 
@@ -123,7 +123,7 @@ class UidItemCollection
      * Returns a list of items from the specified uids
      *
      * @param  array $uids
-     * @return ProvidesUidInterface[]
+     * @return UidProviderInterface[]
      */
     protected function uidsToItems(array $uids)
     {

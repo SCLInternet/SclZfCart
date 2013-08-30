@@ -9,7 +9,6 @@ use Zend\Stdlib\Hydrator\HydratorInterface;
  * Hydrator for {@see CartItemEntity} objects
  *
  * @author Tom Oram <tom@scl.co.uk>
- * @todo Add object type checking
  */
 class CartItemEntityHydrator implements HydratorInterface
 {
@@ -46,10 +45,10 @@ class CartItemEntityHydrator implements HydratorInterface
             return $entity;
         }
 
-        $entity->setUid($data['uid'])
-               ->setQuantity($data['quantity'])
-               ->setType($data['type'])
-               ->setData($data['data']);
+        $entity->setUid($data['uid']);
+        $entity->setQuantity($data['quantity']);
+        $entity->setType($data['type']);
+        $entity->setData($data['data']);
 
         return $entity;
     }

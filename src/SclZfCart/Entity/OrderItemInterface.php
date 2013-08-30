@@ -2,14 +2,19 @@
 
 namespace SclZfCart\Entity;
 
-use SclZfCart\ProvidesUidInterface;
+use SclZfCart\PriceAwareInterface;
+use SclZfCart\UidAwareInterface;
+use SclZfCart\UnitPriceAwareInterface;
 
 /**
  * Defines the interface of an order item object.
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-interface OrderItemInterface extends ProvidesUidInterface
+interface OrderItemInterface extends
+    PriceAwareInterface,
+    UidAwareInterface,
+    UnitPriceAwareInterface
 {
     /**
      * Gets the value for quantity.
@@ -25,29 +30,6 @@ interface OrderItemInterface extends ProvidesUidInterface
      * @return self
      */
     public function setQuantity($quantity);
-
-    /**
-     * Sets the value for uid.
-     *
-     * @param  string $uid
-     * @return self
-     */
-    public function setUid($uid);
-
-    /**
-     * Gets the value for price.
-     *
-     * @return float
-     */
-    public function getPrice();
-
-    /**
-     * Sets the value for price.
-     *
-     * @param  float $price
-     * @return self
-     */
-    public function setPrice($price);
 
     /**
      * Gets the value for type.

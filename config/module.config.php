@@ -89,21 +89,18 @@ return array(
     'scl_zf_cart' => array(
         'session_name'       => 'SclZfCart',
         'storage_class'      => 'SclZfCart\Storage\DoctrineStorage',
-        'order_class'        => 'SclZfCart\Entity\DoctrineOrder',
-        'item_class'         => 'SclZfCart\Entity\DoctrineOrderItem',
-        'order_mapper_class' => 'SclZfCart\Mapper\DoctrineOrderMapper',
-        'item_mapper_class'  => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
+        'order_class'        => 'SclZfCart\Entity\Order',
+        'item_class'         => 'SclZfCart\Entity\OrderItem',
+        'order_mapper_class' => 'SclZfCart\Mapper\OrderMapper',
+        'item_mapper_class'  => 'SclZfCart\Mapper\OrderItemMapper',
     ),
 
     // @todo Move to .dist config file
     'doctrine' => array(
         'driver' => array(
             __NAMESPACE__ . '_driver' => array(
-                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-                'cache' => 'array',
-                'paths' => array(
-                    __DIR__ . '/../src/'. __NAMESPACE__ . '/Entity/',
-                ),
+                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+                'paths' => __DIR__ . '/xml/doctrine-entities'
             ),
             'orm_default' => array(
                 'drivers' => array(

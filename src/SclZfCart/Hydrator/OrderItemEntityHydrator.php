@@ -47,11 +47,11 @@ class OrderItemEntityHydrator implements HydratorInterface
             return $item;
         }
 
-        $item->setUid($data['uid'])
-             ->setType($data['type'])
-             ->setQuantity($data['quantity'])
-             ->setData($data['data'])
-             ->setPrice($data['price']);
+        $item->setUid($data['uid']);
+        $item->setType($data['type']);
+        $item->setQuantity($data['quantity']);
+        $item->setData($data['data']);
+        $item->setPrice($data['price']);
 
         return $item;
     }

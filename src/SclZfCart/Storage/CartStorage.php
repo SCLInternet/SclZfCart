@@ -198,6 +198,7 @@ class CartStorage
      *
      * @param float $probability Value of 0 to 1, 1 being all the time, 0 being never
      * @param int   $lifetime    The age in hours before a cart is expired
+     * @todo Implement me!
      */
     public function collectGarbage($probability, $lifetime)
     {

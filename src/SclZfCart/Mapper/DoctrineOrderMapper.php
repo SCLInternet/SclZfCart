@@ -26,7 +26,7 @@ class DoctrineOrderMapper extends GenericDoctrineMapper implements
         parent::__construct(
             $entityManager,
             $flushLock,
-            'SclZfCart\Entity\DoctrineOrder'
+            'SclZfCart\Entity\Order'
         );
     }
 
