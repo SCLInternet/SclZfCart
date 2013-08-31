@@ -1,6 +1,6 @@
 <?php
 
-namespace SclZfCart;
+namespace SclZfCart\CartItem;
 
 /**
  * Trait for objects that are UID aware.

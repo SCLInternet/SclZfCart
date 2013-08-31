@@ -2,10 +2,10 @@
 
 namespace SclZfCart;
 
-use SclZfCart\PriceProviderInterface;
-use SclZfCart\UidProviderInterface;
-use SclZfCart\UnitPriceProviderInterface;
-use Serializable;
+use SclZfCart\CartItem\PriceProviderInterface;
+use SclZfCart\CartItem\UidProviderInterface;
+use SclZfCart\CartItem\UnitPriceProviderInterface;
+use SclZfCart\CartItem\QuantityProviderInterface;
 
 /**
  * The interface for any item that wants to be added to the cart.
@@ -14,7 +14,7 @@ use Serializable;
  */
 interface CartItemInterface extends
     PriceProviderInterface,
-    Serializable,
+    QuantityProviderInterface,
     UidProviderInterface,
     UnitPriceProviderInterface
 {
@@ -31,18 +31,4 @@ interface CartItemInterface extends
      * @return string
      */
     public function getDescription();
-
-    /**
-     * Sets the quantity for this item.
-     *
-     * @param int $quantity
-     */
-    public function setQuantity($quantity);
-
-    /**
-     * Returns the quantity.
-     *
-     * @return int
-     */
-    public function getQuantity();
 }

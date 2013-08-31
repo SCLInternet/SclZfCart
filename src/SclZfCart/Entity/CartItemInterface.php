@@ -2,9 +2,11 @@
 
 namespace SclZfCart\Entity;
 
-use SclZfCart\UidAwareInterface;
-use SclZfCart\PriceAwareInterface;
-use SclZfCart\UnitPriceAwareInterface;
+use SclZfCart\CartItem\DataAwareInterface;
+use SclZfCart\CartItem\PriceAwareInterface;
+use SclZfCart\CartItem\QuantityAwareInterface;
+use SclZfCart\CartItem\UidAwareInterface;
+use SclZfCart\CartItem\UnitPriceAwareInterface;
 
 /**
  * Entity class interface for storing a cart item to the database.
@@ -12,8 +14,10 @@ use SclZfCart\UnitPriceAwareInterface;
  * @author Tom Oram <tom@scl.co.uk>
  */
 interface CartItemInterface extends
-    UidAwareInterface,
+    DataAwareInterface,
     PriceAwareInterface,
+    QuantityAwareInterface,
+    UidAwareInterface,
     UnitPriceAwareInterface
 {
     /**
@@ -23,35 +27,20 @@ interface CartItemInterface extends
 
     /**
      * @param  int $id
-     * @return CartItem
+     * @return void
      */
     public function setId($id);
 
     /**
-     * @return Cart
+     * @return CartInterface
      */
     public function getCart();
 
     /**
      * @param  CartInterface $cart
-     * @return CartItem
+     * @return void
      */
     public function setCart(CartInterface $cart);
-
-    /**
-     * Gets the value for quantity.
-     *
-     * @return int
-     */
-    public function getQuantity();
-
-    /**
-     * Sets the value for quantity.
-     *
-     * @param  int $quantity
-     * @return self
-     */
-    public function setQuantity($quantity);
 
     /**
      * Gets the value for type.
@@ -64,18 +53,7 @@ interface CartItemInterface extends
      * Sets the value for type.
      *
      * @param  string $type
-     * @return self
+     * @return void
      */
     public function setType($type);
-
-    /**
-     * @return string
-     */
-    public function getData();
-
-    /**
-     * @param  string $productData
-     * @return CartItem
-     */
-    public function setData($data);
 }

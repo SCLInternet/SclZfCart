@@ -1,6 +1,6 @@
 <?php
 
-namespace SclZfCart;
+namespace SclZfCart\CartItem;
 
 /**
  * Interface for objects which can have unit price values set.
