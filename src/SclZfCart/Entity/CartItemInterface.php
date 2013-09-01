@@ -7,6 +7,7 @@ use SclZfCart\CartItem\PriceAwareInterface;
 use SclZfCart\CartItem\QuantityAwareInterface;
 use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
+use SclZfCart\CartItemInterface as MainCartItemInterface;
 
 /**
  * Entity class interface for storing a cart item to the database.
@@ -14,6 +15,7 @@ use SclZfCart\CartItem\UnitPriceAwareInterface;
  * @author Tom Oram <tom@scl.co.uk>
  */
 interface CartItemInterface extends
+    MainCartItemInterface,
     DataAwareInterface,
     PriceAwareInterface,
     QuantityAwareInterface,

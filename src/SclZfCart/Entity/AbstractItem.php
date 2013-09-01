@@ -7,6 +7,8 @@ use SclZfCart\CartItem\PriceAwareInterface;
 use SclZfCart\CartItem\PriceAwareTrait;
 use SclZfCart\CartItem\QuantityAwareInterface;
 use SclZfCart\CartItem\QuantityAwareTrait;
+use SclZfCart\CartItem\TitleAwareTrait;
+use SclZfCart\CartItem\TitleProviderInterface;
 use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UidAwareTrait;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
@@ -21,9 +23,11 @@ abstract class AbstractItem implements
     DataAwareInterface,
     PriceAwareInterface,
     QuantityAwareInterface,
+    TitleProviderInterface,
     UidAwareInterface,
     UnitPriceAwareInterface
 {
+    use TitleAwareTrait;
     use PriceAwareTrait;
     use QuantityAwareTrait;
     use UidAwareTrait;
@@ -43,6 +47,11 @@ abstract class AbstractItem implements
      */
     protected $data;
 
+    /**
+     * The type of item to be stored in this entity.
+     *
+     * @var string
+     */
     protected $type;
 
     public function getId()

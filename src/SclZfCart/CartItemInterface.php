@@ -3,9 +3,10 @@
 namespace SclZfCart;
 
 use SclZfCart\CartItem\PriceProviderInterface;
+use SclZfCart\CartItem\QuantityProviderInterface;
+use SclZfCart\CartItem\TitleProviderInterface;
 use SclZfCart\CartItem\UidProviderInterface;
 use SclZfCart\CartItem\UnitPriceProviderInterface;
-use SclZfCart\CartItem\QuantityProviderInterface;
 
 /**
  * The interface for any item that wants to be added to the cart.
@@ -15,20 +16,8 @@ use SclZfCart\CartItem\QuantityProviderInterface;
 interface CartItemInterface extends
     PriceProviderInterface,
     QuantityProviderInterface,
+    TitleProviderInterface,
     UidProviderInterface,
     UnitPriceProviderInterface
 {
-    /**
-     * Return the main title of the product to be displayed it the cart.
-     *
-     * @return string
-     */
-    public function getTitle();
-
-    /**
-     * An extended description for the product.
-     *
-     * @return string
-     */
-    public function getDescription();
 }
