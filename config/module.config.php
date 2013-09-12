@@ -104,7 +104,8 @@ return array(
             ),
             'orm_default' => array(
                 'drivers' => array(
-                    __NAMESPACE__ => __NAMESPACE__ . '_driver',
+                    // Added trailing backslash to avoid partial matches
+                    __NAMESPACE__ . '\\' => __NAMESPACE__ . '_driver',
                 ),
             ),
         ),

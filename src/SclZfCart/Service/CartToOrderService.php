@@ -63,12 +63,12 @@ class CartToOrderService
         foreach ($cart->getItems() as $cartItem) {
             $data = $this->itemHydrator->extract($cartItem);
 
-            // @todo Maybe add this the the hydrator extract method.
-            $data['price'] = $cartItem->getPrice();
-
             $orderItem = $this->orderItemMapper->create();
 
             $this->itemHydrator->hydrate($data, $orderItem);
+
+            // @todo Maybe move this into the hydrator
+            $orderItem->setType(get_class($cartItem));
 
             $order->addItem($orderItem);
         }
