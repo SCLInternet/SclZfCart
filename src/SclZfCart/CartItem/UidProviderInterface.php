@@ -1,6 +1,6 @@
 <?php
 
-namespace SclZfCart;
+namespace SclZfCart\CartItem;
 
 /**
  * Interface for class that provide an cart item UID string.

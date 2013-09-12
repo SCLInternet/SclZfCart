@@ -2,7 +2,6 @@
 
 namespace SclZfCart\Mapper;
 
-use SclZfCart\Entity\CartItemInterface;
 use SclZfUtilities\Mapper\GenericMapperInterface;
 
 /**

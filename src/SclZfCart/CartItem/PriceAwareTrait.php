@@ -1,6 +1,6 @@
 <?php
 
-namespace SclZfCart;
+namespace SclZfCart\CartItem;
 
 /**
  * Trait for objects which are price aware.

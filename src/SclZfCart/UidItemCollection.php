@@ -2,6 +2,8 @@
 
 namespace SclZfCart;
 
+use SclZfCart\CartItem\UidProviderInterface;
+
 /**
  * This class represents a collection of items which provide a UID
  *
