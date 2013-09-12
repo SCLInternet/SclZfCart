@@ -34,6 +34,7 @@ class DoctrineOrderMapper extends GenericDoctrineMapper implements
     {
         $order = parent::create();
         $order->setStatus(OrderInterface::STATUS_PENDING);
+
         return $order;
     }
 }

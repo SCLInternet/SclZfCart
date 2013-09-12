@@ -6,8 +6,7 @@ use SclZfCart\Cart;
 use SclZfCart\CartItemInterface;
 use SclZfCart\Entity\OrderInterface;
 use SclZfCart\Entity\OrderItemInterface;
-use SclZfCart\Hydrator\CartItemHydrator;
-use SclZfCart\Hydrator\OrderItemEntityHydrator;
+use SclZfCart\Hydrator\ItemHydrator;
 use SclZfCart\Mapper\OrderItemMapperInterface;
 use SclZfCart\Service\CartItemCreatorInterface;
 
@@ -24,14 +23,9 @@ class CartToOrderService
     protected $cartItemCreator;
 
     /**
-     * @var CartItemHydrator
+     * @var ItemHydrator
      */
-    protected $cartItemHydrator;
-
-    /**
-     * @var OrderItemEntityHydrator
-     */
-    protected $orderItemHydrator;
+    protected $itemHydrator;
 
     /**
      * Persistence for OrderItem objects.
@@ -43,19 +37,16 @@ class CartToOrderService
     /**
      *
      * @param  CartItemCreatorInterface $cartItemCreator
-     * @param  CartItemHydrator         $cartItemHydrator
-     * @param  OrderItemEntityHydrator  $orderItemHydrator
+     * @param  ItemHydrator             $itemHydrator
      * @param  OrderItemMapper          $orderItemMapper
      */
     public function __construct(
         CartItemCreatorInterface $cartItemCreator,
-        CartItemHydrator $cartItemHydrator,
-        OrderItemEntityHydrator $orderItemHydrator,
+        ItemHydrator $itemHydrator,
         OrderItemMapperInterface $orderItemMapper
     ) {
         $this->cartItemCreator   = $cartItemCreator;
-        $this->cartItemHydrator  = $cartItemHydrator;
-        $this->orderItemHydrator = $orderItemHydrator;
+        $this->itemHydrator      = $itemHydrator;
         $this->orderItemMapper   = $orderItemMapper;
     }
 
@@ -70,14 +61,14 @@ class CartToOrderService
         $order->reset();
 
         foreach ($cart->getItems() as $cartItem) {
-            $data = $this->cartItemHydrator->extract($cartItem);
+            $data = $this->itemHydrator->extract($cartItem);
 
             // @todo Maybe add this the the hydrator extract method.
             $data['price'] = $cartItem->getPrice();
 
             $orderItem = $this->orderItemMapper->create();
 
-            $this->orderItemHydrator->hydrate($data, $orderItem);
+            $this->itemHydrator->hydrate($data, $orderItem);
 
             $order->addItem($orderItem);
         }
@@ -111,8 +102,8 @@ class CartToOrderService
     {
         $cartItem = $this->cartItemCreator->create($orderItem->getType());
 
-        $data = $this->orderItemHydrator->extract($orderItem);
+        $data = $this->itemHydrator->extract($orderItem);
 
-        return $this->cartItemHydrator->hydrate($data, $cartItem);
+        return $this->itemHydrator->hydrate($data, $cartItem);
     }
 }

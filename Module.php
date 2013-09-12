@@ -115,9 +115,7 @@ class Module implements
                 'SclZfCart\Entity\CartItem'                  => 'SclZfCart\Entity\CartItem',
                 'SclZfCart\Form\Cart'                        => 'SclZfCart\Form\Cart',
                 // Hydrators
-                'SclZfCart\Hydrator\CartItemHydrator'        => 'SclZfCart\Hydrator\CartItemHydrator',
-                'SclZfCart\Hydrator\CartItemEntityHydrator'  => 'SclZfCart\Hydrator\CartItemEntityHydrator',
-                'SclZfCart\Hydrator\OrderItemEntityHydrator' => 'SclZfCart\Hydrator\OrderItemEntityHydrator',
+                'SclZfCart\Hydrator\ItemHydrator'            => 'SclZfCart\Hydrator\ItemHydrator',
                 // Entities
                 'SclZfCart\Entity\DoctrineCart'              => 'SclZfCart\Entity\DoctrineCart',
                 'SclZfCart\Entity\DoctrineCartItem'          => 'SclZfCart\Entity\DoctrineCartItem',
@@ -135,8 +133,7 @@ class Module implements
                         $serviceLocator->get('SclZfCart\Mapper\CartMapperInterface'),
                         $serviceLocator->get('SclZfCart\Mapper\CartItemMapperInterface'),
                         $serviceLocator->get('SclZfCart\Service\CartItemCreatorInterface'),
-                        $serviceLocator->get('SclZfCart\Hydrator\CartItemHydrator'),
-                        $serviceLocator->get('SclZfCart\Hydrator\CartItemEntityHydrator')
+                        $serviceLocator->get('SclZfCart\Hydrator\ItemHydrator')
                     );
                 },
                 'SclZfCart\Service\CartItemCreatorInterface' => function ($serviceLocator) {
@@ -184,8 +181,7 @@ class Module implements
                 'SclZfCart\Service\CartToOrderService' => function ($sm) {
                     return new \SclZfCart\Service\CartToOrderService(
                         $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
-                        $sm->get('SclZfCart\Hydrator\CartItemHydrator'),
-                        $sm->get('SclZfCart\Hydrator\OrderItemEntityHydrator'),
+                        $sm->get('SclZfCart\Hydrator\ItemHydrator'),
                         $sm->get('SclZfCart\Mapper\OrderItemMapperInterface')
                     );
                 },

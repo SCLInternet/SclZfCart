@@ -12,6 +12,8 @@
         <many-to-one field="cart" target-entity="SclZfCart\Entity\Cart" inversed-by="items" />
 
         <field name="uid" type="string" />
+        <field name="title" type="string" />
+        <field name="description" type="string" />
         <field name="quantity" type="integer" />
         <field name="unitPrice" type="decimal" precision="11" scale="2" />
         <field name="unitTax" type="decimal" precision="11" scale="2" />

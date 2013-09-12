@@ -32,14 +32,9 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
     protected $itemCreator;
 
     /**
-     * @var \SclZfCart\Hydrator\CartItemHydrator
+     * @var \SclZfCart\Hydrator\ItemHydrator
      */
     protected $itemHydrator;
-
-    /**
-     * @var \SclZfCart\Hydrator\CartItemEntityHydrator
-     */
-    protected $entityHydrator;
 
     /**
      * Prepare the object we'll be using
@@ -52,16 +47,13 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->itemCreator =$this->getMock('SclZfCart\Service\CartItemCreatorInterface');
 
-        $this->itemHydrator = $this->getMock('SclZfCart\Hydrator\CartItemHydrator');
-
-        $this->entityHydrator = $this->getMock('SclZfCart\Hydrator\CartItemEntityHydrator');
+        $this->itemHydrator = $this->getMock('SclZfCart\Hydrator\ItemHydrator');
 
         $this->storage = new CartStorage(
             $this->cartMapper,
             $this->cartItemMapper,
             $this->itemCreator,
-            $this->itemHydrator,
-            $this->entityHydrator
+            $this->itemHydrator
         );
     }
 

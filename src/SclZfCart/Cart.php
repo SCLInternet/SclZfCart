@@ -2,6 +2,7 @@
 
 namespace SclZfCart;
 
+use SclZfCart\CartItem\QuantityAwareInterface;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -78,6 +79,7 @@ class Cart implements
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
+
         return $this;
     }
 
@@ -105,13 +107,19 @@ class Cart implements
     {
         $uid = $item->getUid();
 
-        if (isset($this->items[$uid])) {
-            $quantity = $this->items[$uid]->getQuantity() + $item->getQuantity();
-            $this->items[$uid]->setQuantity($quantity);
+        if (!isset($this->items[$uid])) {
+            $this->items[$uid] = $item;
+
             return;
         }
 
-        $this->items[$uid] = $item;
+        if (!($this->items[$uid] instanceof QuantityAwareInterface)) {
+            return;
+        }
+
+        $quantity = $this->items[$uid]->getQuantity() + $item->getQuantity();
+
+        $this->items[$uid]->setQuantity($quantity);
     }
 
     /**

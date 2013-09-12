@@ -19,6 +19,7 @@ class Cart extends AbstractPlugin
     private function getServiceLocator()
     {
         $controller = $this->getController();
+
         return $controller->getServiceLocator();
     }
 

@@ -2,9 +2,13 @@
 
 namespace SclZfCart\Entity;
 
-use SclZfCart\PriceAwareInterface;
-use SclZfCart\UidAwareInterface;
-use SclZfCart\UnitPriceAwareInterface;
+use SclZfCart\CartItem\DataAwareInterface;
+use SclZfCart\CartItemInterface as MainCartItemInterface;
+use SclZfCart\CartItem\PriceAwareInterface;
+use SclZfCart\CartItem\QuantityAwareInterface;
+use SclZfCart\CartItem\TitleAwareInterface;
+use SclZfCart\CartItem\UidAwareInterface;
+use SclZfCart\CartItem\UnitPriceAwareInterface;
 
 /**
  * Defines the interface of an order item object.
@@ -12,24 +16,39 @@ use SclZfCart\UnitPriceAwareInterface;
  * @author Tom Oram <tom@scl.co.uk>
  */
 interface OrderItemInterface extends
-    PriceAwareInterface,
-    UidAwareInterface,
-    UnitPriceAwareInterface
+ MainCartItemInterface,
+ DataAwareInterface,
+ PriceAwareInterface,
+ QuantityAwareInterface,
+ TitleAwareInterface,
+ UidAwareInterface,
+ UnitPriceAwareInterface
 {
     /**
-     * Gets the value for quantity.
-     *
      * @return int
      */
-    public function getQuantity();
+    public function getId();
 
     /**
-     * Sets the value for quantity.
-     *
-     * @param  int $quantity
-     * @return self
+     * @param  int $id
+     * @return void
      */
-    public function setQuantity($quantity);
+    public function setId($id);
+
+    /**
+     * Get the order this item belongs to.
+     *
+     * @return OrderInterface
+     */
+    public function getOrder();
+
+    /**
+     * Set the order this item belongs to.
+     *
+     * @param  OrderInterface $order
+     * @return void
+     */
+    public function setOrder(OrderInterface $order);
 
     /**
      * Gets the value for type.
@@ -42,22 +61,7 @@ interface OrderItemInterface extends
      * Sets the value for type.
      *
      * @param  string $type
-     * @return self
+     * @return void
      */
     public function setType($type);
-
-    /**
-     * Gets the value for data.
-     *
-     * @return string
-     */
-    public function getData();
-
-    /**
-     * Sets the value for data.
-     *
-     * @param  string $data
-     * @return self
-     */
-    public function setData($data);
 }
