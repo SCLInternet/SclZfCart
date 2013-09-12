@@ -79,7 +79,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $uid = 'product123';
 
-        $item1 = $this->getMock('SclZfCart\CartItemInterface');
+        $item1 = $this->getMock('SclZfCartTests\TestAssets\FullyLoadedCartItemInterface');
 
         $item1->expects($this->atLeastOnce())->method('getUid')->will($this->returnValue($uid));
 

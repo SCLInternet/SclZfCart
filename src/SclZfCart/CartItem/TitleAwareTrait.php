@@ -49,7 +49,7 @@ trait TitleAwareTrait
      *
      * @return string
      */
-    public function getDesciption()
+    public function getDescription()
     {
         return $this->description;
     }

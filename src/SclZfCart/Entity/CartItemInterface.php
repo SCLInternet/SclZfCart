@@ -3,11 +3,12 @@
 namespace SclZfCart\Entity;
 
 use SclZfCart\CartItem\DataAwareInterface;
+use SclZfCart\CartItemInterface as MainCartItemInterface;
 use SclZfCart\CartItem\PriceAwareInterface;
 use SclZfCart\CartItem\QuantityAwareInterface;
+use SclZfCart\CartItem\TitleAwareInterface;
 use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
-use SclZfCart\CartItemInterface as MainCartItemInterface;
 
 /**
  * Entity class interface for storing a cart item to the database.
@@ -15,12 +16,13 @@ use SclZfCart\CartItemInterface as MainCartItemInterface;
  * @author Tom Oram <tom@scl.co.uk>
  */
 interface CartItemInterface extends
-    MainCartItemInterface,
-    DataAwareInterface,
-    PriceAwareInterface,
-    QuantityAwareInterface,
-    UidAwareInterface,
-    UnitPriceAwareInterface
+ MainCartItemInterface,
+ DataAwareInterface,
+ PriceAwareInterface,
+ QuantityAwareInterface,
+ TitleAwareInterface,
+ UidAwareInterface,
+ UnitPriceAwareInterface
 {
     /**
      * @return int

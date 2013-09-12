@@ -21,5 +21,5 @@ interface TitleProviderInterface
      *
      * @return string
      */
-    public function getDesciption();
+    public function getDescription();
 }

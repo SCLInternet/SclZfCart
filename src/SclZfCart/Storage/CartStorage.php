@@ -5,8 +5,7 @@ namespace SclZfCart\Storage;
 use SclZfCart\Cart;
 use SclZfCart\Entity\CartInterface as CartEntity;
 use SclZfCart\Exception;
-use SclZfCart\Hydrator\CartItemEntityHydrator;
-use SclZfCart\Hydrator\CartItemHydrator;
+use SclZfCart\Hydrator\ItemHydrator;
 use SclZfCart\Mapper\CartItemMapperInterface;
 use SclZfCart\Mapper\CartMapperInterface;
 use SclZfCart\Service\CartItemCreatorInterface;
@@ -40,35 +39,27 @@ class CartStorage
     protected $itemCreator;
 
     /**
-     * @var CartItemHydrator
+     * @var ItemHydrator
      */
     protected $cartItemHydrator;
-
-    /**
-     * @var CartItemEntityHydrator
-     */
-    protected $cartItemEntityHydrator;
 
     /**
      *
      * @param  CartMapperInterface      $cartMapper
      * @param  CartItemMapperInterface  $cartItemMapper
      * @param  CartItemCreatorInterface $itemCreator
-     * @param  CartItemHydrator         $cartItemHydrator
-     * @param  CartItemEntityHydrator   $cartItemEntityHydrator
+     * @param  ItemHydrator             $cartItemHydrator
      */
     public function __construct(
         CartMapperInterface $cartMapper,
         CartItemMapperInterface $cartItemMapper,
         CartItemCreatorInterface $itemCreator,
-        CartItemHydrator $cartItemHydrator,
-        CartItemEntityHydrator $cartItemEntityHydrator
+        ItemHydrator $itemHydrator
     ) {
-        $this->cartMapper             = $cartMapper;
-        $this->cartItemMapper         = $cartItemMapper;
-        $this->itemCreator            = $itemCreator;
-        $this->cartItemHydrator       = $cartItemHydrator;
-        $this->cartItemEntityHydrator = $cartItemEntityHydrator;
+        $this->cartMapper     = $cartMapper;
+        $this->cartItemMapper = $cartItemMapper;
+        $this->itemCreator    = $itemCreator;
+        $this->itemHydrator   = $itemHydrator;
     }
 
     /**
@@ -134,9 +125,9 @@ class CartStorage
         foreach ($cartEntity->getItems() as $entity) {
             $item = $this->itemCreator->create($entity->getType());
 
-            $data = $this->cartItemEntityHydrator->extract($entity);
+            $data = $this->itemHydrator->extract($entity);
 
-            $this->cartItemHydrator->hydrate($data, $item);
+            $this->itemHydrator->hydrate($data, $item);
 
             $cart->add($item);
         }
@@ -185,9 +176,11 @@ class CartStorage
         foreach ($items->getItems() as $uid => $item) {
             $entity = $entityItems->get($uid);
 
-            $data = $this->cartItemHydrator->extract($item);
+            $data = $this->itemHydrator->extract($item);
 
-            $this->cartItemEntityHydrator->hydrate($data, $entity);
+            $this->itemHydrator->hydrate($data, $entity);
+
+            $entity->setType(get_class($item));
         }
 
         $cartEntity->setItems($entityItems->getItems());

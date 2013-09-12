@@ -11,9 +11,7 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
 
     protected $cartItemCreator;
 
-    protected $cartItemHydrator;
-
-    protected $orderItemHydrator;
+    protected $itemHydrator;
 
     protected $orderItemMapper;
 
@@ -21,16 +19,13 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->cartItemCreator = $this->getMock('SclZfCart\Service\CartItemCreatorInterface');
 
-        $this->cartItemHydrator = $this->getMock('SclZfCart\Hydrator\CartItemHydrator');
-
-        $this->orderItemHydrator = $this->getMock('SclZfCart\Hydrator\OrderItemEntityHydrator');
+        $this->itemHydrator = $this->getMock('SclZfCart\Hydrator\ItemHydrator');
 
         $this->orderItemMapper = $this->getMock('SclZfCart\Mapper\OrderItemMapperInterface');
 
         $this->service = new CartToOrderService(
             $this->cartItemCreator,
-            $this->cartItemHydrator,
-            $this->orderItemHydrator,
+            $this->itemHydrator,
             $this->orderItemMapper
         );
     }
@@ -63,14 +58,14 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
              ->with($this->equalTo($type))
              ->will($this->returnValue($cartItem));
 
-        $this->orderItemHydrator
-             ->expects($this->once())
+        $this->itemHydrator
+             ->expects($this->at(0))
              ->method('extract')
              ->with($this->equalTo($orderItem))
              ->will($this->returnValue($data));
 
-        $this->cartItemHydrator
-             ->expects($this->once())
+        $this->itemHydrator
+             ->expects($this->at(1))
              ->method('hydrate')
              ->with($this->equalTo($data), $this->equalTo($cartItem))
              ->will($this->returnValue($cartItem));

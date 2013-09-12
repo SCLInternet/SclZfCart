@@ -69,6 +69,7 @@ class Cart extends Form
         if ($element instanceof \Zend\Form\ElementInterface) {
             $element->setName($item->getUid());
             $this->add($element);
+
             return true;
         }
 

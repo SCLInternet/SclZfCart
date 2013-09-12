@@ -48,6 +48,7 @@ class Cart extends AbstractHelper implements ServiceLocatorAwareInterface
     public function __invoke()
     {
         $helperPluginManager = $this->getServiceLocator();
+
         return $helperPluginManager->getServiceLocator()->get('SclZfCart\Cart');
     }
 }

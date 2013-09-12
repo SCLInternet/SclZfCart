@@ -3,11 +3,12 @@
 namespace SclZfCart\Entity;
 
 use SclZfCart\CartItem\DataAwareInterface;
+use SclZfCart\CartItemInterface as MainCartItemInterface;
 use SclZfCart\CartItem\PriceAwareInterface;
 use SclZfCart\CartItem\QuantityAwareInterface;
+use SclZfCart\CartItem\TitleAwareInterface;
 use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
-use SclZfCart\CartItemInterface as MainCartItemInterface;
 
 /**
  * Defines the interface of an order item object.
@@ -15,12 +16,13 @@ use SclZfCart\CartItemInterface as MainCartItemInterface;
  * @author Tom Oram <tom@scl.co.uk>
  */
 interface OrderItemInterface extends
-    MainCartItemInterface,
-    DataAwareInterface,
-    PriceAwareInterface,
-    QuantityAwareInterface,
-    UidAwareInterface,
-    UnitPriceAwareInterface
+ MainCartItemInterface,
+ DataAwareInterface,
+ PriceAwareInterface,
+ QuantityAwareInterface,
+ TitleAwareInterface,
+ UidAwareInterface,
+ UnitPriceAwareInterface
 {
     /**
      * @return int
