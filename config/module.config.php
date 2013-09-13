@@ -88,11 +88,13 @@ return array(
 
     'scl_zf_cart' => array(
         'session_name'       => 'SclZfCart',
+        /*
         'storage_class'      => 'SclZfCart\Storage\DoctrineStorage',
         'order_class'        => 'SclZfCart\Entity\Order',
         'item_class'         => 'SclZfCart\Entity\OrderItem',
         'order_mapper_class' => 'SclZfCart\Mapper\OrderMapper',
         'item_mapper_class'  => 'SclZfCart\Mapper\OrderItemMapper',
+        */
     ),
 
     // @todo Move to .dist config file
@@ -116,6 +118,23 @@ return array(
             'getCart' => 'SclZfCart\Controller\Plugin\Cart',
         ),
     ),
+
+    'service_manager' => array(
+        'aliases' => array(
+            'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
+            // Entities
+            'SclZfCart\Entity\CartInterface'             => 'SclZfCart\Entity\DoctrineCart',
+            'SclZfCart\Entity\CartItemInterface'         => 'SclZfCart\Entity\DoctrineCartItem',
+            'SclZfCart\Entity\OrderInterface'            => 'SclZfCart\Entity\DoctrineOrder',
+            'SclZfCart\Entity\OrderItemInterface'        => 'SclZfCart\Entity\DoctrineOrderItem',
+            // Mappers
+            'SclZfCart\Mapper\CartMapperInterface'       => 'SclZfCart\Mapper\DoctrineCartMapper',
+            'SclZfCart\Mapper\CartItemMapperInterface'   => 'SclZfCart\Mapper\DoctrineCartItemMapper',
+            'SclZfCart\Mapper\OrderMapperInterface'      => 'SclZfCart\Mapper\DoctrineOrderMapper',
+            'SclZfCart\Mapper\OrderItemMapperInterface'  => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
+        ),
+    ),
+
     'view_helpers' => array(
         'invokables' => array(
             'getCart' => 'SclZfCart\View\Helper\Cart',
