@@ -20,8 +20,6 @@ class Module implements
     ConfigProviderInterface,
     ServiceProviderInterface
 {
-    const DEFAULT_PROCESS_PREFERENCE  = 0;
-    const DEFAULT_COMPLETE_PREFERENCE = 0;
 
     /**
      * {@inheritDoc}
@@ -31,28 +29,19 @@ class Module implements
     public function onBootstrap(EventInterface $e)
     {
         $serviceLocator = $e->getApplication()->getServiceManager();
+
+        $eventManager = $serviceLocator->get('SharedEventManager');
+
+        $listener = $serviceLocator->get('SclZfCart\Listener\RegistrationListener');
+
+        $eventManager->attachAggregate($listener);
+
         /* @var $cart \SclZfCart\Cart */
         $cart = $serviceLocator->get('SclZfCart\Cart');
         $eventManager = $cart->getEventManager();
 
-        // @todo Use shared event manager and switch to fetching the event manager & ServiceLocator from the event.
-        // @todo Move the events out of this class
-
-        // Default process order event
-        $eventManager->attach(
-            CartEvent::EVENT_PROCESS,
-            function (CartEvent $event) use ($eventManager) {
-                $order = $event->getTarget();
-
-                $eventManager->trigger(CartEvent::EVENT_COMPLETE, $order);
-
-                return new \SclZfUtilities\Model\Route(
-                    'cart/checkout/complete',
-                    array('id' => $order->getId())
-                );
-            },
-            self::DEFAULT_PROCESS_PREFERENCE
-        );
+        // @todo Use shared event manager and switch to fetching the event
+        // manager & ServiceLocator from the event.
 
         // Default complete order event
         $eventManager->attach(
@@ -112,6 +101,17 @@ class Module implements
             ),
             'factories' => array(
                 'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
+
+                'SclZfCart\Listener\RegistrationListener' => function ($sm) {
+                    $cart = $sm->get('SclZfCart\Cart');
+                    $config = $sm->get('Config')['scl_zf_cart'];
+
+                    return new \SclZfCart\Listener\RegistrationListener(
+                        $cart->getEventManager(),
+                        $sm->get('SclZfCart\Customer\CustomerLocatorInterface'),
+                        $config['login_route']
+                    );
+                },
 
                 'SclZfCart\Session' => function ($serviceLocator) {
                     $config = $serviceLocator->get('Config');
