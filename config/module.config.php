@@ -87,12 +87,14 @@ return array(
     ),
 
     'scl_zf_cart' => array(
+        /**
+         * The name of the session container for storing cart info.
+         */
         'session_name'       => 'SclZfCart',
-        'storage_class'      => 'SclZfCart\Storage\DoctrineStorage',
-        'order_class'        => 'SclZfCart\Entity\Order',
-        'item_class'         => 'SclZfCart\Entity\OrderItem',
-        'order_mapper_class' => 'SclZfCart\Mapper\OrderMapper',
-        'item_mapper_class'  => 'SclZfCart\Mapper\OrderItemMapper',
+        /**
+         * The route to redirect a user to if then need to register/login.
+         */
+        'login_route'        => 'user/login',
     ),
 
     // @todo Move to .dist config file
@@ -116,6 +118,7 @@ return array(
             'getCart' => 'SclZfCart\Controller\Plugin\Cart',
         ),
     ),
+
     'view_helpers' => array(
         'invokables' => array(
             'getCart' => 'SclZfCart\View\Helper\Cart',
