@@ -69,7 +69,7 @@ class CartListenerTest extends \PHPUnit_Framework_TestCase
              ->with(
                   $this->equalTo('SclZfCart\Cart'),
                   $this->equalTo(CartEvent::EVENT_PROCESS),
-                  $this->equalTo(array($this->listener, 'process')),
+                  $this->equalTo([$this->listener, 'process']),
                   $this->equalTo(0)
              );
 
@@ -79,7 +79,7 @@ class CartListenerTest extends \PHPUnit_Framework_TestCase
              ->with(
                   $this->equalTo('SclZfCart\Cart'),
                   $this->equalTo(CartEvent::EVENT_CHECKOUT),
-                  $this->equalTo(array($this->listener, 'checkout')),
+                  $this->equalTo([$this->listener, 'checkout']),
                   $this->equalTo(0)
              );
 
@@ -89,7 +89,7 @@ class CartListenerTest extends \PHPUnit_Framework_TestCase
              ->with(
                   $this->equalTo('SclZfCart\Cart'),
                   $this->equalTo(CartEvent::EVENT_COMPLETE),
-                  $this->equalTo(array($this->listener, 'complete')),
+                  $this->equalTo([$this->listener, 'complete']),
                   $this->equalTo(0)
              );
 

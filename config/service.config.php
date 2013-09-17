@@ -2,13 +2,13 @@
 
 namespace SclZfCart;
 
-return array(
-    'shared' => array(
+return [
+    'shared' => [
         'SclZfCart\CartItem'                => false,
         'SclZfCart\Entity\DoctrineCartItem' => false,
-    ),
+    ],
 
-    'aliases' => array(
+    'aliases' => [
         'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
 
         /*
@@ -28,9 +28,9 @@ return array(
         'SclZfCart\Mapper\CartItemMapperInterface'   => 'SclZfCart\Mapper\DoctrineCartItemMapper',
         'SclZfCart\Mapper\OrderMapperInterface'      => 'SclZfCart\Mapper\DoctrineOrderMapper',
         'SclZfCart\Mapper\OrderItemMapperInterface'  => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
-    ),
+    ],
 
-    'invokables' => array(
+    'invokables' => [
         'SclZfCart\CartObject'                       => 'SclZfCart\Cart',
         'SclZfCart\CartItem'                         => 'SclZfCart\CartItem',
         'SclZfCart\Entity\CartItem'                  => 'SclZfCart\Entity\CartItem',
@@ -50,9 +50,9 @@ return array(
         'SclZfCart\Entity\DoctrineCartItem'          => 'SclZfCart\Entity\DoctrineCartItem',
         'SclZfCart\Entity\DoctrineOrder'             => 'SclZfCart\Entity\DoctrineOrder',
         'SclZfCart\Entity\DoctrineOrderItem'         => 'SclZfCart\Entity\DoctrineOrderItem',
-    ),
+    ],
 
-    'factories' => array(
+    'factories' => [
         'SclZfCart\Cart'    => 'SclZfCart\Service\CartFactory',
 
 
@@ -152,5 +152,5 @@ return array(
                 $sm->get('SclZfCart\Mapper\OrderMapperInterface')
             );
         }
-    ),
-);
+    ],
+];

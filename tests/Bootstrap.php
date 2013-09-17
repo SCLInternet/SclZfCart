@@ -1,10 +1,10 @@
 <?php
 
-$files = array(
+$files = [
     __DIR__ . '/../vendor/autoload.php',        // local autoloader
     __DIR__ . '/../../../vendor/autoload.php',  // module/SclZfCart/tests autoloader
     __DIR__ . '/../../../autoloader.php',       // vendor/sclinternet/scl-zf-cart/tests autoloader
-);
+];
 
 foreach ($files as $file) {
     if (file_exists($file)) {

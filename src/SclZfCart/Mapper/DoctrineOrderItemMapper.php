@@ -38,6 +38,6 @@ class DoctrineOrderItemMapper extends GenericDoctrineMapper implements
      */
     public function findAllForOrder(OrderInterface $order)
     {
-         return parent::fetchBy(array('order' => $order));
+         return parent::fetchBy(['order' => $order]);
     }
 }

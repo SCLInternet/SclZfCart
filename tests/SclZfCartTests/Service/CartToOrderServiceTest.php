@@ -43,7 +43,7 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
     public function testConvertToCartItem()
     {
         $type = 'cart_item_type';
-        $data = array('blah', 'blah');
+        $data = ['blah', 'blah'];
         $cartItem = $this->getMock('SclZfCart\CartItemInterface');
 
         $orderItem = $this->getMock('SclZfCart\Entity\OrderItemInterface');

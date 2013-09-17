@@ -34,7 +34,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $eventManager->expects($this->once())
             ->method('setIdentifiers')
-            ->with($this->equalTo(array('SclZfCart\Cart', 'SclZfCart\Cart')));
+            ->with($this->equalTo(['SclZfCart\Cart', 'SclZfCart\Cart']));
 
         $eventManager->expects($this->once())
             ->method('setEventClass')
@@ -181,6 +181,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
         $this->cart->clear();
 
-        $this->assertEquals(array(), $this->cart->getItems());
+        $this->assertEquals([], $this->cart->getItems());
     }
 }

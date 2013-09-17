@@ -36,7 +36,7 @@ class Cart implements
      *
      * @var CartItemInterface[]
      */
-    protected $items = array();
+    protected $items = [];
 
     /**
      * {@inheritDoc}
@@ -191,7 +191,7 @@ class Cart implements
      */
     public function clear()
     {
-        $this->items = array();
+        $this->items = [];
     }
 
     /**
