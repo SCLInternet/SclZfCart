@@ -80,7 +80,7 @@ class CartListenerTest extends \PHPUnit_Framework_TestCase
                   $this->equalTo('SclZfCart\Cart'),
                   $this->equalTo(CartEvent::EVENT_CHECKOUT),
                   $this->equalTo([$this->listener, 'checkout']),
-                  $this->equalTo(0)
+                  $this->equalTo(1000)
              );
 
         $this->events
@@ -188,6 +188,26 @@ class CartListenerTest extends \PHPUnit_Framework_TestCase
         $route = $this->listener->checkout($this->event);
 
         $this->assertEquals(self::LOGIN_ROUTE, $route->route);
+    }
+
+    public function test_checkout_stops_propogation_if_no_active_customer_exists()
+    {
+        $this->setActiveCustomer(null);
+
+        $this->listener->checkout($this->event);
+
+        $this->assertTrue($this->event->propagationIsStopped());
+    }
+
+    public function test_checkout_does_not_stop_propogation_if_active_customer()
+    {
+        $customer = $this->getMock('\SclZfCart\Customer\CustomerInterface');
+
+        $this->setActiveCustomer($customer);
+
+        $this->listener->checkout($this->event);
+
+        $this->assertFalse($this->event->propagationIsStopped());
     }
 
     /*

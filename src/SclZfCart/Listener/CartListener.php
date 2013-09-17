@@ -26,7 +26,7 @@ class CartListener implements SharedListenerAggregateInterface
     const EVENT_MANAGER_ID = 'SclZfCart\Cart';
 
     const PROCESS_PREFERENCE  = 0;
-    const CHECKOUT_PREFERENCE = 0;
+    const CHECKOUT_PREFERENCE = 1000;
     const COMPLETE_PREFERENCE = 0;
 
     /**
@@ -147,6 +147,8 @@ class CartListener implements SharedListenerAggregateInterface
     public function checkout(CartEvent $event)
     {
         if (!$this->customerLocator->getActiveCustomer()) {
+            $event->stopPropagation();
+
             return new Route($this->loginRoute);
         }
 

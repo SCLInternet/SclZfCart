@@ -9,7 +9,7 @@ return [
     ],
 
     'aliases' => [
-        'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
+//        'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
 
         /*
          * Entities
@@ -58,7 +58,7 @@ return [
 
         'SclZfCart\Session' => function ($serviceLocator) {
             $config = $serviceLocator->get('Config');
-            return new Container($config['scl_zf_cart']['session_name']);
+            return new \Zend\Session\Container($config['scl_zf_cart']['session_name']);
         },
 
         'SclZfCart\Storage\CartStorage' => function ($serviceLocator) {

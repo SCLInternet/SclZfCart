@@ -71,6 +71,18 @@ return [
         ],
     ],
 
+    'scl_zf_cart' => [
+        /**
+         * The name of the session container for storing cart info.
+         */
+        'session_name'       => 'SclZfCart',
+
+        /**
+         * The route to redirect a user to if then need to register/login.
+         */
+        'login_route'        => 'zfcuser/login',
+    ],
+
     'asset_manager' => [
         'resolver_configs' => [
             'map' => [
@@ -84,17 +96,6 @@ return [
                 ],
             ],
         ],
-    ],
-
-    'scl_zf_cart' => [
-        /**
-         * The name of the session container for storing cart info.
-         */
-        'session_name'       => 'SclZfCart',
-        /**
-         * The route to redirect a user to if then need to register/login.
-         */
-        'login_route'        => 'user/login',
     ],
 
     // @todo Move to .dist config file
