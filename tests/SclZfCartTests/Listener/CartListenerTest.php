@@ -3,16 +3,16 @@
 namespace SclZfCartTests\Listener;
 
 use SclZfCart\CartEvent;
-use SclZfCart\Listener\RegistrationListener;
+use SclZfCart\Listener\CartListener;
 
 /**
  * Unit tests for {@see RegistrationListener}.
  *
- * @covers SclZfCart\Listener\RegistrationListener
+ * @covers SclZfCart\Listener\CartListener
  *
  * @author Tom Oram <tom@scl.co.uk>
  */
-class RegistrationListenerTest extends \PHPUnit_Framework_TestCase
+class CartListenerTest extends \PHPUnit_Framework_TestCase
 {
     const LOGIN_ROUTE = 'login/page';
     const ORDER_ID    = 123;
@@ -46,7 +46,7 @@ class RegistrationListenerTest extends \PHPUnit_Framework_TestCase
                                    ->disableOriginalConstructor()
                                    ->getMock();
 
-        $this->listener = new RegistrationListener(
+        $this->listener = new CartListener(
             $this->eventManager,
             $this->locator,
             $this->orderService,
@@ -204,14 +204,12 @@ class RegistrationListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->complete($this->event);
     }
 
-    /*
     public function test_complete_throws_if_event_doesnt_contain_order()
     {
         $this->setExpectedException('SclZfCart\Exception\RuntimeException');
 
         $this->listener->complete(new CartEvent());
     }
-    */
 
     /*
      * Private methods

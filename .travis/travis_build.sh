@@ -11,7 +11,6 @@ PHPCS=$?
 ### Check code quality
 vendor/bin/phpmd src text codesize
 PHPMD=$?
-PHPMD=0
 
 ### Check for license headers
 LICENSE=0

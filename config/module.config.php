@@ -119,22 +119,6 @@ return array(
         ),
     ),
 
-    'service_manager' => array(
-        'aliases' => array(
-            'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
-            // Entities
-            'SclZfCart\Entity\CartInterface'             => 'SclZfCart\Entity\DoctrineCart',
-            'SclZfCart\Entity\CartItemInterface'         => 'SclZfCart\Entity\DoctrineCartItem',
-            'SclZfCart\Entity\OrderInterface'            => 'SclZfCart\Entity\DoctrineOrder',
-            'SclZfCart\Entity\OrderItemInterface'        => 'SclZfCart\Entity\DoctrineOrderItem',
-            // Mappers
-            'SclZfCart\Mapper\CartMapperInterface'       => 'SclZfCart\Mapper\DoctrineCartMapper',
-            'SclZfCart\Mapper\CartItemMapperInterface'   => 'SclZfCart\Mapper\DoctrineCartItemMapper',
-            'SclZfCart\Mapper\OrderMapperInterface'      => 'SclZfCart\Mapper\DoctrineOrderMapper',
-            'SclZfCart\Mapper\OrderItemMapperInterface'  => 'SclZfCart\Mapper\DoctrineOrderItemMapper',
-        ),
-    ),
-
     'view_helpers' => array(
         'invokables' => array(
             'getCart' => 'SclZfCart\View\Helper\Cart',

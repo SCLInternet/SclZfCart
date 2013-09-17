@@ -21,7 +21,7 @@ use SclZfCart\Service\OrderCompletionService;
  *         may not be required and this will get created on every load via
  *         the module bootstrap.
  */
-class RegistrationListener implements SharedListenerAggregateInterface
+class CartListener implements SharedListenerAggregateInterface
 {
     const EVENT_MANAGER_ID = 'SclZfCart\Cart';
 
@@ -128,9 +128,19 @@ class RegistrationListener implements SharedListenerAggregateInterface
         return null;
     }
 
+    /**
+     * complete
+     *
+     * @param  CartEvent $event
+     * @return void
+     */
     public function complete(CartEvent $event)
     {
         $order = $event->getTarget();
+
+        if (!$order instanceof OrderInterface) {
+            throw RuntimeException::expectedOrder($order);
+        }
 
         $this->orderService->complete($order);
     }
