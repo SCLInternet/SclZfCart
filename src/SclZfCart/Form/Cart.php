@@ -18,7 +18,7 @@ class Cart extends Form
     /**
      * @var array:string
      */
-    private $quantityMessages = array();
+    private $quantityMessages = [];
 
     /**
      * Setup the submit buttons
@@ -32,22 +32,22 @@ class Cart extends Form
         $this->add(
             array(
                 'name' => 'update',
-                'attributes' => array(
-                    'type' => 'submit',
+                'attributes' => [
+                    'type'  => 'submit',
                     'value' => 'Update Cart',
-                    'id' => 'update-cart',
-                ),
+                    'id'    => 'update-cart',
+                ],
             )
         );
 
         $this->add(
             array(
                 'name' => 'checkout',
-                'attributes' => array(
-                    'type' => 'submit',
+                'attributes' => [
+                    'type'  => 'submit',
                     'value' => 'Checkout',
-                    'id' => 'checkout-cart',
-                ),
+                    'id'    => 'checkout-cart',
+                ],
             )
         );
     }
@@ -103,9 +103,9 @@ class Cart extends Form
             array(
                 'name' => $item->getUid(),
                 'type' => 'Zend\Form\Element\Text',
-                'attributes' => array(
+                'attributes' => [
                     'value' => $item->getQuantity(),
-                )
+                ]
             )
         );
     }

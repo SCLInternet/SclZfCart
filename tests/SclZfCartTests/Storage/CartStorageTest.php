@@ -82,7 +82,7 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 27;
 
-        $cart = $this->getMock('SclZfCart\Cart', array('clear', 'add'));
+        $cart = $this->getMock('SclZfCart\Cart', ['clear', 'add']);
 
         $cartEntity = $this->getMock('SclZfCart\Entity\CartInterface');
 
@@ -96,7 +96,7 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
 
         $cartEntity->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $result = $this->storage->load($cartId, $cart);
 

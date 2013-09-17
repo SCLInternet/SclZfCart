@@ -78,10 +78,10 @@ class CartController extends AbstractActionController
             return $redirect;
         }
 
-        return array(
+        return [
             'form' => $form,
             'cart' => $cart,
-        );
+        ];
     }
 
     /**
