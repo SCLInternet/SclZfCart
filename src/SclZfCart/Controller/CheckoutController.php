@@ -54,7 +54,7 @@ class CheckoutController extends AbstractActionController
         $results = $eventManager->trigger(
             CartEvent::EVENT_CHECKOUT,
             $cart,
-            array(CartEvent::PARAM_CART => $cart)
+            [CartEvent::PARAM_CART => $cart]
         );
 
         foreach ($results as $result) {
@@ -82,11 +82,11 @@ class CheckoutController extends AbstractActionController
             array(
                 'name' => 'complete',
                 'type' => 'Zend\Form\Element\Submit',
-                'attributes' => array(
+                'attributes' => [
                     'value' => 'Confirm',
                     'id'    => 'complete-order',
                     'class' => 'btn',
-                ),
+                ],
             )
         );
 
@@ -112,9 +112,9 @@ class CheckoutController extends AbstractActionController
             return $redirect;
         }
 
-        return array(
+        return [
             'form' => $this->createConfirmForm(),
-        );
+        ];
     }
 
     //
@@ -160,17 +160,17 @@ class CheckoutController extends AbstractActionController
             array(
                 'name' => 'complete',
                 'type' => 'Zend\Form\Element\Submit',
-                'attributes' => array(
+                'attributes' => [
                     'value' => 'Confirm',
                     'id'    => 'complete-order',
-                ),
+                ],
             )
         );
 
         $this->getCartEventManager()->trigger(
             CartEvent::EVENT_COMPLETE_FORM,
             $form,
-            array(CartEvent::PARAM_CART => $this->getCart())
+            [CartEvent::PARAM_CART => $this->getCart()]
         );
 
         return $form;
@@ -202,13 +202,13 @@ class CheckoutController extends AbstractActionController
         }
 
         if ($result instanceof Form) {
-            return array(
+            return [
                 'form' => $result,
-            );
+            ];
         }
 
         // @todo Throw an exception here
-        return array();
+        return [];
     }
 
     //
@@ -224,6 +224,6 @@ class CheckoutController extends AbstractActionController
 
         // @todo Load the order
 
-        return array();
+        return [];
     }
 }

@@ -86,16 +86,16 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $this->testItem,
-            $this->hydrator->hydrate(array(), $this->testItem)
+            $this->hydrator->hydrate([], $this->testItem)
         );
     }
 
     public function test_hydrate_doesnt_alter_object_if_no_data_provided()
     {
         // No methods are mocked so any calls to the item would be an error
-        $item = $this->getMock('SclZfCart\CartItemInterface', array());
+        $item = $this->getMock('SclZfCart\CartItemInterface', []);
 
-        $this->hydrator->hydrate(array(), $item);
+        $this->hydrator->hydrate([], $item);
     }
 
     /**
@@ -113,7 +113,7 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
                  ->method($setMethod)
                  ->with($this->equalTo($testValue));
 
-        $this->hydrator->hydrate(array($field => $testValue), $testItem);
+        $this->hydrator->hydrate([$field => $testValue], $testItem);
     }
 
     /**
@@ -126,7 +126,7 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
     {
         $item = $this->getMock('SclZfCart\CartItemInterface');
 
-        $this->hydrator->hydrate(array($field => $testValue), $item);
+        $this->hydrator->hydrate([$field => $testValue], $item);
     }
 
     public function test_hydrator_returns_the_unmodified_object_if_not_an_instance_of_CartItemInterface()
@@ -135,7 +135,7 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $item,
-            $this->hydrator->hydrate(array('title' => self::TEST_TITLE), $item)
+            $this->hydrator->hydrate(['title' => self::TEST_TITLE], $item)
         );
     }
 
@@ -150,16 +150,16 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
      */
     public function extractedFieldProvider()
     {
-        return array(
-            array('title', self::TEST_TITLE),
-            array('description', self::TEST_DESCRIPTION),
-            array('quantity', self::TEST_QUANTITY),
-            array('uid', self::TEST_UID),
-            array('price', self::TEST_PRICE),
-            array('tax', self::TEST_TAX),
-            array('unitPrice', self::TEST_UNIT_PRICE),
-            array('unitTax', self::TEST_UNIT_TAX),
-        );
+        return [
+            ['title',       self::TEST_TITLE      ],
+            ['description', self::TEST_DESCRIPTION],
+            ['quantity',    self::TEST_QUANTITY   ],
+            ['uid',         self::TEST_UID        ],
+            ['price',       self::TEST_PRICE      ],
+            ['tax',         self::TEST_TAX        ],
+            ['unitPrice',   self::TEST_UNIT_PRICE ],
+            ['unitTax',     self::TEST_UNIT_TAX   ],
+        ];
     }
 
     /**
@@ -169,17 +169,17 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
      */
     public function hydrateMembersProvider()
     {
-        return array(
-            array('title', self::TEST_TITLE, 'setTitle'),
-            array('description', self::TEST_DESCRIPTION, 'setDescription'),
-            array('quantity', self::TEST_QUANTITY, 'setQuantity'),
-            array('uid', self::TEST_UID, 'setUid'),
-            array('price', self::TEST_PRICE, 'setPrice'),
-            array('tax', self::TEST_TAX, 'setTax'),
-            array('unitPrice', self::TEST_UNIT_PRICE, 'setUnitPrice'),
-            array('unitTax', self::TEST_UNIT_TAX, 'setUnitTax'),
-            array('data', self::TEST_DATA, 'setData'),
-        );
+        return [
+            ['title',       self::TEST_TITLE,       'setTitle'      ],
+            ['description', self::TEST_DESCRIPTION, 'setDescription'],
+            ['quantity',    self::TEST_QUANTITY,    'setQuantity'   ],
+            ['uid',         self::TEST_UID,         'setUid'        ],
+            ['price',       self::TEST_PRICE,       'setPrice'      ],
+            ['tax',         self::TEST_TAX,         'setTax'        ],
+            ['unitPrice',   self::TEST_UNIT_PRICE,  'setUnitPrice'  ],
+            ['unitTax',     self::TEST_UNIT_TAX,    'setUnitTax'    ],
+            ['data',        self::TEST_DATA,        'setData'       ],
+        ];
     }
 
     /*

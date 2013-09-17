@@ -29,14 +29,39 @@ class CartListener implements SharedListenerAggregateInterface
     const CHECKOUT_PREFERENCE = 0;
     const COMPLETE_PREFERENCE = 0;
 
-    private $listeners;
+    /**
+     * List of registered listeners.
+     *
+     * @var array
+     */
+    private $listeners = [];
 
+    /**
+     * Cart event manager use to retrigger events.
+     *
+     * @var EventManagerInterface
+     */
     private $eventManager;
 
+    /**
+     * Used to fetch the currently logged in customer.
+     *
+     * @var CustomerLocatorInterface
+     */
     private $customerLocator;
 
+    /**
+     * Service to finalize an order.
+     *
+     * @var OrderCompletionService
+     */
     private $orderService;
 
+    /**
+     * The route to the login page.
+     *
+     * @var string
+     */
     private $loginRoute;
 
     /**
@@ -68,21 +93,21 @@ class CartListener implements SharedListenerAggregateInterface
         $this->listeners[] = $events->attach(
             self::EVENT_MANAGER_ID,
             CartEvent::EVENT_PROCESS,
-            array($this, 'process'),
+            [$this, 'process'],
             self::PROCESS_PREFERENCE
         );
 
         $this->listeners[] = $events->attach(
             self::EVENT_MANAGER_ID,
             CartEvent::EVENT_CHECKOUT,
-            array($this, 'checkout'),
+            [$this, 'checkout'],
             self::CHECKOUT_PREFERENCE
         );
 
         $this->listeners[] = $events->attach(
             self::EVENT_MANAGER_ID,
             CartEvent::EVENT_COMPLETE,
-            array($this, 'complete'),
+            [$this, 'complete'],
             self::COMPLETE_PREFERENCE
         );
     }

@@ -37,7 +37,7 @@ class UidItemCollection
      */
     public function setItems($items)
     {
-        $this->items = array();
+        $this->items = [];
 
         if (null === $items) {
             return $this;
@@ -129,7 +129,7 @@ class UidItemCollection
      */
     protected function uidsToItems(array $uids)
     {
-        $items = array();
+        $items = [];
 
         foreach ($uids as $uid) {
             if (!isset($this->items[$uid])) {

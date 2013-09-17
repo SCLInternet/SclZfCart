@@ -19,17 +19,17 @@ class ItemHydrator implements HydratorInterface
      *
      * @var array
      */
-    protected static $setFields = array(
-        array('\SclZfCart\CartItem\TitleAwareInterface',     'setTitle',       'title'      ),
-        array('\SclZfCart\CartItem\TitleAwareInterface',     'setDescription', 'description'),
-        array('\SclZfCart\CartItem\QuantityAwareInterface',  'setQuantity',    'quantity'   ),
-        array('\SclZfCart\CartItem\UidAwareInterface',       'setUid',         'uid'        ),
-        array('\SclZfCart\CartItem\PriceAwareInterface',     'setPrice',       'price'      ),
-        array('\SclZfCart\CartItem\PriceAwareInterface',     'setTax',         'tax'        ),
-        array('\SclZfCart\CartItem\UnitPriceAwareInterface', 'setUnitPrice',   'unitPrice'  ),
-        array('\SclZfCart\CartItem\UnitPriceAwareInterface', 'setUnitTax',     'unitTax'    ),
-        array('\SclZfCart\CartItem\DataAwareInterface',      'setData',        'data'       ),
-    );
+    protected static $setFields = [
+        ['\SclZfCart\CartItem\TitleAwareInterface',     'setTitle',       'title'      ],
+        ['\SclZfCart\CartItem\TitleAwareInterface',     'setDescription', 'description'],
+        ['\SclZfCart\CartItem\QuantityAwareInterface',  'setQuantity',    'quantity'   ],
+        ['\SclZfCart\CartItem\UidAwareInterface',       'setUid',         'uid'        ],
+        ['\SclZfCart\CartItem\PriceAwareInterface',     'setPrice',       'price'      ],
+        ['\SclZfCart\CartItem\PriceAwareInterface',     'setTax',         'tax'        ],
+        ['\SclZfCart\CartItem\UnitPriceAwareInterface', 'setUnitPrice',   'unitPrice'  ],
+        ['\SclZfCart\CartItem\UnitPriceAwareInterface', 'setUnitTax',     'unitTax'    ],
+        ['\SclZfCart\CartItem\DataAwareInterface',      'setData',        'data'       ],
+    ];
 
     /**
      * Set the value of the object from the entry in the array using the provided
@@ -96,10 +96,10 @@ class ItemHydrator implements HydratorInterface
     public function extract($object)
     {
         if (!$object instanceof CartItemInterface) {
-            return array();
+            return [];
         }
 
-        $data = array(
+        $data = [
             'title'       => $object->getTitle(),
             'description' => $object->getDescription(),
             'quantity'    => $object->getQuantity(),
@@ -108,7 +108,7 @@ class ItemHydrator implements HydratorInterface
             'tax'         => $object->getTax(),
             'unitPrice'   => $object->getUnitPrice(),
             'unitTax'     => $object->getUnitTax(),
-        );
+        ];
 
         if ($object instanceof DataAwareInterface) {
             $data['data'] = $object->getData();

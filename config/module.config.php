@@ -2,91 +2,91 @@
 
 namespace SclZfCart;
 
-return array(
-    'controllers' => array(
-        'invokables' => array(
+return [
+    'controllers' => [
+        'invokables' => [
             'SclZfCart\Controller\Cart'     => 'SclZfCart\Controller\CartController',
             'SclZfCart\Controller\Checkout' => 'SclZfCart\Controller\CheckoutController',
-        ),
-    ),
+        ],
+    ],
 
-    'router' => array(
-        'routes' => array(
-            'cart' => array(
+    'router' => [
+        'routes' => [
+            'cart' => [
                 'type'    => 'literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/cart',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => 'SclZfCart\Controller\Cart',
                         'action'     => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
-                'child_routes'  => array(
-                    'remove' => array(
+                'child_routes'  => [
+                    'remove' => [
                         'type'    => 'segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/remove/:item',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'SclZfCart\Controller\Cart',
                                 'action'     => 'removeItem',
-                            ),
-                        ),
-                    ),
-                    'checkout' => array(
+                            ],
+                        ],
+                    ],
+                    'checkout' => [
                         'type'    => 'literal',
-                        'options' => array(
+                        'options' => [
                             'route'    => '/checkout',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'SclZfCart\Controller\Checkout',
                                 'action'     => 'index',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes'  => array(
-                            'process' => array(
+                        'child_routes'  => [
+                            'process' => [
                                 'type'    => 'literal',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/process',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'controller' => 'SclZfCart\Controller\Checkout',
                                         'action'     => 'process',
-                                    ),
-                                ),
-                            ),
-                            'complete' => array(
+                                    ],
+                                ],
+                            ],
+                            'complete' => [
                                 'type'    => 'literal',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/complete',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'controller' => 'SclZfCart\Controller\Checkout',
                                         'action'     => 'completed',
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'asset_manager' => array(
-        'resolver_configs' => array(
-            'map' => array(
+    'asset_manager' => [
+        'resolver_configs' => [
+            'map' => [
                 'css/scl-zf-cart/cart.css' => __DIR__ . '/../public/less/cart.less',
-            ),
-        ),
-        'filters' => array(
-            'css/scl-zf-cart/cart.css' => array(
-                array(
+            ],
+        ],
+        'filters' => [
+            'css/scl-zf-cart/cart.css' => [
+                [
                     'filter' => 'LessphpFilter',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
 
-    'scl_zf_cart' => array(
+    'scl_zf_cart' => [
         /**
          * The name of the session container for storing cart info.
          */
@@ -95,39 +95,39 @@ return array(
          * The route to redirect a user to if then need to register/login.
          */
         'login_route'        => 'user/login',
-    ),
+    ],
 
     // @todo Move to .dist config file
-    'doctrine' => array(
-        'driver' => array(
-            __NAMESPACE__ . '_driver' => array(
+    'doctrine' => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
                 'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
                 'paths' => __DIR__ . '/xml/doctrine-entities'
-            ),
-            'orm_default' => array(
-                'drivers' => array(
+            ],
+            'orm_default' => [
+                'drivers' => [
                     // Added trailing backslash to avoid partial matches
                     __NAMESPACE__ . '\\' => __NAMESPACE__ . '_driver',
-                ),
-            ),
-        ),
-    ),
+                ],
+            ],
+        ],
+    ],
 
-    'controller_plugins' => array(
-        'invokables' => array(
+    'controller_plugins' => [
+        'invokables' => [
             'getCart' => 'SclZfCart\Controller\Plugin\Cart',
-        ),
-    ),
+        ],
+    ],
 
-    'view_helpers' => array(
-        'invokables' => array(
+    'view_helpers' => [
+        'invokables' => [
             'getCart' => 'SclZfCart\View\Helper\Cart',
-        ),
-    ),
+        ],
+    ],
 
-    'view_manager' => array(
-        'template_path_stack' => array(
+    'view_manager' => [
+        'template_path_stack' => [
             'SclZfCart\Controller' => __DIR__ . '/../view',
-        ),
-    ),
-);
+        ],
+    ],
+];
