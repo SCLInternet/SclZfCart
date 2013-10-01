@@ -30,16 +30,6 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCartToOrder()
-    {
-        $this->markTestIncomplete('Test needs to be written.');
-    }
-
-    public function testOrderToCart()
-    {
-        $this->markTestIncomplete('Test needs to be written.');
-    }
-
     public function testConvertToCartItem()
     {
         $type = 'cart_item_type';

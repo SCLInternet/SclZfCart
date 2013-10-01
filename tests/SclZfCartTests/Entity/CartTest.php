@@ -52,9 +52,4 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->fluentGetSetTest('id', 34)
              ->fluentGetSetTest('lastUpdated', new \DateTime());
     }
-
-    public function testItems()
-    {
-        $this->markTestIncomplete('write this test');
-    }
 }

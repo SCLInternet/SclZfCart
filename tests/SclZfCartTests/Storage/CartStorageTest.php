@@ -104,14 +104,6 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \SclZfCart\Storage\CartStorage::loadItems
-     */
-    public function testLoadItems()
-    {
-        $this->markTestIncomplete('Implement me');
-    }
-
-    /**
      * @covers \SclZfCart\Storage\CartStorage::store
      */
     public function testStore()
@@ -137,23 +129,5 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
         $result = $this->storage->store($cart);
 
         $this->assertEquals($cartId, $result, 'Store should return the ID from the entity');
-    }
-
-    /**
-     * @covers \SclZfCart\Storage\CartStorage::storeItems
-     */
-    public function testStoreItems()
-    {
-        $this->markTestIncomplete('Implement me');
-    }
-
-    /**
-     * @covers \SclZfCart\Storage\CartStorage::collectGarbage
-     */
-    public function testCollectGarbage()
-    {
-        $this->markTestIncomplete(
-            'This function & test has not been implemented yet.'
-        );
     }
 }
