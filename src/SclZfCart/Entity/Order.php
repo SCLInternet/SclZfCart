@@ -3,6 +3,7 @@
 namespace SclZfCart\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use SclZfUtilities\Model\CurrencyValue;
 
 /**
  * Doctrine implementation of the the OrderInterface
@@ -106,6 +107,13 @@ class Order implements OrderInterface
      */
     public function getTotal()
     {
-        return 0;
+        $total = new CurrencyValue(0);
+
+        foreach ($this->items as $item) {
+            $total->add($item->getPrice());
+            $total->add($item->getTax());
+        }
+
+        return $total->get();
     }
 }
