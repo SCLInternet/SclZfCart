@@ -14,10 +14,10 @@ use SclZfCart\CartItem\UnitPriceProviderInterface;
  * @author Tom Oram <tom@scl.co.uk>
  */
 interface CartItemInterface extends
-    PriceProviderInterface,
-    QuantityProviderInterface,
-    TitleProviderInterface,
-    UidProviderInterface,
-    UnitPriceProviderInterface
+ PriceProviderInterface,
+ QuantityProviderInterface,
+ TitleProviderInterface,
+ UidProviderInterface,
+ UnitPriceProviderInterface
 {
 }

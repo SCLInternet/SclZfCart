@@ -18,6 +18,7 @@
         "zf-commons/zfc-user-doctrine-orm" : "dev-master",
         "rwoverdijk/assetmanager" : "1.*",
         "sclinternet/scl-zf-utilities": "dev-master",
+        "sclinternet/scl-zf-generic-mapper": "dev-master",
         "sclinternet/scl-contact": "dev-master",
         "zendframework/zendframework" : "2.*"
     },
