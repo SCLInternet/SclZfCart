@@ -4,7 +4,7 @@ namespace SclZfCart\Mapper;
 
 use SclZfCart\Entity\OrderItemInterface;
 use SclZfCart\Entity\OrderInterface;
-use SclZfUtilities\Mapper\GenericMapperInterface;
+use SclZfGenericMapper\MapperInterface as GenericMapperInterface;
 
 /**
  * Inteface for OrderItemMapper.

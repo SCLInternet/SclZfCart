@@ -110,28 +110,28 @@ return [
         'SclZfCart\Mapper\DoctrineCartMapper' => function ($sm) {
             return new \SclZfCart\Mapper\DoctrineCartMapper(
                 $sm->get('doctrine.entitymanager.orm_default'),
-                $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                $sm->get('SclZfGenericMapper\Doctrine\FlushLock')
             );
         },
 
         'SclZfCart\Mapper\DoctrineCartItemMapper' => function ($sm) {
             return new \SclZfCart\Mapper\DoctrineCartItemMapper(
                 $sm->get('doctrine.entitymanager.orm_default'),
-                $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                $sm->get('SclZfGenericMapper\Doctrine\FlushLock')
             );
         },
 
         'SclZfCart\Mapper\DoctrineOrderMapper' => function ($sm) {
             return new \SclZfCart\Mapper\DoctrineOrderMapper(
                 $sm->get('doctrine.entitymanager.orm_default'),
-                $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                $sm->get('SclZfGenericMapper\Doctrine\FlushLock')
             );
         },
 
         'SclZfCart\Mapper\DoctrineOrderItemMapper' => function ($sm) {
             return new \SclZfCart\Mapper\DoctrineOrderItemMapper(
                 $sm->get('doctrine.entitymanager.orm_default'),
-                $sm->get('SclZfUtilities\Doctrine\FlushLock')
+                $sm->get('SclZfGenericMapper\Doctrine\FlushLock')
             );
         },
 

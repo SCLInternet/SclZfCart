@@ -3,8 +3,8 @@
 namespace SclZfCart\Mapper;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use SclZfUtilities\Doctrine\FlushLock;
-use SclZfUtilities\Mapper\GenericDoctrineMapper;
+use SclZfGenericMapper\Doctrine\FlushLock;
+use SclZfGenericMapper\DoctrineMapper as GenericDoctrineMapper;
 use SclZfCart\Entity\OrderInterface;
 
 /**
@@ -24,9 +24,9 @@ class DoctrineOrderMapper extends GenericDoctrineMapper implements
         FlushLock $flushLock
     ) {
         parent::__construct(
+            new \SclZfCart\Entity\Order(),
             $entityManager,
-            $flushLock,
-            'SclZfCart\Entity\Order'
+            $flushLock
         );
     }
 
