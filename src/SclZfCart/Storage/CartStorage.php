@@ -161,7 +161,7 @@ class CartStorage
 
         // Remove old entities
         foreach ($entityItems->diffItems($items) as $entity) {
-            $this->cartItemMapper->delete($entity);
+            $this->cartItemMapper->remove($entity);
             $entityItems->remove($entity);
         }
 
