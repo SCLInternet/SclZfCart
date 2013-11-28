@@ -4,6 +4,7 @@ namespace SclZfCart\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use SclZfUtilities\Model\CurrencyValue;
+use SclZfCart\Customer\CustomerInterface;
 
 /**
  * Doctrine implementation of the the OrderInterface
@@ -15,18 +16,25 @@ class Order implements OrderInterface
     /**
      * @var int
      */
-    protected $id;
+    private $id;
+
+    /**
+     * The customer who owns the order.
+     *
+     * @var CustomerInterface
+     */
+    private $customer;
 
     /**
      * @var string
      */
-    protected $status;
+    private $status;
 
     /**
      * @var ArrayCollection
      * @todo Remove reliance of ArrayCollection
      */
-    protected $items;
+    private $items;
 
     /**
      * Initialise the values in the order.
@@ -44,6 +52,26 @@ class Order implements OrderInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Gets the value of customer
+     *
+     * @return CustomerInterface
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Sets the value of customer
+     *
+     * @param  CustomerInterface $customer
+     */
+    public function setCustomer(CustomerInterface $customer)
+    {
+        $this->customer = $customer;
     }
 
     /**

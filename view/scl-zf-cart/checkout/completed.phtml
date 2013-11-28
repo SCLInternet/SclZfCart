@@ -1,7 +1,28 @@
 <?php
 $this->headLink()->appendStylesheet($this->basePath() . '/css/scl-zf-cart/cart.css');
 
-echo $this->pageTitle('Your order was successful');
+$order = $this->order;
+
+$title  = 'Order Pending';
+$status = 'PENDING';
+
+if ($order::STATUS_COMPLETED === $order->getStatus()) {
+    $title  = 'Your order was successful';
+    $status = 'COMPLETED';
+} elseif ($order::STATUS_FAILED === $order->getStatus()) {
+    $title  = 'Your order has failed';
+    $status = 'FAILED';
+}
+
+echo $this->pageTitle($title);
 ?>
 
-<p>Thank you for giving us lots of your money.</p>
+<h2>Order details</h2>
+
+<p>Total: <?php echo $this->formatPrice($order->getTotal()); ?></p>
+<p>Status: <?php echo $status; ?></p>
+
+<h2>Items</h2>
+<?php foreach ($order->getItems() as $item) : ?>
+    <p><?php echo $this->escapeHtml($item->getTitle()); ?></p>
+<?php endforeach; ?>

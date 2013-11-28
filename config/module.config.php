@@ -6,7 +6,6 @@ return [
     'controllers' => [
         'invokables' => [
             'SclZfCart\Controller\Cart'     => 'SclZfCart\Controller\CartController',
-            'SclZfCart\Controller\Checkout' => 'SclZfCart\Controller\CheckoutController',
         ],
     ],
 
@@ -55,9 +54,12 @@ return [
                                 ],
                             ],
                             'complete' => [
-                                'type'    => 'literal',
+                                'type'    => 'segment',
                                 'options' => [
-                                    'route'    => '/complete',
+                                    'route'    => '/complete/:id',
+                                    'constraints' => [
+                                        'id' => '[0-9]+',
+                                    ],
                                     'defaults' => [
                                         'controller' => 'SclZfCart\Controller\Checkout',
                                         'action'     => 'completed',

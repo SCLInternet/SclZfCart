@@ -1,0 +1,23 @@
+<?php
+
+namespace SclZfCart;
+
+return [
+    'doctrine' => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
+                'class' => 'Doctrine\ORM\Mapping\Driver\XmlDriver',
+
+                // Set this to the path where your doctrine XML files
+                // are located.
+                'paths' => ''
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    // Added trailing backslash to avoid partial matches
+                    __NAMESPACE__ . '\\' => __NAMESPACE__ . '_driver',
+                ],
+            ],
+        ],
+    ],
+];

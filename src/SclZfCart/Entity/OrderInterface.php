@@ -2,6 +2,8 @@
 
 namespace SclZfCart\Entity;
 
+use SclZfCart\Customer\CustomerInterface;
+
 /**
  * Defines the interface of an order object.
  *
@@ -26,6 +28,20 @@ interface OrderInterface
      * @return void
      */
     public function reset();
+
+    /**
+     * Return the customer who owns this order.
+     *
+     * @return CustomerInterface
+     */
+    public function getCustomer();
+
+    /**
+     * Return the customer who owns this order.
+     *
+     * @param  CustomerInterface $customer
+     */
+    public function setCustomer(CustomerInterface $customer);
 
     /**
      * Get the order status.

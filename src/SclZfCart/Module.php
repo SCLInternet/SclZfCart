@@ -6,6 +6,7 @@ use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ControllerProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 
 /**
@@ -17,6 +18,7 @@ class Module implements
     BootstrapListenerInterface,
     AutoloaderProviderInterface,
     ConfigProviderInterface,
+    ControllerProviderInterface,
     ServiceProviderInterface
 {
 
@@ -56,6 +58,22 @@ class Module implements
     public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
+    }
+
+    public function getControllerConfig()
+    {
+        return [
+            'factories' => [
+                'SclZfCart\Controller\Checkout' => function ($cm) {
+                    $sm = $cm->getServiceLocator();
+
+                    return new \SclZfCart\Controller\CheckoutController(
+                        $sm->get('SclZfCart\Service\CartToOrderService'),
+                        $sm->get('SclZfCart\Mapper\OrderMapperInterface')
+                    );
+                },
+            ],
+        ];
     }
 
     /**
