@@ -20,14 +20,14 @@ class OrderCompletionService implements EventManagerAwareInterface
      *
      * @var OrderMapperInterface
      */
-    protected $mapper;
+    private $mapper;
 
     /**
      * The event manager.
      *
      * @var EventManagerInterface
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      *
