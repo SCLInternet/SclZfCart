@@ -17,13 +17,17 @@
         "php" : ">=5.4",
         "zf-commons/zfc-user-doctrine-orm" : "dev-master",
         "rwoverdijk/assetmanager" : "1.*",
+        "sclinternet/currency": "dev-master",
         "sclinternet/scl-zf-utilities": "dev-master",
         "sclinternet/scl-zf-generic-mapper": "dev-master",
         "sclinternet/scl-contact": "dev-master",
+        "sclinternet/scl-zf-currency": "dev-master",
         "zendframework/zendframework" : "2.*"
     },
     "require-dev" : {
+        "sclinternet/scl-test": "dev-master",
         "phpunit/phpunit" : "3.7.*",
+        "phpunit/dbunit": ">=1.2",
         "squizlabs/php_codesniffer" : "1.*",
         "phpmd/phpmd" : "1.4.0",
         "satooshi/php-coveralls": "dev-master"

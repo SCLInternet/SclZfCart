@@ -36,12 +36,6 @@ return [
         'SclZfCart\Entity\CartItem'                  => 'SclZfCart\Entity\CartItem',
         'SclZfCart\Form\Cart'                        => 'SclZfCart\Form\Cart',
 
-         /*
-          * Hydrators
-          */
-
-        'SclZfCart\Hydrator\ItemHydrator'            => 'SclZfCart\Hydrator\ItemHydrator',
-
         /*
          * Entities
          */
@@ -61,12 +55,20 @@ return [
             return new \Zend\Session\Container($config['scl_zf_cart']['session_name']);
         },
 
-        'SclZfCart\Storage\CartStorage' => function ($serviceLocator) {
+        'SclZfCart\Doctrine\PriceFactoryInjectorListener' => function ($sm) {
+            return new \SclZfCart\Doctrine\PriceFactoryInjectorListener(
+                $sm->get('scl_currency.taxed_price_factory')
+            );
+        },
+
+        'SclZfCart\Storage\CartStorage' => function ($sm) {
+            $hm = $sm->get('HydratorManager');
+
             return new \SclZfCart\Storage\CartStorage(
-                $serviceLocator->get('SclZfCart\Mapper\CartMapperInterface'),
-                $serviceLocator->get('SclZfCart\Mapper\CartItemMapperInterface'),
-                $serviceLocator->get('SclZfCart\Service\CartItemCreatorInterface'),
-                $serviceLocator->get('SclZfCart\Hydrator\ItemHydrator')
+                $sm->get('SclZfCart\Mapper\CartMapperInterface'),
+                $sm->get('SclZfCart\Mapper\CartItemMapperInterface'),
+                $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
+                $hm->get('SclZfCart\Hydrator\ItemHydrator')
             );
         },
 
@@ -140,10 +142,12 @@ return [
          */
 
         'SclZfCart\Service\CartToOrderService' => function ($sm) {
+            $hm = $sm->get('HydratorManager');
+
             return new \SclZfCart\Service\CartToOrderService(
                 $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
                 $sm->get('SclZfCart\Hydrator\ItemHydrator'),
-                $sm->get('SclZfCart\Mapper\OrderItemMapperInterface')
+                $hm->get('SclZfCart\Mapper\OrderItemMapperInterface')
             );
         },
 

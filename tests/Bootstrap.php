@@ -1,22 +1,68 @@
 <?php
 
-$files = [
-    __DIR__ . '/../vendor/autoload.php',        // local autoloader
-    __DIR__ . '/../../../vendor/autoload.php',  // module/SclZfCart/tests autoloader
-    __DIR__ . '/../../../autoloader.php',       // vendor/sclinternet/scl-zf-cart/tests autoloader
-];
+class TestBootstrap
+{
+    private static $autoloaderFiles = [
+        '../vendor/autoload.php',
+    ];
 
-foreach ($files as $file) {
-    if (file_exists($file)) {
-        $loader = require $file;
-        break;
+    private static $application;
+
+    /**
+     * Setup the testing environment.
+     *
+     * @param  string $config Path to the Zend application config file.
+     * @return void
+     */
+    public static function init($config)
+    {
+        $loader = self::getAutoloader();
+
+        $loader->add('SclZfCartTests\\', __DIR__);
+
+        self::$application = \Zend\Mvc\Application::init($config);
+    }
+
+    /**
+     * Return the application instance.
+     *
+     * @return \Zend\Mvc\Application
+     */
+    public static function getApplication()
+    {
+        return self::$application;
+    }
+
+    public static function getEntityManager()
+    {
+        return self::$application
+                   ->getServiceManager()
+                   ->get('doctrine.entitymanager.orm_default');
+    }
+
+    private static function getAutoloader()
+    {
+        global $loader;
+
+        foreach (self::$autoloaderFiles as $file) {
+            if ($file[1] !== '/') {
+                $file = __DIR__ . '/' . $file;
+            }
+
+
+            if (file_exists($file)) {
+                $loader = include $file;
+
+                break;
+            }
+        }
+
+        if (!isset($loader) || !$loader) {
+            throw new \RuntimeException('vendor/autoload.php not found. Have you run composer?');
+        }
+
+        return $loader;
     }
 }
 
-if (!$loader) {
-    throw new \RuntimeError('vendor/autoload.php not found. Have you run composer?');
-}
-
-$loader->add('SclZfCartTests\\', __DIR__);
-
-unset($files, $file, $loader);
+TestBootstrap::init(include __DIR__ . '/application.config.php');

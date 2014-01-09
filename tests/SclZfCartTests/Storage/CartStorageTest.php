@@ -47,7 +47,9 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->itemCreator =$this->getMock('SclZfCart\Service\CartItemCreatorInterface');
 
-        $this->itemHydrator = $this->getMock('SclZfCart\Hydrator\ItemHydrator');
+        $this->itemHydrator = $this->getMockBuilder('SclZfCart\Hydrator\ItemHydrator')
+                                   ->disableOriginalConstructor()
+                                   ->getMock();
 
         $this->storage = new CartStorage(
             $this->cartMapper,

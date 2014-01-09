@@ -5,12 +5,9 @@ namespace SclZfCart\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use SclZfUtilities\Model\CurrencyValue;
 use SclZfCart\Customer\CustomerInterface;
+use SCL\Currency\Money;
+use SCL\Currency\Money\Accumulator;
 
-/**
- * Doctrine implementation of the the OrderInterface
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class Order implements OrderInterface
 {
     /**
@@ -19,8 +16,6 @@ class Order implements OrderInterface
     private $id;
 
     /**
-     * The customer who owns the order.
-     *
      * @var CustomerInterface
      */
     private $customer;
@@ -36,17 +31,12 @@ class Order implements OrderInterface
      */
     private $items;
 
-    /**
-     * Initialise the values in the order.
-     */
     public function __construct()
     {
         $this->reset();
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return int
      */
     public function getId()
@@ -55,8 +45,6 @@ class Order implements OrderInterface
     }
 
     /**
-     * Gets the value of customer
-     *
      * @return CustomerInterface
      */
     public function getCustomer()
@@ -64,29 +52,17 @@ class Order implements OrderInterface
         return $this->customer;
     }
 
-    /**
-     * Sets the value of customer
-     *
-     * @param  CustomerInterface $customer
-     */
     public function setCustomer(CustomerInterface $customer)
     {
         $this->customer = $customer;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @return void
-     */
     public function reset()
     {
         $this->items = new ArrayCollection();
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return string
      */
     public function getStatus()
@@ -95,11 +71,8 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param  string $status
-     * @return void
-    */
+     * @param string $status
+     */
     public function setStatus($status)
     {
         // @todo value checking
@@ -107,8 +80,6 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @return OrderItemInterface[]
      */
     public function getItems()
@@ -117,10 +88,7 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param  OrderItemInterface $item
-     * @return void
+     * @param OrderItemInterface $item
      */
     public function addItem(OrderItemInterface $item)
     {
@@ -129,19 +97,18 @@ class Order implements OrderInterface
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @return float
+     * @return Money
      */
     public function getTotal()
     {
-        $total = new CurrencyValue(0);
+        $accumulator = new Accumulator();
 
         foreach ($this->items as $item) {
-            $total->add($item->getPrice());
-            $total->add($item->getTax());
+            $price = $item->getPrice();
+            $accumulator->add($price->getAmount());
+            $accumulator->add($price->getTax());
         }
 
-        return $total->get();
+        return $accumulator->calculateTotal();
     }
 }

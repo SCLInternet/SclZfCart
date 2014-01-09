@@ -2,13 +2,20 @@
 
 namespace SclZfCart\Hydrator;
 
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use SCL\Currency\TaxedPrice;
+use SCL\Currency\TaxedPriceFactory;
 use SclZfCart\CartItemInterface;
-use SclZfCart\CartItem\TitleAwareInterface;
 use SclZfCart\CartItem\DataAwareInterface;
+use SclZfCart\CartItem\TitleAwareInterface;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class ItemHydrator implements HydratorInterface
 {
+    /**
+     * @var TaxedPriceFactory
+     */
+    private $priceFactory;
+
     /**
      * List of fields to be set on the object.
      *
@@ -19,50 +26,24 @@ class ItemHydrator implements HydratorInterface
      *
      * @var array
      */
-    protected static $setFields = [
+    private static $setFields = [
         ['\SclZfCart\CartItem\TitleAwareInterface',     'setTitle',       'title'      ],
         ['\SclZfCart\CartItem\TitleAwareInterface',     'setDescription', 'description'],
         ['\SclZfCart\CartItem\QuantityAwareInterface',  'setQuantity',    'quantity'   ],
         ['\SclZfCart\CartItem\UidAwareInterface',       'setUid',         'uid'        ],
         ['\SclZfCart\CartItem\PriceAwareInterface',     'setPrice',       'price'      ],
-        ['\SclZfCart\CartItem\PriceAwareInterface',     'setTax',         'tax'        ],
         ['\SclZfCart\CartItem\UnitPriceAwareInterface', 'setUnitPrice',   'unitPrice'  ],
-        ['\SclZfCart\CartItem\UnitPriceAwareInterface', 'setUnitTax',     'unitTax'    ],
         ['\SclZfCart\CartItem\DataAwareInterface',      'setData',        'data'       ],
     ];
 
-    /**
-     * Set the value of the object from the entry in the array using the provided
-     * setter method providing that the object is an instance of $interface and
-     * $data[$key] exists.
-     *
-     * @param  string $interface
-     * @param  object $object
-     * @param  string $method
-     * @param  array  $data
-     * @param  string $key
-     * @return object
-     */
-    private function conditionalSet($interface, $object, $method, array $data, $key)
+    public function __construct(TaxedPriceFactory $priceFactory)
     {
-        if (!$object instanceof $interface) {
-            return;
-        }
-
-        if (!isset($data[$key])) {
-            return;
-        }
-
-        $object->$method($data[$key]);
-
-        return $object;
+        $this->priceFactory = $priceFactory;
     }
 
     /**
-     * Hydrate $object with the provided $data.
+     * @param CartItemInterface $object
      *
-     * @param  array $data
-     * @param  object $object
      * @return object
      */
     public function hydrate(array $data, $object)
@@ -71,11 +52,14 @@ class ItemHydrator implements HydratorInterface
             return $object;
         }
 
+        $this->convertValuesToPriceObject($data, 'price', 'tax');
+        $this->convertValuesToPriceObject($data, 'unitPrice', 'unitTax');
+
         foreach (self::$setFields as $fieldParams) {
-            $this->conditionalSet(
+            $this->setIfImplementsInterfaceAndValueExists(
+                $object,
                 // Interface name
                 $fieldParams[0],
-                $object,
                 // $object set method
                 $fieldParams[1],
                 $data,
@@ -88,9 +72,8 @@ class ItemHydrator implements HydratorInterface
     }
 
     /**
-     * Extract values from an object
+     * @param CartItemInterface $object
      *
-     * @param  object $object
      * @return array
      */
     public function extract($object)
@@ -104,16 +87,79 @@ class ItemHydrator implements HydratorInterface
             'description' => $object->getDescription(),
             'quantity'    => $object->getQuantity(),
             'uid'         => $object->getUid(),
-            'price'       => $object->getPrice(),
-            'tax'         => $object->getTax(),
-            'unitPrice'   => $object->getUnitPrice(),
-            'unitTax'     => $object->getUnitTax(),
         ];
+
+        $data = array_merge(
+            $data,
+            $this->extractTaxedPriceObject($object->getPrice(), 'price', 'tax'),
+            $this->extractTaxedPriceObject($object->getUnitPrice(), 'unitPrice', 'unitTax')
+        );
 
         if ($object instanceof DataAwareInterface) {
             $data['data'] = $object->getData();
         }
 
         return $data;
+    }
+
+    /**
+     * @param string $priceName
+     * @param string $taxName
+     */
+    private function convertValuesToPriceObject(array &$data, $priceName, $taxName)
+    {
+        if (!isset($data[$priceName])) {
+            return;
+        }
+
+        $data[$priceName] = $this->priceFactory->createFromValues(
+            $data[$priceName],
+            $data[$taxName]
+        );
+
+        unset($data[$taxName]);
+    }
+
+    /**
+     * @param string $interface
+     * @param object $object
+     * @param string $method
+     * @param array  $data
+     * @param string $key
+     *
+     * @return object
+     */
+    private function setIfImplementsInterfaceAndValueExists($object, $interface, $setterMethod, array $data, $key)
+    {
+        if (!$object instanceof $interface) {
+            return;
+        }
+
+        if (!isset($data[$key])) {
+            return;
+        }
+
+        $object->$setterMethod($data[$key]);
+
+        return $object;
+    }
+
+    /**
+     * @param TaxedPrice $price
+     * @param string     $priceName
+     * @param string     $taxName
+     *
+     * @return float[]
+     */
+    private function extractTaxedPriceObject($price, $priceName, $taxName)
+    {
+        if (!$price instanceof TaxedPrice) {
+            return [];
+        }
+
+        return [
+            $priceName => $price->getAmount()->getValue(),
+            $taxName   => $price->getTax()->getValue()
+        ];
     }
 }

@@ -7,40 +7,47 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ControllerProviderInterface;
+use Zend\ModuleManager\Feature\HydratorProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
+use SclZfCart\Hydrator\ItemHydrator;
 
-/**
- * This module contains an extensible shopping cart solution.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class Module implements
     BootstrapListenerInterface,
     AutoloaderProviderInterface,
     ConfigProviderInterface,
     ControllerProviderInterface,
+    HydratorProviderInterface,
     ServiceProviderInterface
 {
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param EventInterface $e
-     */
     public function onBootstrap(EventInterface $e)
     {
         $serviceLocator = $e->getApplication()->getServiceManager();
 
+        $this->attachCartListener($serviceLocator);
+
+        // @todo Should be done using a more modular approach
+        $this->attachDoctrineListener($serviceLocator);
+    }
+
+    private function attachCartListener($serviceLocator)
+    {
         $eventManager = $serviceLocator->get('SharedEventManager');
-
         $listener = $serviceLocator->get('SclZfCart\Listener\CartListener');
-
         $eventManager->attachAggregate($listener);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    private function attachDoctrineListener($serviceLocator)
+    {
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+        $eventManager = $entityManager->getEventManager();
+        $listener = $serviceLocator->get('SclZfCart\Doctrine\PriceFactoryInjectorListener');
+        $eventManager->addEventListener(
+            array(\Doctrine\ORM\Events::postLoad),
+            $listener
+        );
+    }
+
     public function getAutoloaderConfig()
     {
         return [
@@ -52,9 +59,6 @@ class Module implements
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
@@ -76,9 +80,19 @@ class Module implements
         ];
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    public function getHydratorConfig()
+    {
+        return [
+            'factories' => [
+                'SclZfCart\Hydrator\ItemHydrator' => function ($hm) {
+                    $sm = $hm->getServiceLocator();
+
+                    return new ItemHydrator($sm->get('scl_currency.taxed_price_factory'));
+                }
+            ],
+        ];
+    }
+
     public function getServiceConfig()
     {
         return include __DIR__ . '/../../config/service.config.php';

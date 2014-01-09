@@ -15,10 +15,10 @@
         <field name="title" type="string" />
         <field name="description" type="string" />
         <field name="quantity" type="integer" />
-        <field name="unitPrice" type="decimal" precision="11" scale="2" />
-        <field name="unitTax" type="decimal" precision="11" scale="2" />
-        <field name="price" type="decimal" precision="11" scale="2" />
-        <field name="tax" type="decimal" precision="11" scale="2" />
+        <field name="unitPrice" type="integer" />
+        <field name="unitTax" type="integer" />
+        <field name="price" type="integer" />
+        <field name="tax" type="integer" />
         <field name="type" type="string" />
         <field name="data" type="text" />
     </entity>

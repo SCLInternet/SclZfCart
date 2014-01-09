@@ -3,6 +3,7 @@
 namespace SclZfCartTests\Hydrator;
 
 use SclZfCart\Hydrator\ItemHydrator;
+use SCL\Currency\TaxedPriceFactory;
 
 /**
  * Unit tests for {@see ItemHydrator}.
@@ -27,6 +28,8 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
 
     private $testItem;
 
+    private $priceFactory;
+
     /**
      * Set up the instance to be tested.
      *
@@ -34,7 +37,9 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->hydrator = new ItemHydrator();
+        $this->priceFactory = TaxedPriceFactory::createDefaultInstance();
+
+        $this->hydrator = new ItemHydrator($this->priceFactory);
 
         $this->createTestItem();
     }
@@ -67,16 +72,37 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
 
     public function test_extract_returns_data_if_object_implements_DataAwareInterface()
     {
-        $object = $this->getMock('\SclZfCartTests\TestAssets\FullyLoadedCartItemInterface');
-
-        $object->expects($this->once())
-               ->method('getData')
-               ->will($this->returnValue(self::TEST_DATA));
+        $object = $this->createMockItemWithOneReturningMethod('getData', self::TEST_DATA);
 
         $result = $this->hydrator->extract($object);
 
         $this->assertEquals(self::TEST_DATA, $result['data']);
     }
+
+    public function test_extract_extracts_price_into_seperate_fields()
+    {
+        $price = $this->priceFactory->createFromValues(10.10, 2.2);
+
+        $object = $this->createMockItemWithOneReturningMethod('getPrice', $price);
+
+        $data = $this->hydrator->extract($object);
+
+        $this->assertArrayValueByKey(10.10, $data, 'price');
+        $this->assertArrayValueByKey(2.2, $data, 'tax');
+    }
+
+    public function test_extract_extracts_unit_price_into_seperate_fields()
+    {
+        $price = $this->priceFactory->createFromValues(10.10, 2.2);
+
+        $object = $this->createMockItemWithOneReturningMethod('getUnitPrice', $price);
+
+        $data = $this->hydrator->extract($object);
+
+        $this->assertArrayValueByKey(10.10, $data, 'unitPrice');
+        $this->assertArrayValueByKey(2.2, $data, 'unitTax');
+    }
+
 
     /*
      * hydrate()
@@ -98,12 +124,38 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
         $this->hydrator->hydrate([], $item);
     }
 
+    public function test_hydrate_converts_price_and_tax_to_price_object()
+    {
+        $item = $this->getMock('SclZfCartTests\TestAssets\FullyLoadedCartItemInterface');
+
+        $price = $this->priceFactory->createFromValues(50, 10);
+
+        $item->expects($this->once())
+             ->method('setPrice')
+             ->with($this->equalTo($price));
+
+        $this->hydrator->hydrate(['price' => 50, 'tax' => 10], $item);
+    }
+
+    public function test_hydrate_converts_unit_price_and_tax_to_price_object()
+    {
+        $item = $this->getMock('SclZfCartTests\TestAssets\FullyLoadedCartItemInterface');
+
+        $price = $this->priceFactory->createFromValues(50, 10);
+
+        $item->expects($this->once())
+             ->method('setUnitPrice')
+             ->with($this->equalTo($price));
+
+        $this->hydrator->hydrate(['unitPrice' => 50, 'unitTax' => 10], $item);
+    }
+
     /**
      * @dataProvider hydrateMembersProvider
      *
-     * @param  string $field
-     * @param  mixed  $testValue
-     * @param  string $setMethod
+     * @param string $field
+     * @param mixed  $testValue
+     * @param string $setMethod
      */
     public function test_object_value_is_set_if_data_is_provided($field, $testValue, $setMethod)
     {
@@ -119,8 +171,8 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider hydrateMembersProvider
      *
-     * @param  string $field
-     * @param  mixed  $testValue
+     * @param string $field
+     * @param mixed  $testValue
      */
     public function test_object_value_is_not_set_if_correct_interface_is_not_implemented($field, $testValue)
     {
@@ -155,10 +207,6 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
             ['description', self::TEST_DESCRIPTION],
             ['quantity',    self::TEST_QUANTITY   ],
             ['uid',         self::TEST_UID        ],
-            ['price',       self::TEST_PRICE      ],
-            ['tax',         self::TEST_TAX        ],
-            ['unitPrice',   self::TEST_UNIT_PRICE ],
-            ['unitTax',     self::TEST_UNIT_TAX   ],
         ];
     }
 
@@ -174,10 +222,6 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
             ['description', self::TEST_DESCRIPTION, 'setDescription'],
             ['quantity',    self::TEST_QUANTITY,    'setQuantity'   ],
             ['uid',         self::TEST_UID,         'setUid'        ],
-            ['price',       self::TEST_PRICE,       'setPrice'      ],
-            ['tax',         self::TEST_TAX,         'setTax'        ],
-            ['unitPrice',   self::TEST_UNIT_PRICE,  'setUnitPrice'  ],
-            ['unitTax',     self::TEST_UNIT_TAX,    'setUnitTax'    ],
             ['data',        self::TEST_DATA,        'setData'       ],
         ];
     }
@@ -185,6 +229,34 @@ class ItemHydratorTest extends \PHPUnit_Framework_TestCase
     /*
      * Private methods
      */
+
+    /**
+     * @param mixed $expected
+     * @param array $array
+     * @param mixed $key
+     */
+    private function assertArrayValueByKey($expected, array $array, $key)
+    {
+        $this->assertArrayHasKey($key, $array);
+        $this->assertEquals($expected, $array[$key]);
+    }
+
+    /**
+     * @param string $method
+     * @param mixed  $value
+     *
+     * @return CartItemInterface
+     */
+    private function createMockItemWithOneReturningMethod($method, $value)
+    {
+        $item = $this->getMock('SclZfCartTests\TestAssets\FullyLoadedCartItemInterface');
+
+        $item->expects($this->once())
+               ->method($method)
+               ->will($this->returnValue($value));
+
+        return $item;
+    }
 
     private function createTestItem()
     {

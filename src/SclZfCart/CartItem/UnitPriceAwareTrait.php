@@ -2,66 +2,25 @@
 
 namespace SclZfCart\CartItem;
 
-/**
- * Trait for objects which are price aware.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
+use SCL\Currency\TaxedPrice;
+
 trait UnitPriceAwareTrait
 {
     /**
-     * Price amount,
-     *
-     * @var mixed
+     * @var TaxedPrice
      */
-    protected $unitPrice = 0.00;
+    private $unitPrice;
 
     /**
-     * Tax amount.
-     *
-     * @var float
-     */
-    protected $unitTax = 0.00;
-
-    /**
-     * Get the price for a single unit.
-     *
-     * @return float
+     * @return TaxedPrice
      */
     public function getUnitPrice()
     {
         return $this->unitPrice;
     }
 
-    /**
-     * Set the price for a single unit.
-     *
-     * @param  float $unitPrice
-     * @return void
-     */
-    public function setUnitPrice($unitPrice)
+    public function setUnitPrice(TaxedPrice $unitPrice)
     {
-        $this->unitPrice = (float) $unitPrice;
-    }
-
-    /**
-     * Get the tax amount for a single unit.
-     *
-     * @return float
-     */
-    public function getUnitTax()
-    {
-        return $this->unitTax;
-    }
-
-    /**
-     * Sets the tax amount for a single unit.
-     *
-     * @param  float $unitTax
-     * @return void
-     */
-    public function setUnitTax($unitTax)
-    {
-        $this->unitTax = (float) $unitTax;
+        $this->unitPrice = $unitPrice;
     }
 }

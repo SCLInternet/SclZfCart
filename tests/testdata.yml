@@ -1,0 +1,13 @@
+cart_item:
+    -
+        id: 1
+        uid: 'test_item_1'
+        data: ''
+        quantity: 1
+        type: 'SclZfCartTests\TestAssets\FullyLoadedCartItem'
+        unitPrice: 5
+        unitTax: 1
+        price: 5
+        tax: 1
+        title: ''
+        description: ''

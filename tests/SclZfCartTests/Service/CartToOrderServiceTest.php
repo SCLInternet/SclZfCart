@@ -19,7 +19,9 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->cartItemCreator = $this->getMock('SclZfCart\Service\CartItemCreatorInterface');
 
-        $this->itemHydrator = $this->getMock('SclZfCart\Hydrator\ItemHydrator');
+        $this->itemHydrator = $this->getMockBuilder('SclZfCart\Hydrator\ItemHydrator')
+                                   ->disableOriginalConstructor()
+                                   ->getMock();
 
         $this->orderItemMapper = $this->getMock('SclZfCart\Mapper\OrderItemMapperInterface');
 

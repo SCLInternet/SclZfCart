@@ -11,13 +11,13 @@ use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
 
 interface ItemEntityInterface extends
- MainCartItemInterface,
- DataAwareInterface,
- PriceAwareInterface,
- QuantityAwareInterface,
- TitleAwareInterface,
- UidAwareInterface,
- UnitPriceAwareInterface
+    MainCartItemInterface,
+    DataAwareInterface,
+    PriceAwareInterface,
+    QuantityAwareInterface,
+    TitleAwareInterface,
+    UidAwareInterface,
+    UnitPriceAwareInterface
 {
     /**
      * @return int

@@ -13,6 +13,8 @@ use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UidAwareTrait;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
 use SclZfCart\CartItem\UnitPriceAwareTrait;
+use SCL\Currency\TaxedPrice;
+use SCL\Currency\TaxedPriceFactory;
 
 /**
  * Abstract class for storing an item entity.
@@ -20,6 +22,7 @@ use SclZfCart\CartItem\UnitPriceAwareTrait;
  * @author Tom Oram <tom@scl.co.uk>
  */
 abstract class AbstractItem implements
+    PriceFactoryAware,
     DataAwareInterface,
     PriceAwareInterface,
     QuantityAwareInterface,
@@ -28,32 +31,57 @@ abstract class AbstractItem implements
     UnitPriceAwareInterface
 {
     use TitleAwareTrait;
-    use PriceAwareTrait;
     use QuantityAwareTrait;
     use UidAwareTrait;
-    use UnitPriceAwareTrait;
 
     /**
-     * The entity id.
-     *
      * @var int
      */
     protected $id;
 
     /**
-     * The serialized data.
-     *
      * @var string
      */
     protected $data;
 
     /**
-     * The type of item to be stored in this entity.
-     *
      * @var string
      */
     protected $type;
 
+    /**
+     * @var int
+     */
+    protected $price;
+
+    /**
+     * @var int
+     */
+    protected $tax;
+
+    /**
+     * @var int
+     */
+    protected $unitPrice;
+
+    /**
+     * @var int
+     */
+    protected $unitTax;
+
+    /**
+     * @var TaxedPriceFactory
+     */
+    private $priceFactory;
+
+    public function setPriceFactory(TaxedPriceFactory $priceFactory)
+    {
+        $this->priceFactory = $priceFactory;
+    }
+
+    /**
+     * @return int
+     */
     public function getId()
     {
         return $this->id;
@@ -64,23 +92,63 @@ abstract class AbstractItem implements
         $this->id = (int) $id;
     }
 
+    /**
+     * @return string
+     */
     public function getData()
     {
         return $this->data;
     }
 
+    /**
+     * @param string $data
+     */
     public function setData($data)
     {
         $this->data = (string) $data;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
 
+    /**
+     * @param string $type
+     */
     public function setType($type)
     {
         $this->type = (string) $type;
+    }
+
+    /**
+     * @return TaxedPrice
+     */
+    public function getPrice()
+    {
+        return $this->priceFactory->createFromUnits($this->price, $this->tax);
+    }
+
+    public function setPrice(TaxedPrice $price)
+    {
+        $this->price = $price->getAmount()->getUnits();
+        $this->tax   = $price->getTax()->getUnits();
+    }
+
+    /**
+     * @return TaxedPrice
+     */
+    public function getUnitPrice()
+    {
+        return $this->priceFactory->createFromUnits($this->unitPrice, $this->unitTax);
+    }
+
+    public function setUnitPrice(TaxedPrice $price)
+    {
+        $this->unitPrice = $price->getAmount()->getUnits();
+        $this->unitTax   = $price->getTax()->getUnits();
     }
 }

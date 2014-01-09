@@ -2,24 +2,12 @@
 
 namespace SclZfCart\CartItem;
 
-/**
- * Interface for objects which provide unit price values.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
+use SCL\Currency\TaxedPrice;
+
 interface UnitPriceProviderInterface
 {
     /**
-     * Get the tax amount.
-     *
-     * @return float
-     */
-    public function getUnitTax();
-
-    /**
-     * Get the price.
-     *
-     * @return float
+     * @return TaxedPrice
      */
     public function getUnitPrice();
 }

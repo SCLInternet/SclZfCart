@@ -2,6 +2,8 @@
 
 namespace SclZfCart\CartItem;
 
+use SCL\Currency\TaxedPrice;
+
 /**
  * Interface for objects which provide price values.
  *
@@ -10,16 +12,7 @@ namespace SclZfCart\CartItem;
 interface PriceProviderInterface
 {
     /**
-     * Get the tax amount.
-     *
-     * @return float
-     */
-    public function getTax();
-
-    /**
-     * Get the price.
-     *
-     * @return float
+     * @return TaxedPrice
      */
     public function getPrice();
 }
