@@ -9,16 +9,18 @@ return [
     ],
 
     'aliases' => [
-//        'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
+        //'SclZfCart\Customer\CustomerLocatorInterface' => 'SclZfCart\Customer\ZfcUserCustomerLocator',
 
         /*
          * Entities
          */
 
+        /*
         'SclZfCart\Entity\CartInterface'             => 'SclZfCart\Entity\DoctrineCart',
         'SclZfCart\Entity\CartItemInterface'         => 'SclZfCart\Entity\DoctrineCartItem',
         'SclZfCart\Entity\OrderInterface'            => 'SclZfCart\Entity\DoctrineOrder',
         'SclZfCart\Entity\OrderItemInterface'        => 'SclZfCart\Entity\DoctrineOrderItem',
+        */
 
         /*
          * Mappers

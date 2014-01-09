@@ -79,7 +79,7 @@ class Cart
         $this->items = new ArrayCollection($items);
     }
 
-    public function addItem(CartItemInterface $item)
+    public function addItem(CartItem $item)
     {
         $item->setCart($this);
         $this->items[$item->getUid()] = $item;
