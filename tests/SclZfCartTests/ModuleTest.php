@@ -14,6 +14,14 @@ class ModuleTest extends AbstractTestCase
         );
     }
 
+    public function test_service_manager_can_create_CartToOrderService()
+    {
+        $this->assertServiceIsInstanceOf(
+            'SclZfCart\Service\CartToOrderService',
+            'SclZfCart\Service\CartToOrderService'
+        );
+    }
+
     private function getHydratorManager()
     {
         return $this->getServiceManager()->get('HydratorManager');

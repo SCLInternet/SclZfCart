@@ -148,8 +148,8 @@ return [
 
             return new \SclZfCart\Service\CartToOrderService(
                 $sm->get('SclZfCart\Service\CartItemCreatorInterface'),
-                $sm->get('SclZfCart\Hydrator\ItemHydrator'),
-                $hm->get('SclZfCart\Mapper\OrderItemMapperInterface')
+                $hm->get('SclZfCart\Hydrator\ItemHydrator'),
+                $sm->get('SclZfCart\Mapper\OrderItemMapperInterface')
             );
         },
 
