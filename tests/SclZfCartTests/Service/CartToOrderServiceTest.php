@@ -38,7 +38,7 @@ class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
         $data = ['blah', 'blah'];
         $cartItem = $this->getMock('SclZfCart\CartItemInterface');
 
-        $orderItem = $this->getMock('SclZfCart\Entity\OrderItemInterface');
+        $orderItem = $this->getMock('SclZfCart\Entity\OrderItem');
 
         $orderItem->expects($this->once())
                   ->method('getType')

@@ -3,7 +3,7 @@
 namespace SclZfCart\Controller;
 
 use SclZfCart\CartEvent;
-use SclZfCart\Entity\OrderInterface;
+use SclZfCart\Entity\Order;
 use SclZfUtilities\Model\Route;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Form\Form;
@@ -11,16 +11,9 @@ use Zend\Mvc\Controller\AbstractActionController;
 use SclZfCart\Service\CartToOrderService;
 use SclZfCart\Mapper\OrderMapperInterface;
 
-/**
- * Takes the user through the checkout process.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class CheckoutController extends AbstractActionController
 {
     /**
-     * The cart event manager.
-     *
      * @var EventManagerInterface
      */
     private $cartEventManager;
@@ -38,8 +31,6 @@ class CheckoutController extends AbstractActionController
     }
 
     /**
-     * Return the cart event manager.
-     *
      * @return EventManagerInterface
      */
     private function getCartEventManager()
@@ -189,10 +180,10 @@ class CheckoutController extends AbstractActionController
     }
 
     /**
-     * @param  OrderInterface $order
+     * @param  Order $order
      * @return \Zend\Http\Response|null
      */
-    private function triggerProcessEvent(OrderInterface $order)
+    private function triggerProcessEvent(Order $order)
     {
         $eventManager = $this->getCartEventManager();
 

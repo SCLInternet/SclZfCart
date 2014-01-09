@@ -3,7 +3,7 @@
 namespace SclZfCart\Storage;
 
 use SclZfCart\Cart;
-use SclZfCart\Entity\CartInterface as CartEntity;
+use SclZfCart\Entity\Cart as CartEntity;
 use SclZfCart\Exception;
 use SclZfCart\Hydrator\ItemHydrator;
 use SclZfCart\Mapper\CartItemMapperInterface;

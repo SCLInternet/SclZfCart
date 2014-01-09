@@ -5,32 +5,25 @@ namespace SclZfCart\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 
-/**
- * Entity class for storing a cart to the database
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
-class Cart implements CartInterface
+class Cart
 {
     /**
      * @var int
      */
-    protected $id;
+    private $id;
 
     /**
      * @var DateTime
      */
-    protected $lastUpdated;
+    private $lastUpdated;
 
     /**
      * @var ArrayCollection
+     *
      * @todo Remove ArrayCollection type and see if Doctrine can still handle it.
      */
-    protected $items;
+    private $items;
 
-    /**
-     * Initialise internal objects
-     */
     public function __construct()
     {
         $this->timestamp = new DateTime();
@@ -46,8 +39,7 @@ class Cart implements CartInterface
     }
 
     /**
-     * @param  int $id
-     * @return void
+     * @param int $id
      */
     public function setId($id)
     {
@@ -62,10 +54,6 @@ class Cart implements CartInterface
         return $this->lastUpdated;
     }
 
-    /**
-     * @param DateTime $lastUpdated
-     * @return void
-     */
     public function setLastUpdated(DateTime $lastUpdated)
     {
         $this->lastUpdated = $lastUpdated;
@@ -80,9 +68,7 @@ class Cart implements CartInterface
     }
 
     /**
-     * @param array $items
-     *
-     * @return Cart
+     * @param CartItem[] $items
      */
     public function setItems(array $items)
     {
@@ -93,9 +79,6 @@ class Cart implements CartInterface
         $this->items = new ArrayCollection($items);
     }
 
-    /**
-     * @param CartItem $item
-     */
     public function addItem(CartItemInterface $item)
     {
         $item->setCart($this);

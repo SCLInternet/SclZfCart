@@ -4,7 +4,7 @@ namespace SclZfCart\Listener;
 
 use SclZfCart\CartEvent;
 use SclZfCart\Customer\CustomerLocatorInterface;
-use SclZfCart\Entity\OrderInterface;
+use SclZfCart\Entity\Order;
 use SclZfCart\Exception\RuntimeException;
 use SclZfUtilities\Model\Route;
 use Zend\EventManager\EventManagerInterface;
@@ -128,7 +128,7 @@ class CartListener implements SharedListenerAggregateInterface
     {
         $order = $event->getTarget();
 
-        if (!$order instanceof OrderInterface) {
+        if (!$order instanceof Order) {
             throw RuntimeException::expectedOrder($order);
         }
 
@@ -165,7 +165,7 @@ class CartListener implements SharedListenerAggregateInterface
     {
         $order = $event->getTarget();
 
-        if (!$order instanceof OrderInterface) {
+        if (!$order instanceof Order) {
             throw RuntimeException::expectedOrder($order);
         }
 

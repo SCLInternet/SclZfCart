@@ -55,7 +55,7 @@ class Cart extends Form
     /**
      * If the item provides a custom quantity element this method adds it to the form.
      *
-     * @param CartInterfaceItem $item
+     * @param CartItemInterface $item
      * @return boolean True is a custom element was provided
      */
     private function addCustomQuantityElement(CartItemInterface $item)

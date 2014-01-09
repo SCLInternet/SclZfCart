@@ -86,7 +86,7 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
 
         $cart = $this->getMock('SclZfCart\Cart', ['clear', 'add']);
 
-        $cartEntity = $this->getMock('SclZfCart\Entity\CartInterface');
+        $cartEntity = $this->getMock('SclZfCart\Entity\Cart');
 
         $this->cartMapper->expects($this->once())
             ->method('findById')
@@ -114,7 +114,7 @@ class CartStorageTest extends \PHPUnit_Framework_TestCase
 
         $cart = $this->getMock('SclZfCart\Cart');
 
-        $cartEntity = $this->getMock('SclZfCart\Entity\CartInterface');
+        $cartEntity = $this->getMock('SclZfCart\Entity\Cart');
 
         $this->cartMapper->expects($this->once())
             ->method('create')

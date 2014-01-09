@@ -2,15 +2,10 @@
 
 namespace SclZfCart\Entity;
 
-/**
- * Entity class for storing a cart item to the database.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
-class CartItem extends AbstractItem implements CartItemInterface
+class CartItem extends AbstractItem
 {
     /**
-     * @var DoctrineCart
+     * @var Cart
      */
     protected $cart;
 
@@ -22,11 +17,7 @@ class CartItem extends AbstractItem implements CartItemInterface
         return $this->cart;
     }
 
-    /**
-     * @param  Cart $cart
-     * @return void
-     */
-    public function setCart(CartInterface $cart)
+    public function setCart(Cart $cart)
     {
         $this->cart = $cart;
     }

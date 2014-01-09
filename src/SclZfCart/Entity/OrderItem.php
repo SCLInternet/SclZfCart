@@ -2,35 +2,22 @@
 
 namespace SclZfCart\Entity;
 
-/**
- * Doctrine implementation of the the OrderInterface.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
-class OrderItem extends AbstractItem implements OrderItemInterface
+class OrderItem extends AbstractItem
 {
     /**
-     * @var DoctrineOrder
+     * @var Order
      */
-    protected $order;
+    private $order;
 
     /**
-     * {@inheritDoc}
-     *
-     * @return OrderInterface
+     * @return Order
      */
     public function getOrder()
     {
         return $this->order;
     }
 
-    /**
-     * Sets the value for order.
-     *
-     * @param  OrderInterface $order
-     * @return void
-     */
-    public function setOrder(OrderInterface $order)
+    public function setOrder(Order $order)
     {
         $this->order = $order;
     }

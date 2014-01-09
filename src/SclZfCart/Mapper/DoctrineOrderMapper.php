@@ -5,20 +5,11 @@ namespace SclZfCart\Mapper;
 use Doctrine\Common\Persistence\ObjectManager;
 use SclZfGenericMapper\Doctrine\FlushLock;
 use SclZfGenericMapper\DoctrineMapper as GenericDoctrineMapper;
-use SclZfCart\Entity\OrderInterface;
+use SclZfCart\Entity\Order;
 
-/**
- * Doctrine Mapper for Order.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class DoctrineOrderMapper extends GenericDoctrineMapper implements
     OrderMapperInterface
 {
-    /**
-     * @param ObjectManager $entityManager
-     * @param FlushLock     $flushLock
-     */
     public function __construct(
         ObjectManager $entityManager,
         FlushLock $flushLock
@@ -30,10 +21,13 @@ class DoctrineOrderMapper extends GenericDoctrineMapper implements
         );
     }
 
+    /**
+     * @return Order
+     */
     public function create()
     {
         $order = parent::create();
-        $order->setStatus(OrderInterface::STATUS_PENDING);
+        $order->setStatus(Order::STATUS_PENDING);
 
         return $order;
     }

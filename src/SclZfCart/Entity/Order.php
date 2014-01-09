@@ -8,8 +8,12 @@ use SclZfCart\Customer\CustomerInterface;
 use SCL\Currency\Money;
 use SCL\Currency\Money\Accumulator;
 
-class Order implements OrderInterface
+class Order
 {
+    const STATUS_PENDING   = 'pending';
+    const STATUS_COMPLETED = 'completed';
+    const STATUS_FAILED    = 'failed';
+
     /**
      * @var int
      */
@@ -80,17 +84,14 @@ class Order implements OrderInterface
     }
 
     /**
-     * @return OrderItemInterface[]
+     * @return OrderItem[]
      */
     public function getItems()
     {
         return $this->items;
     }
 
-    /**
-     * @param OrderItemInterface $item
-     */
-    public function addItem(OrderItemInterface $item)
+    public function addItem(OrderItem $item)
     {
         $item->setOrder($this);
         $this->items[] = $item;

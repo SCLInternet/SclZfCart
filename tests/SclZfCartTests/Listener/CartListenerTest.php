@@ -237,7 +237,7 @@ class CartListenerTest extends \PHPUnit_Framework_TestCase
 
     private function createEvent($orderId)
     {
-        $this->order = $this->getMock('SclZfCart\Entity\OrderInterface');
+        $this->order = $this->getMock('SclZfCart\Entity\Order');
 
         $this->order->expects($this->any())
               ->method('getId')

@@ -4,17 +4,12 @@ namespace SclZfCart\Service;
 
 use SclZfCart\Cart;
 use SclZfCart\CartItemInterface;
-use SclZfCart\Entity\OrderInterface;
-use SclZfCart\Entity\OrderItemInterface;
+use SclZfCart\Entity\Order;
+use SclZfCart\Entity\OrderItem;
 use SclZfCart\Hydrator\ItemHydrator;
 use SclZfCart\Mapper\OrderItemMapperInterface;
 use SclZfCart\Service\CartItemCreatorInterface;
 
-/**
- * Provides methods to fill an Order entity from a Cart, or fill a Cart from an Order entity.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class CartToOrderService
 {
     /**
@@ -32,11 +27,6 @@ class CartToOrderService
      */
     private $orderItemMapper;
 
-    /**
-     * @param CartItemCreatorInterface $cartItemCreator
-     * @param ItemHydrator             $itemHydrator
-     * @param OrderItemMapper          $orderItemMapper
-     */
     public function __construct(
         CartItemCreatorInterface $cartItemCreator,
         ItemHydrator $itemHydrator,
@@ -47,13 +37,7 @@ class CartToOrderService
         $this->orderItemMapper   = $orderItemMapper;
     }
 
-    /**
-     * Copy the contents of the cart into an order.
-     *
-     * @param Cart           $cart
-     * @param OrderInterface $order
-     */
-    public function cartToOrder(Cart $cart, OrderInterface $order)
+    public function cartToOrder(Cart $cart, Order $order)
     {
         $order->reset();
 
@@ -63,13 +47,9 @@ class CartToOrderService
     }
 
     /**
-     * Transfer the contents of an order into the cart.
-     *
-     * @param OrderInterface $order
-     * @param Cart           $cart
-     * @param boolean        $overwrite
+     * @param boolean $overwrite
      */
-    public function orderToCart(OrderInterface $order, Cart $cart, $overwrite = true)
+    public function orderToCart(Order $order, Cart $cart, $overwrite = true)
     {
         if (true === $overwrite) {
             $cart->clear();
@@ -81,13 +61,9 @@ class CartToOrderService
     }
 
     /**
-     * Convert a order item entity into a cart item.
-     *
-     * @param OrderItemInterface $orderItem
-     *
      * @return CartItemInterface
      */
-    public function convertToCartItem(OrderItemInterface $orderItem)
+    public function convertToCartItem(OrderItem $orderItem)
     {
         $cartItem = $this->cartItemCreator->create($orderItem->getType());
 
@@ -96,7 +72,7 @@ class CartToOrderService
         return $this->itemHydrator->hydrate($data, $cartItem);
     }
 
-    private function addItemToOrder(OrderInterface $order, CartItemInterface $cartItem)
+    private function addItemToOrder(Order $order, CartItemInterface $cartItem)
     {
         $data = $this->itemHydrator->extract($cartItem);
 

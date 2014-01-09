@@ -3,47 +3,28 @@
 namespace SclZfCart\Service;
 
 use SclZfCart\Mapper\OrderMapperInterface;
-use SclZfCart\Entity\OrderInterface;
+use SclZfCart\Entity\Order;
 use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use SclZfCart\CartEvent;
 
-/**
- * Marks a payment as completed.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class OrderCompletionService implements EventManagerAwareInterface
 {
     /**
-     * The mapper for saving a payment.
-     *
      * @var OrderMapperInterface
      */
     private $mapper;
 
     /**
-     * The event manager.
-     *
      * @var EventManagerInterface
      */
     private $eventManager;
 
-    /**
-     *
-     * @param OrderMapperInterface $mapper
-     */
     public function __construct(OrderMapperInterface $mapper)
     {
         $this->mapper = $mapper;
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param  EventManagerInterface $eventManager
-     * @return self
-     */
     public function setEventManager(EventManagerInterface $eventManager)
     {
         $eventManager->setIdentifiers(
@@ -56,13 +37,9 @@ class OrderCompletionService implements EventManagerAwareInterface
         $eventManager->setEventClass('SclZfCart\CartEvent');
 
         $this->eventManager = $eventManager;
-
-        return $this;
     }
 
     /**
-     * {@inheritDoc}
-     *
      * @see EventManagerInterface
      */
     public function getEventManager()
@@ -70,28 +47,18 @@ class OrderCompletionService implements EventManagerAwareInterface
         return $this->eventManager;
     }
 
-    /**
-     * Mark an order as successfully completing.
-     *
-     * @param OrderInterface $order
-     */
-    public function complete(OrderInterface $order)
+    public function complete(Order $order)
     {
-        $order->setStatus(OrderInterface::STATUS_COMPLETED);
+        $order->setStatus(Order::STATUS_COMPLETED);
 
         $this->getEventManager()->trigger(CartEvent::EVENT_ORDER_COMPLETE, $order);
 
         $this->mapper->save($order);
     }
 
-    /**
-     * Mark an order as failed.
-     *
-     * @param OrderInterface $payment
-     */
-    public function fail(OrderInterface $order)
+    public function fail(Order $order)
     {
-        $order->setStatus(OrderInterface::STATUS_FAILED);
+        $order->setStatus(Order::STATUS_FAILED);
 
         $this->getEventManager()->trigger(CartEvent::EVENT_ORDER_FAIL, $order);
 

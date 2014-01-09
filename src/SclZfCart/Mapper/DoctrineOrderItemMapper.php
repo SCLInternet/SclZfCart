@@ -3,22 +3,14 @@
 namespace SclZfCart\Mapper;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use SclZfCart\Entity\OrderInterface;
-use SclZfGenericMapper\Doctrine\FlushLock;
+use SclZfCart\Entity\Order;
+use SclZfCart\Entity\OrderItem;
 use SclZfGenericMapper\DoctrineMapper as GenericDoctrineMapper;
+use SclZfGenericMapper\Doctrine\FlushLock;
 
-/**
- * Doctrine Mapper for OrderItem.
- *
- * @author Tom Oram <tom@scl.co.uk>
- */
 class DoctrineOrderItemMapper extends GenericDoctrineMapper implements
     OrderItemMapperInterface
 {
-    /**
-     * @param ObjectManager $entityManager
-     * @param FlushLock     $flushLock
-     */
     public function __construct(
         ObjectManager $entityManager,
         FlushLock $flushLock
@@ -31,12 +23,9 @@ class DoctrineOrderItemMapper extends GenericDoctrineMapper implements
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @param  OrderInterface
-     * @return OrderItemInterface[]|null
+     * @return OrderItem[]|null
      */
-    public function findAllForOrder(OrderInterface $order)
+    public function findAllForOrder(Order $order)
     {
          return parent::fetchBy(['order' => $order]);
     }

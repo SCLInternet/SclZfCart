@@ -3,7 +3,7 @@
 namespace SclZfCart\Entity;
 
 use SclZfCart\CartItem\DataAwareInterface;
-use SclZfCart\CartItemInterface as MainCartItemInterface;
+use SclZfCart\CartItemInterface;
 use SclZfCart\CartItem\PriceAwareInterface;
 use SclZfCart\CartItem\QuantityAwareInterface;
 use SclZfCart\CartItem\TitleAwareInterface;
@@ -11,7 +11,7 @@ use SclZfCart\CartItem\UidAwareInterface;
 use SclZfCart\CartItem\UnitPriceAwareInterface;
 
 interface ItemEntityInterface extends
-    MainCartItemInterface,
+    CartItemInterface,
     DataAwareInterface,
     PriceAwareInterface,
     QuantityAwareInterface,
