@@ -24,10 +24,15 @@ class Module implements
     {
         $serviceLocator = $e->getApplication()->getServiceManager();
 
-        $this->attachCartListener($serviceLocator);
-
+        // The Doctrine listener has to be attached before the
+        // cart listener. I'm not really sure why since neither
+        // should be called until later on but it works this way
+        // and not the other.
+        //
         // @todo Should be done using a more modular approach
         $this->attachDoctrineListener($serviceLocator);
+
+        $this->attachCartListener($serviceLocator);
     }
 
     private function attachCartListener($serviceLocator)

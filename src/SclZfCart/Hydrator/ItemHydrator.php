@@ -78,9 +78,11 @@ class ItemHydrator implements HydratorInterface
      */
     public function extract($object)
     {
+        echo get_class($object);
         if (!$object instanceof CartItemInterface) {
             return [];
         }
+        echo "BOOOM!";
 
         $data = [
             'title'       => $object->getTitle(),
@@ -99,6 +101,8 @@ class ItemHydrator implements HydratorInterface
             $data['data'] = $object->getData();
         }
 
+        echo "EXTRAAAAAAAAAAAAAAAACT\n";
+        var_dump($data);
         return $data;
     }
 

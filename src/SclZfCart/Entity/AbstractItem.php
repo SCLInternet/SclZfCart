@@ -2,6 +2,7 @@
 
 namespace SclZfCart\Entity;
 
+use SclZfCart\CartItemInterface;
 use SclZfCart\CartItem\DataAwareInterface;
 use SclZfCart\CartItem\PriceAwareInterface;
 use SclZfCart\CartItem\PriceAwareTrait;
@@ -22,11 +23,11 @@ use SCL\Currency\TaxedPriceFactory;
  * @author Tom Oram <tom@scl.co.uk>
  */
 abstract class AbstractItem implements
+    CartItemInterface,
     PriceFactoryAware,
     DataAwareInterface,
     PriceAwareInterface,
     QuantityAwareInterface,
-    TitleProviderInterface,
     UidAwareInterface,
     UnitPriceAwareInterface
 {
@@ -42,32 +43,32 @@ abstract class AbstractItem implements
     /**
      * @var string
      */
-    protected $data;
+    protected $data = '';
 
     /**
      * @var string
      */
-    protected $type;
+    protected $type = '';
 
     /**
      * @var int
      */
-    protected $price;
+    protected $price = 0;
 
     /**
      * @var int
      */
-    protected $tax;
+    protected $tax = 0;
 
     /**
      * @var int
      */
-    protected $unitPrice;
+    protected $unitPrice = 0;
 
     /**
      * @var int
      */
-    protected $unitTax;
+    protected $unitTax = 0;
 
     /**
      * @var TaxedPriceFactory

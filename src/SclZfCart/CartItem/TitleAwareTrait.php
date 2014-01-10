@@ -14,14 +14,14 @@ trait TitleAwareTrait
      *
      * @var string
      */
-    protected $title;
+    protected $title = '';
 
     /**
      * The description.
      *
      * @var string
      */
-    protected $description;
+    protected $description = '';
 
     /**
      * Get the item title
