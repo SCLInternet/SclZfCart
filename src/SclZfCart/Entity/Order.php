@@ -102,7 +102,10 @@ class Order
      */
     public function getTotal()
     {
-        $accumulator = new Accumulator();
+        $accumulator = new Accumulator(
+            // @todo Create this properly!
+            \SCL\Currency\CurrencyFactory::createDefaultInstance()->getDefaultCurrency()
+        );
 
         foreach ($this->items as $item) {
             $price = $item->getPrice();
