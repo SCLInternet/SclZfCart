@@ -7,6 +7,7 @@ use Zend\EventManager\EventManagerAwareInterface;
 use Zend\EventManager\EventManagerInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use SCL\Currency\TaxedPrice\Accumulator;
 
 /**
  * The shopping cart
@@ -151,37 +152,22 @@ class Cart implements
         return $this->items[$uid];
     }
 
-    public function getTotalExTax()
+    /**
+     * @return Money
+     */
+    public function getTotal()
     {
-        return array_reduce(
-            $this->items,
-            function ($total, $item) {
-                return $total + $item->getPrice();
-            },
-            0
+        $accumulator = new Accumulator(
+            // @todo Create this properly!
+            \SCL\Currency\CurrencyFactory::createDefaultInstance()->getDefaultCurrency()
         );
-    }
 
-    public function getTotalIncTax()
-    {
-        return array_reduce(
-            $this->items,
-            function ($total, $item) {
-                return $total + $item->getPrice() + $item->getTax();
-            },
-            0
-        );
-    }
+        foreach ($this->items as $item) {
+            $price = $item->getPrice();
+            $accumulator->add($item->getPrice());
+        }
 
-    public function getTotalTax()
-    {
-        return array_reduce(
-            $this->items,
-            function ($total, $item) {
-                return $total + $item->getTax();
-            },
-            0
-        );
+        return $accumulator->calculateTotal();
     }
 
     /**

@@ -19,7 +19,7 @@ echo $this->pageTitle($title);
 
 <h2>Order details</h2>
 
-<p>Total: <?php echo $this->formatPrice($order->getTotal()); ?></p>
+<p>Total: <?php echo $this->formatMoney($order->getTotal()); ?></p>
 <p>Status: <?php echo $status; ?></p>
 
 <h2>Items</h2>

@@ -121,7 +121,8 @@ return [
         'SclZfCart\Mapper\DoctrineCartItemMapper' => function ($sm) {
             return new \SclZfCart\Mapper\DoctrineCartItemMapper(
                 $sm->get('doctrine.entitymanager.orm_default'),
-                $sm->get('SclZfGenericMapper\Doctrine\FlushLock')
+                $sm->get('SclZfGenericMapper\Doctrine\FlushLock'),
+                $sm->get('scl_currency.taxed_price_factory')
             );
         },
 
