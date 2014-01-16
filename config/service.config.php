@@ -59,6 +59,7 @@ return [
 
         'SclZfCart\Doctrine\PriceFactoryInjectorListener' => function ($sm) {
             return new \SclZfCart\Doctrine\PriceFactoryInjectorListener(
+                $sm->get('scl_currency.money_factory'),
                 $sm->get('scl_currency.taxed_price_factory')
             );
         },
@@ -136,7 +137,8 @@ return [
         'SclZfCart\Mapper\DoctrineOrderItemMapper' => function ($sm) {
             return new \SclZfCart\Mapper\DoctrineOrderItemMapper(
                 $sm->get('doctrine.entitymanager.orm_default'),
-                $sm->get('SclZfGenericMapper\Doctrine\FlushLock')
+                $sm->get('SclZfGenericMapper\Doctrine\FlushLock'),
+                $sm->get('scl_currency.taxed_price_factory')
             );
         },
 

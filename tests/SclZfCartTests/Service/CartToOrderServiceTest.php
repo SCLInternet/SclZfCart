@@ -6,7 +6,6 @@ use SclZfCart\Service\CartToOrderService;
 
 class CartToOrderServiceTest extends \PHPUnit_Framework_TestCase
 {
-
     protected $service;
 
     protected $cartItemCreator;

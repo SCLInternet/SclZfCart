@@ -33,7 +33,6 @@ $form->setAttribute('action', $this->url('cart'));
                             ? $this->escapeHtml($quantity)
                             : $this->formElement($quantity);
                     ?></td>
-                    <?php var_dump($item->getPrice()); ?>
                     <td><?php echo $this->formatMoney($item->getPrice()->getTax()); ?></td>
                     <td><?php echo $this->formatMoney($item->getPrice()->getAmount()); ?></td>
                 </tr>
